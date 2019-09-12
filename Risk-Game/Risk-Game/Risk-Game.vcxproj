@@ -151,7 +151,23 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Risk-Game.cpp" />
+    <ClCompile Include="Cards.cpp" />
+    <ClCompile Include="CardsDriver.cpp" />
+    <ClCompile Include="Dice.cpp" />
+    <ClCompile Include="DiceDriver.cpp" />
+    <ClCompile Include="Map.cpp" />
+    <ClCompile Include="MapDriver.cpp" />
+    <ClCompile Include="MapLoader.cpp" />
+    <ClCompile Include="MapLoaderDriver.cpp" />
+    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PlayerDriver.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Cards.h" />
+    <ClInclude Include="Dice.h" />
+    <ClInclude Include="Map.h" />
+    <ClInclude Include="MapLoader.h" />
+    <ClInclude Include="Player.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
