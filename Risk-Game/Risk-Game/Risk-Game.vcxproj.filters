@@ -33,7 +33,7 @@
     <ClCompile Include="Cards.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Assignment1.cpp">
+    <ClCompile Include="CardsDriver.cpp">
       <Filter>Source Files\Drivers</Filter>
     </ClCompile>
   </ItemGroup>

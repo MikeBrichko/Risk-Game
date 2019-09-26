@@ -9,7 +9,7 @@ Card::Card(CardType* type) {
 	cardType = type;
 	cardTypeMap = new std::map<int, std::string>();
 	cardTypeMap->insert(std::pair<int, std::string>(0, "infantry"));
-	cardTypeMap->insert(std::pair<int, std::string>(1, "artillary"));
+	cardTypeMap->insert(std::pair<int, std::string>(1, "artillery"));
 	cardTypeMap->insert(std::pair<int, std::string>(2, "cavalry"));
 };
 
@@ -22,7 +22,7 @@ std::string* Card::getCardType() {
 	return &(cardTypeMap->find(*cardType)->second);
 };
 
-//-------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 Deck::Deck(int numberOfCountries) {
 	deck = buildDeck(numberOfCountries);
 	shuffle();
@@ -43,7 +43,7 @@ std::vector<Card*>* Deck::buildDeck(int numberOfCountries) {
 			newDeck->push_back(new Card(cardType));
 		}
 		else if (i < (numberOfCountries * 2 / 3)) {
-			CardType* cardType = new CardType(artillary);
+			CardType* cardType = new CardType(artillery);
 			newDeck->push_back(new Card(cardType));
 		}
 		else {
@@ -77,86 +77,115 @@ void Deck::shuffle() {
 	}
 }
 
+int Deck::getDeckSize() {
+	return deck->size();
+}
+
 //----------------------------------------------------------------------------------------
-Hand::Hand() {
+Hand::Hand(std::string* name) {
 	hand = new std::vector<Card*>;
 	armies = new int(0);
+	playerName = name;
 }
 
 void Hand::exchange() {
-	int armySize = 0;
-	std::string exchangeArray[3] = {};
-	
 	if (hand->size() < 3)
 		return;
 
 	//Determine the position and the amount of each CardType that the hand contains
+	std::string exchangeArray[3] = {};
 	for (int i = 0; i < hand->size(); i++) {
 		if (*(hand->at(i)->getCardType()) == "infantry")
 			exchangeArray[0] += i;
-		else if (*(hand->at(i)->getCardType()) == "artillary")
+		else if (*(hand->at(i)->getCardType()) == "artillery")
 			exchangeArray[1] += i;
 		else
 			exchangeArray[2] += i;
 	};
 	
-	//Determine the cards that can be traded
-	std::string setOfDifferentCardTypes = "";
-	std::string setOfSimilarCardTypes = "";
+	//Determine the set of cards that can be traded
+	std::string differentCardTypes = "";
+	std::string similarCardTypes = "";
 	for (int i = 0; i < 3; i++) {
 		if (exchangeArray[i].length() > 0)
-			setOfDifferentCardTypes += exchangeArray[i].at(0);
+			differentCardTypes += exchangeArray[i].at(0);
 
 		if (exchangeArray[i].length() == 3) 
-			setOfSimilarCardTypes = exchangeArray[i];
+			similarCardTypes = exchangeArray[i];
 	}
 
-	int choice = 0;
-	if (setOfDifferentCardTypes.size() == 3 && setOfSimilarCardTypes.size() >= 3) {
-		std::cout << "Input 1 to trade all similar cards or Input 2 to trade all different cards or Input nothing to not trade cards for armies" << std::endl;
-		std::cin >> choice;
-	}
-	else if (setOfDifferentCardTypes.size() != 3 && setOfSimilarCardTypes.size() >= 3) {
-		std::cout << "Enter 1 to trade all similar cards or Input nothing to not trade cards for armies" << std::endl;
-		std::cin >> choice;
-	}
-	else if (setOfDifferentCardTypes.size() == 3 && setOfSimilarCardTypes.size() < 3) {
-		std::cout << "Enter 2 to trade all different cards or Input nothing to not trade cards for armies" << std::endl;
-		std::cin >> choice;
-	}
+	//Prompt user if he would like to exchange cards for armies
+	switch (exchangeDecision(similarCardTypes, differentCardTypes)){
+		case 0:
+			break;
 
+		case 1: 
+			removeCardsInHand(similarCardTypes);
+			increaseArmySize();
+			break;
+
+		case 2: 
+			removeCardsInHand(differentCardTypes);
+			increaseArmySize();
+			break;
+
+		default: 
+			std::cout << "WRONG INPUT WAS SELECTED" << std::endl;
+			break;
+	}
+}
+
+int Hand::exchangeDecision(std::string similarCardTypes, std::string differentCardTypes){
+	while (true) {
+		int choice = 0;
+		if (differentCardTypes.size() == 3 && similarCardTypes.size() >= 3) {
+			std::cout << std::endl;
+			std::cout << *playerName << std::endl;
+			if(hand->size() != 5)
+				std::cout << "Input 0 to not trade cards for armies" << std::endl;
+			std::cout << "Input 1 to trade all similar cards" << std::endl;
+			std::cout << "Input 2 to trade all different cards" << std::endl;
+			std::cin >> choice;
+			std::cout << std::endl;
+		}
+		else if (differentCardTypes.size() != 3 && similarCardTypes.size() >= 3) {
+			std::cout << std::endl;
+			std::cout << *playerName << std::endl;
+			if (hand->size() != 5)
+				std::cout << "Input 0 to not trade cards for armies" << std::endl;
+			std::cout << "Input 1 to trade all similar cards" << std::endl;
+			std::cin >> choice;
+			std::cout << std::endl;
+		}
+		else if (differentCardTypes.size() == 3 && similarCardTypes.size() < 3) {
+			std::cout << std::endl;
+			std::cout << *playerName << std::endl;
+			if (hand->size() != 5)
+				std::cout << "Input 0 to not trade cards for armies" << std::endl;
+			std::cout << "Input 2 to trade all different cards" << std::endl;
+			std::cin >> choice;
+			std::cout << std::endl;
+		}
+
+		if (hand->size()==5 && choice != 1 && choice != 2) {
+			std::cout << *playerName << std::endl;
+			std::cout << "You have 5 cards in hand. You need to trade your cards for armies. Game rules are fun :)" << std::endl;
+		}
+		else {
+			return choice;
+		}
+	}
+}
+
+void Hand::removeCardsInHand(std::string cardsInHand) {
 	int indexModifier = 0;
-	switch (choice)
-	{
-	case 1: 
-		std::sort(setOfSimilarCardTypes.begin(), setOfSimilarCardTypes.end());
-		for (int i = 0; i < setOfSimilarCardTypes.length(); i++) {
-			if (i == 0)
-				hand->erase(hand->begin() + (int)setOfSimilarCardTypes.at(i));
-			else
-				hand->erase(hand->begin() + ((int)setOfDifferentCardTypes.at(i) - indexModifier));
-			indexModifier += 1;
-		}
-		increaseArmySize();
-		std::cout << "The amount of armies you receive is " << *armies << std::endl;
-		break;
-
-	case 2: 
-		std::sort(setOfDifferentCardTypes.begin(), setOfDifferentCardTypes.end());
-		for (int i = 0; i < setOfDifferentCardTypes.length(); i++) {
-			if (i==0 || (int)setOfDifferentCardTypes.at(i) == 0)
-				hand->erase(hand->begin() + (int)setOfDifferentCardTypes.at(i));
-			else
-				hand->erase(hand->begin() + (((int)setOfDifferentCardTypes.at(i)) - indexModifier));
-			indexModifier += 1;
-		}
-		increaseArmySize();
-		std::cout << "The amount of armies you receive is " << *armies << std::endl;
-		break;
-
-	default: 
-		return;
-		break;
+	std::sort(cardsInHand.begin(), cardsInHand.end());
+	for (int i = 0; i < cardsInHand.length(); i++) {
+		if (i == 0)
+			hand->erase(hand->begin() + (int)cardsInHand.at(i));
+		else
+			hand->erase(hand->begin() + ((int)cardsInHand.at(i) - indexModifier));
+		indexModifier += 1;
 	}
 }
 
@@ -164,11 +193,17 @@ int* Hand::getArmySize() {
 	return armies;
 }
 
+int Hand::getHandSize() {
+	return hand->size();
+}
+
 void Hand::increaseArmySize() {
 	*armies += 5;
+	std::cout << "The amount of armies "<< *playerName << " receives is " << *armies << std::endl;
 }
 
 void Hand::addCard(Card* card) {
+	std::cout << "The card " << *playerName << " drew is a " << *card->getCardType() << " card!" << std::endl;
 	hand->push_back(card);
 	exchange();
 }

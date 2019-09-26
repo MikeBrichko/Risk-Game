@@ -152,7 +152,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Cards.cpp" />
-    <ClCompile Include="Assignment1.cpp" />
+    <ClCompile Include="CardsDriver.cpp" />
     <ClCompile Include="Dice.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="MapLoader.cpp" />

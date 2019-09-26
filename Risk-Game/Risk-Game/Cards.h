@@ -3,7 +3,7 @@
 #include <vector>
 #include <map>
 
-enum CardType {infantry, artillary, cavalry};
+enum CardType {infantry, artillery, cavalry};
 
 class Card {
 private:
@@ -26,17 +26,22 @@ public:
 	Deck(int);
 	~Deck();
 	Card* draw(int);
+	int getDeckSize();
 };
 
 class Hand {
 private:
 	std::vector<Card*>* hand;
 	int* armies;
+	std::string* playerName;
+	void removeCardsInHand(std::string);
+	int exchangeDecision(std::string, std::string);
 
 public:
-	Hand();
+	Hand(std::string*);
 	void exchange();
 	int* getArmySize();
+	int getHandSize();
 	void increaseArmySize();
 	void addCard(Card*);
 	
