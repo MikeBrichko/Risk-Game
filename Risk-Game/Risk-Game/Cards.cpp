@@ -115,61 +115,51 @@ void Hand::exchange() {
 	}
 
 	//Prompt user if he would like to exchange cards for armies
-	switch (exchangeDecision(similarCardTypes, differentCardTypes)){
-		case 0:
-			break;
+	switch (exchangeDecision(similarCardTypes, differentCardTypes)) {
+	case 0:
+		break;
 
-		case 1: 
-			removeCardsInHand(similarCardTypes);
-			increaseArmySize();
-			break;
+	case 1:
+		removeCardsInHand(similarCardTypes);
+		increaseArmySize();
+		break;
 
-		case 2: 
-			removeCardsInHand(differentCardTypes);
-			increaseArmySize();
-			break;
+	case 2:
+		removeCardsInHand(differentCardTypes);
+		increaseArmySize();
+		break;
 
-		default: 
-			std::cout << "WRONG INPUT WAS SELECTED" << std::endl;
-			break;
+	default:
+		break;
 	}
 }
 
 int Hand::exchangeDecision(std::string similarCardTypes, std::string differentCardTypes){
+	if (differentCardTypes.size() != 3 && similarCardTypes.size() < 3)
+		return 0;
+
+	int choice = 0;
 	while (true) {
-		int choice = 0;
-		if (differentCardTypes.size() == 3 && similarCardTypes.size() >= 3) {
-			std::cout << std::endl;
-			std::cout << *playerName << std::endl;
-			if(hand->size() != 5)
-				std::cout << "Input 0 to not trade cards for armies" << std::endl;
+		std::cout << std::endl;
+		std::cout << *playerName << std::endl;
+
+		if (hand->size() != 5)
+			std::cout << "Input 0 to not trade cards for armies" << std::endl;
+
+		if (similarCardTypes.size() >= 3)
 			std::cout << "Input 1 to trade all similar cards" << std::endl;
+
+		if (differentCardTypes.size() == 3) 
 			std::cout << "Input 2 to trade all different cards" << std::endl;
-			std::cin >> choice;
-			std::cout << std::endl;
-		}
-		else if (differentCardTypes.size() != 3 && similarCardTypes.size() >= 3) {
-			std::cout << std::endl;
-			std::cout << *playerName << std::endl;
-			if (hand->size() != 5)
-				std::cout << "Input 0 to not trade cards for armies" << std::endl;
-			std::cout << "Input 1 to trade all similar cards" << std::endl;
-			std::cin >> choice;
-			std::cout << std::endl;
-		}
-		else if (differentCardTypes.size() == 3 && similarCardTypes.size() < 3) {
-			std::cout << std::endl;
-			std::cout << *playerName << std::endl;
-			if (hand->size() != 5)
-				std::cout << "Input 0 to not trade cards for armies" << std::endl;
-			std::cout << "Input 2 to trade all different cards" << std::endl;
-			std::cin >> choice;
-			std::cout << std::endl;
-		}
+
+		std::cin >> choice;
+		std::cout << std::endl;
 
 		if (hand->size()==5 && choice != 1 && choice != 2) {
 			std::cout << *playerName << std::endl;
 			std::cout << "You have 5 cards in hand. You need to trade your cards for armies. Game rules are fun :)" << std::endl;
+			std::cin.clear();
+			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 		}
 		else {
 			return choice;
@@ -184,7 +174,7 @@ void Hand::removeCardsInHand(std::string cardsInHand) {
 		if (i == 0)
 			hand->erase(hand->begin() + (int)cardsInHand.at(i));
 		else
-			hand->erase(hand->begin() + ((int)cardsInHand.at(i) - indexModifier));
+			hand->erase(hand->begin() + (static_cast<double>(cardsInHand.at(i)) - indexModifier));
 		indexModifier += 1;
 	}
 }
