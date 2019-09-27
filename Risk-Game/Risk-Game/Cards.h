@@ -36,13 +36,12 @@ private:
 	std::string* playerName;
 	void removeCardsInHand(std::string);
 	int exchangeDecision(std::string, std::string);
+	void increasePlayersArmies(std::vector<Hand*>*);
+	void printCardsInHand();
+	void exchange(std::vector<Hand*>*);
 
 public:
 	Hand(std::string*);
-	void exchange();
-	int* getArmySize();
-	int getHandSize();
-	void increaseArmySize();
-	void addCard(Card*);
-	
+	~Hand();
+	void addCard(Card*, std::vector<Hand*>*);
 };

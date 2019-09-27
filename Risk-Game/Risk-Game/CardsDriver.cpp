@@ -33,17 +33,24 @@ int main() {
 	std::cout << "Deck size after drawing a card: " << deck->getDeckSize() << std::endl;
 	std::cout << "The Card that was drawn was a " << *(card->getCardType()) << " card." << std::endl;
 
-	std::cout <<std::endl << "Demonstrating the addition of a card into a players hand" << std::endl;
-	Hand* hand = new Hand(new std::string("Mike"));
-	std::cout << "Hand size before adding a card: " << hand->getHandSize() << std::endl;
-	std::cout << "Adding the card in the Hand of Mike" << std::endl;
-	hand->addCard(card);
-	std::cout << "Hand size after adding a card: " << hand->getHandSize() << std::endl;
-
-
 	std::cout << std::endl << "Demonstrating the exchange() method" << std::endl;
+	int numberOfPlayers = 0;
+	std::cout << "Enter the number of player that will play" << std::endl;
+	std::cin >> numberOfPlayers;
+
+	std::cout << "Creating the hands of all the players in play" << std::endl;
+	std::vector<Hand*>* handsInPlay = new std::vector<Hand*>;
+	std::string playerName = "";
+	for (int i = 0; i < numberOfPlayers; i++) {
+		std::cout << "Enter the name of player " << i + 1 << " below" << std::endl;
+		std::cin >> playerName;
+		handsInPlay->push_back(new Hand(new std::string(playerName)));
+	}
+
+	std::cout << "All players draw cards and exchange cards for armies if they want" << std::endl;
 	while (true) {
-		hand->addCard(deck->draw(numberOfCountries));
+		for(auto hand : *handsInPlay)
+			hand->addCard(deck->draw(numberOfCountries), handsInPlay);
 	}
 
 	return 0;
