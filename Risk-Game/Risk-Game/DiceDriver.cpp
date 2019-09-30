@@ -37,7 +37,7 @@ int main() {
 			d2.printCurrentState();
 			cout << "Dice 2 ends\n";
 		case 1:
-			d1.storedDiceValue(d2.rollDice());
+			d1.storedDiceValue(d1.rollDice());
 			cout << "Dice 1 Information\n";
 			d1.printCurrentState();
 			cout << "Dice 1 ends\n";

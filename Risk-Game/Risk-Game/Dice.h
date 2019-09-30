@@ -15,6 +15,8 @@ namespace Dice
 	{
 	public:
 		std::vector<int> tracking;
+		int percentDice[6];
+		int numOfRolls;
 		void storedDiceValue(int addedValue);
 		EachDice();
 		int rollDice();
