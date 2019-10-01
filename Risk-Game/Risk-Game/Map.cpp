@@ -19,7 +19,6 @@ Graph::Graph(int numOfCountries)
 }
 
 //Constructors for Country objects
-
 Country::Country(int countryNum)
 {
 	this->countryNum = countryNum;
@@ -29,6 +28,7 @@ Country::Country(int countryNum, string countryName, string continent, int playe
 {
 	this->countryNum = countryNum;
 	this->countryName = countryName;
+	this->continent = continent; 
 	this->playerNum = playerNum;
 	this->armies = armies;
 }
