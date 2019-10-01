@@ -8,6 +8,7 @@ using namespace std;
 class Graph {
 
 	int numOfCountries;                   //Total number of Countries 
+
 	int numVisited = 1;					  //Number of countries visited by BFS algorithm
 
 public:
