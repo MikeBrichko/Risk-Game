@@ -1,36 +1,30 @@
 #pragma once
-#ifndef DICE_H
-#define DICE_H
 
 
 #include <iostream>
 #include <vector>
-using std::istream;
-using std::ostream;
-
-
-namespace Dice
-{
-	class EachDice
+#include <istream>
+//
+//namespace Dice
+//{
+	class Dice
 	{
 	public:
-		std::vector<int>* tracking;
-		int* percentDice[6];
-		int* numOfRolls;
+		/*std::vector<int>* tracking;*/
 		void storedDiceValue(int* addedValue);
-		EachDice();
-		int rollDice();
+		Dice();
+		int* rollDice();
 		void printCurrentState();
 	private:
-
+		int* percentDice;
+		int* numOfRolls;
 	};
-
-	class HowManyDice {
-	public:
-		void setNumOfDice(int* numOfDice);
-		int getNumOfDice();
-	private:
-		int val;
-	};
-} 
-#endif
+//
+//	class HowManyDice {
+//	public:
+//		void setNumOfDice(int* numOfDice);
+//		int getNumOfDice();
+//	private:
+//		int val;
+//	};
+//}
