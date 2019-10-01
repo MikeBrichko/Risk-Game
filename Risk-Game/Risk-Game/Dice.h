@@ -14,10 +14,10 @@ namespace Dice
 	class EachDice
 	{
 	public:
-		std::vector<int> tracking;
-		int percentDice[6];
-		int numOfRolls;
-		void storedDiceValue(int addedValue);
+		std::vector<int>* tracking;
+		int* percentDice[6];
+		int* numOfRolls;
+		void storedDiceValue(int* addedValue);
 		EachDice();
 		int rollDice();
 		void printCurrentState();
@@ -27,7 +27,7 @@ namespace Dice
 
 	class HowManyDice {
 	public:
-		void setNumOfDice(int numOfDice);
+		void setNumOfDice(int* numOfDice);
 		int getNumOfDice();
 	private:
 		int val;

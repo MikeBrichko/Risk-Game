@@ -18,7 +18,7 @@ int main() {
 	// Player p1 (We don't have a player yet but I will implement as player is implmented)
 
 	Dice::HowManyDice dNum1 = Dice::HowManyDice();
-	dNum1.setNumOfDice(numOfDice);
+	dNum1.setNumOfDice(&numOfDice);
 
 	Dice::EachDice d1 = Dice::EachDice();
 	Dice::EachDice d2 = Dice::EachDice();
