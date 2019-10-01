@@ -10,7 +10,7 @@
 	class Dice
 	{
 	public:
-		/*std::vector<int>* tracking;*/
+		std::vector<int*>* tracking;
 		void storedDiceValue(int* addedValue);
 		Dice();
 		int* rollDice();
