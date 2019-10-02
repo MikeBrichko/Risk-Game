@@ -8,12 +8,12 @@
 class Dice
 {
 public:
-	std::vector<std::vector<int*>*>* tracking;
 	Dice();
 	void rollDice(int* numOfDices);
 	void printCurrentState();
 private:
 	int* percentDice;
 	int* numOfRolls;
-	std::vector<int*>* onceRoll;
+	std::vector<int*>* currentRollingDice;
+	std::vector<std::vector<int*>*>* recordsOfRolling;
 };
