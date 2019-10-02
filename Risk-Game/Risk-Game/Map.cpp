@@ -8,15 +8,17 @@
 
 using namespace std;
 
-list<int>* neighbours;            //doubly linked list called neighbours
+list<int>* neighbours;            //pointer to list 
 
 
 //Constructor for graph object
 Graph::Graph(int numOfCountries)
 {
 	this->numOfCountries = numOfCountries;
-	neighbours = new list<int>[numOfCountries];
-}
+	neighbours = new list<int>[numOfCountries];      //create an array of lists, save pointer in neighbours
+}                                                    
+
+
 
 //Constructors for Country objects
 Country::Country(int countryNum)
@@ -34,9 +36,9 @@ Country::Country(int countryNum, string countryName, string continent, int playe
 }
 
 //Function to add a neighbouring country 
-void Graph::addNeighbour(int v, int w)
+void Graph::addNeighbour(int country, int neighbour)
 {
-	neighbours[v].push_back(w); // Add w to v’s list. 
+	neighbours[country].push_back(neighbour); // Add neighbour to country’s list. 
 }
 
 //Function to check if the Map is a connected graph
