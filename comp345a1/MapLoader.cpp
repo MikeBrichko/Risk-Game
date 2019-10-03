@@ -11,22 +11,18 @@ void splitString(string s){
     string word = "";
     for (auto x : s) {
         if(x == ' '){
-            cout << word <<endl;
+            cout << word << " has been stored"<<endl;
             word = "";
         }
         else{
             word = word + x;
+            
         }
     }
-    cout<< word <<endl;
+    cout<< word<<endl;
+    cout<<"has been stored \n"<<endl;
 }
-//validate() function
-void validateMap(string s){
-    bool valid;
-    
-    
-}
-
+//from .map file to an actual map object
 void exportToMap(string s){
     //valid
     
