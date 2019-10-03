@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include <list>
+#include <vector>
 
 
 using namespace std;
@@ -19,14 +20,14 @@ Graph::Graph(int numOfCountries)
 }                                                    
 
 
+//
+////Constructors for Country objects
+//Country::Country(int countryNum)
+//{
+//	this->countryNum = countryNum;
+//}
 
-//Constructors for Country objects
-Country::Country(int countryNum)
-{
-	this->countryNum = countryNum;
-}
-
-Country::Country(int countryNum, string countryName, string continent, int playerNum, int armies)
+Country::Country(int countryNum, std::string countryName, std::string continent, int playerNum, int armies)
 {
 	this->countryNum = countryNum;
 	this->countryName = countryName;
@@ -34,6 +35,15 @@ Country::Country(int countryNum, string countryName, string continent, int playe
 	this->playerNum = playerNum;
 	this->armies = armies;
 }
+
+Continent::Continent(int continentNum, string continentName, std::vector<Country> listOfCountries) {
+	this->continentNum = continentNum;
+	this->continentName = continentName;
+	this->listOfCountries = listOfCountries;
+}
+
+
+
 
 //Function to add a neighbouring country 
 void Graph::addNeighbour(int country, int neighbour)
@@ -62,13 +72,25 @@ void Graph::displayNumVisited()
 
 
 //Breadth First Search Algorithm to traverse all countries possible in a connected graph (takes first country number as parameter)
-void Graph::BFS(int s)
+bool Graph::BFS(int s, Continent cont)
 {
+	int numOfCountriesInContinent = cont.listOfCountries.size();
 	// Mark all the vertices as not visited 
 	bool* visited = new bool[numOfCountries]; //Create array of booleans for the countries visited
 	for (int i = 0; i < numOfCountries; i++)  //Initialize all to false (all countries have not been visited yet)
 		visited[i] = false;
 
+	int* specificNum = new int[numOfCountriesInContinent];
+	bool* continentCheck = new bool(false);
+	for (int i = 0; i < numOfCountriesInContinent; i++) {
+		specificNum[i] = cont.listOfCountries.at(i).countryNum;
+		if (specificNum[i] == s)
+			*continentCheck = true;
+	}
+	if (!*continentCheck) {
+		cout << "Current node does not exist in given Continent";
+		return false;
+	}
 	list<int> queue;  //Create a queue needed for the BFS algorithm
 
 	visited[s] = true;    //Mark first country node as visited
@@ -100,7 +122,14 @@ void Graph::BFS(int s)
 		}
 	}
 
-
+	for (int i = 0; i < numOfCountriesInContinent; i++) {
+		if (!visited[specificNum[i]]) {
+			cout << "\nInvalid Map. The map is not a connected graph.\n" << endl;
+			return false;
+		}
+	}
+	cout << "\nValid Map. The map is a connected graph.\n" << endl;
+	return true;
 }
 
 

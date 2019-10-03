@@ -1,9 +1,9 @@
 
 #pragma once
 #include <string>
-using namespace std;
-
-
+#include <istream>
+#include <vector>
+class Continent;
 
 class Graph {
 
@@ -17,7 +17,7 @@ public:
 
 	void addNeighbour(int v, int w);	//function to add neighbour country to a country
 
-	void BFS(int start);				//function that first country number as parameter and perform BFS algorithm
+	bool BFS(int start, Continent cont);				//function that first country number as parameter and perform BFS algorithm
 
 	void checkConnectedGraph();			//function that checks if the map is a connected graph
 
@@ -29,22 +29,29 @@ public:
 class Country {
 
 public:
-
 	int countryNum;             //Number identifier corresponding to a country
 
-	string countryName;			//Name of the country
+	std::string countryName;			//Name of the country
 
-	string continent;			//Name of the continent the country belongs to
+	std::string continent;			//Name of the continent the country belongs to
 
 	int playerNum;				//The player controlling the current country (ex: player 1, 2, 3, or 4 etc...)
 
 	int armies;					//The number of armies places on the country at the moment
-
 	//Constructors
 
-	Country(int countryNum);
+	//Country(int countryNum);
 
-	Country(int countryNum, string countryName, string continent, int playerNum, int armies);
-
+	Country(int countryNum, std::string countryName, std::string continent, int playerNum, int armies);
 };
 
+class Continent {
+public:
+	Continent(int continentNum, std::string continentName, std::vector<Country> listOfCountries);
+	int continentNum;
+	std::string continentName;
+	std::vector<Country> listOfCountries;
+
+private:
+
+};
