@@ -9,7 +9,7 @@ class Graph {
 
 	int numOfCountries;                   //Total number of Countries 
 
-	int numVisited = 1;					  //Number of countries visited by BFS algorithm
+	//int numVisited = 1;					  //Number of countries visited by BFS algorithm
 
 public:
 
@@ -17,7 +17,9 @@ public:
 
 	void addNeighbour(int v, int w);	//function to add neighbour country to a country
 
-	bool BFS(int start, Continent cont);				//function that first country number as parameter and perform BFS algorithm
+	bool checkConnectedSubgraph(int start, Continent cont);				//function that first country number as parameter and perform BFS algorithm
+
+	void checkConnectedGraph(int start);
 
 	void checkConnectedGraph();			//function that checks if the map is a connected graph
 
