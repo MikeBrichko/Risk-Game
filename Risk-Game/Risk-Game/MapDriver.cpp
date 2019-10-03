@@ -33,6 +33,16 @@ int main()
 		//g.addNeighbour(c1.countryNum, c2.countryNum);
 		//g.addNeighbour(c2.countryNum, c3.countryNum);
 		//g.addNeighbour(c2.countryNum, c3.countryNum);
+		//g.addNeighbour(c3.countryNum, c4.countryNum);
+		//g.addNeighbour(c4.countryNum, c5.countryNum);
+		//g.addNeighbour(c4.countryNum, c6.countryNum);
+		//g.addNeighbour(c6.countryNum, c7.countryNum);
+
+		// Case where globally connected but not connected subgraph;
+		g.addNeighbour(c0.countryNum, c4.countryNum);
+		g.addNeighbour(c0.countryNum, c5.countryNum);
+		g.addNeighbour(c1.countryNum, c6.countryNum);
+		g.addNeighbour(c2.countryNum, c3.countryNum);
 		g.addNeighbour(c3.countryNum, c4.countryNum);
 		g.addNeighbour(c4.countryNum, c5.countryNum);
 		g.addNeighbour(c4.countryNum, c6.countryNum);
@@ -47,7 +57,7 @@ int main()
 
 		cout << "\nShowing path of Breadth First Search Algorithm \n" << endl;
 
-		bool a = g.BFS(0, ct1);       //Show traversal of all connected countries, specifying which country to start with
+		bool a = g.BFS(6, ct2);       //Show traversal of all connected countries, specifying which country to start with
 
 		//cout << "\n\nTotal unique countries visited in search = "; a;   //Display total number of countries able to visit
 

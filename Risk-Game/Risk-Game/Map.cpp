@@ -49,6 +49,7 @@ Continent::Continent(int continentNum, string continentName, std::vector<Country
 void Graph::addNeighbour(int country, int neighbour)
 {
 	neighbours[country].push_back(neighbour); // Add neighbour to country’s list. 
+	neighbours[neighbour].push_back(country); // Also arrow to backwards
 }
 
 //Function to check if the Map is a connected graph
@@ -104,7 +105,7 @@ bool Graph::BFS(int s, Continent cont)
 	{
 		// Dequeue a vertex from queue and print it 
 		s = queue.front();
-		cout << s << " ";
+		//cout << s << " ";
 		queue.pop_front();
 
 		// Get all adjacent vertices of the dequeued 
@@ -112,12 +113,16 @@ bool Graph::BFS(int s, Continent cont)
 		// then mark it visited and enqueue it 
 		for (i = neighbours[s].begin(); i != neighbours[s].end(); ++i)
 		{
-			if (!visited[*i])
-			{
-				visited[*i] = true;
-				numVisited++;
-				queue.push_back(*i);
+			for (int j = 0; j < numOfCountriesInContinent; j++) {
+				if (specificNum[j] == *i) {
+					if (!visited[*i])
+					{
+						visited[*i] = true;
+						numVisited++;
+						queue.push_back(*i);
 
+					}
+				}
 			}
 		}
 	}
