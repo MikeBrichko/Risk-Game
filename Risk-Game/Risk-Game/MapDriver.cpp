@@ -55,10 +55,15 @@ int main()
 
 		cout << "Number of countries used: "; g.displayNumOfCountries();  //Display total number of countries
 
-		cout << "\nShowing path of Breadth First Search Algorithm \n" << endl;
+		//cout << "\nShowing path of Breadth First Search Algorithm \n" << endl;
 
-		bool a = g.BFS(6, ct2);       //Show traversal of all connected countries, specifying which country to start with
+		//Check if the map is a connected graph
+		g.checkConnectedGraph(0);
+		
+		//Check if a continent is a connected subgraph
+		bool a = g.checkConnectedSubgraph(6, ct2);      
 
+	
 		//cout << "\n\nTotal unique countries visited in search = "; a;   //Display total number of countries able to visit
 
 		//g.checkConnectedGraph();       //Checks if graph is a connected graph and displays message
