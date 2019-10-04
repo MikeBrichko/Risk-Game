@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include "MapLoader.h"
 using namespace std;
 
 string line;
@@ -19,8 +20,8 @@ void splitString(string s){
             
         }
     }
-    cout<< word<<endl;
-    cout<<"has been stored \n"<<endl;
+    cout<< word << endl;
+    cout << "is the last value stored for this line\n" << endl;
 }
 //from .map file to an actual map object
 void exportToMap(string s){
@@ -69,11 +70,5 @@ void exportToMap(string s){
 }
 
 
-int main()
-{
-    cout << "please enter a .map file" << endl;
-    cin >> fileName;
-    exportToMap(fileName);
-    return 0;
-}
+
 
