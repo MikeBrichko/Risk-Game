@@ -1,28 +1,16 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <sstream>
+#include <vector>
+#include "Map.h"
 #include "MapLoader.h"
+
 using namespace std;
 
-string line;
-string fileName;
+string line, fileName;
+vector<string> words; 
 
-//function to split string into individual elements
-void splitString(string s){
-    string word = "";
-    for (auto x : s) {
-        if(x == ' '){
-            cout << word << " has been stored"<<endl;
-            word = "";
-        }
-        else{
-            word = word + x;
-            
-        }
-    }
-    cout<< word << endl;
-    cout << "is the last value stored for this line\n" << endl;
-}
 //from .map file to an actual map object
 void exportToMap(string s){
     //valid
@@ -34,8 +22,7 @@ void exportToMap(string s){
          //procedure for continents
          if( line.find("[continents]") == 0){
              getline(infile, line); //go to next line
-             cout<<"[CONTINENTS] DETECTED" <<endl;
-             
+             cout<<"[CONTINENTS] DETECTED" <<endl;            
              while(line.find("[countries]") != 0){
                 splitString(line);
                 getline(infile, line);
@@ -68,7 +55,16 @@ void exportToMap(string s){
  
     infile.close(); 
 }
+//function to split string into individual elements
+void splitString(string s){
 
+    string buf;                 // Have a buffer string
+    stringstream ss(s);       // Insert the string into a stream
 
-
-
+    while (ss >> buf){
+        words.push_back(buf);
+    }
+    for(int i = 0; i < words.size(); i++){
+        cout<<words[i]<<endl;
+    }
+}
