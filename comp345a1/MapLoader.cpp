@@ -7,8 +7,6 @@
 
 using namespace std;
 
-
-
 Map :: Map(int numCountries){
     this->numCountries = numCountries;
     cout << "there are " << numCountries << " on this map" <<endl;
@@ -50,6 +48,10 @@ Border :: Border(int initCountry, int neighbourCountry){
 
 string line, fileName;                  //strings that will iterate through file
 string guideWord;                       //used to separate sections in splitString()
+bool continentFound = false;            //at the end of validation, if one is false, invalid file
+bool countryFound = false;
+bool bordersFound = false;
+bool valid = true;                  
 vector<Continent> listOfContinents;     //store continents
 vector<Country> listOfCountries;
 vector<Border> listOfBorders;        
@@ -59,6 +61,81 @@ int numCountry = 0;
 int numBorders = 0;
 
 
+void validateMap(string s){
+    cout << "validating file......" << endl;
+    ifstream infile(s);
+    
+    while(getline(infile, line)!= NULL){  
+        
+    if( line.find("[continents]") == 0){
+        getline(infile, line); 
+        guideWord = "continent";
+        while(line.find("[countries]") != 0){
+            splitStringValidate(line);
+            getline(infile, line);
+        }
+  
+    }
+       
+    if( line.find("[countries]") == 0){
+        getline(infile, line);
+        guideWord = "country";
+        while(line.find("[borders]") != 0){
+            splitStringValidate(line);
+            getline(infile, line);
+            }
+         }
+         
+         //procedure for borders
+    if( line.find("[borders]") == 0){
+        getline(infile, line);
+        guideWord = "border";
+        while(!line.empty()){
+            splitStringValidate(line);
+            getline(infile, line);
+            } 
+        }         
+    }
+    
+    if((continentFound && countryFound && bordersFound && valid) == false){
+        cout << "invalid file. Program will terminate." <<endl;
+        exit(0);
+    }  
+      
+    cout << "end of file has been reached, validation SUCCESSFULL \n\n" << endl;
+
+    infile.close(); 
+ 
+}
+void splitStringValidate(string s){
+    string element;            
+    stringstream ss(s);       // Insert the string into a stream
+    
+    while (ss >> element){    //figure out how many words there are in the string
+        words.push_back(element);
+    }
+    
+    if(guideWord == "continent"){       //when continent is reached in file
+        continentFound = true;
+        if(!(words.size() == 3 || words.size() == 0)){
+            valid = false;
+        }
+    } 
+    if(guideWord == "country"){      //when country is reached in file
+        countryFound = true;
+        if(!(words.size() == 5 || words.size() == 0)){
+            valid = false;
+        }
+    }
+    if(guideWord == "border"){      //when continent is reached in file
+        bordersFound = true;
+        if(words.size() < 2){
+            valid = false;
+        }
+    }
+      
+    words.clear();
+}
 //from .map file to an actual map object
 void exportToMap(string s){
     //valid
@@ -112,14 +189,15 @@ void exportToMap(string s){
     infile.close(); 
 }
 
+
 //function to split string into individual elements
 void splitString(string s){
 
-    string buf;                 // Have a buffer string
+    string element;                 
     stringstream ss(s);       // Insert the string into a stream
      
-    while (ss >> buf){
-        words.push_back(buf);
+    while (ss >> element){
+        words.push_back(element);
     }
     
     listOfContinents.push_back(Continent());  //initialize the vector

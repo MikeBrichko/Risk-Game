@@ -11,6 +11,7 @@ int main()
 
     cout << "please enter a .map file" << endl;
     cin >> fileName;
+    validateMap(fileName);
     exportToMap(fileName);
     return 0;
 }

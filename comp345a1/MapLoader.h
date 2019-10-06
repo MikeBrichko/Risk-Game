@@ -44,7 +44,9 @@ public:
 
 void splitString(string s);
 void exportToMap(string s);
-
+void validateMap(string s);
+void splitStringValidate(string s);
+void countWords(string s);
 
     
     
