@@ -5,7 +5,6 @@
 
 using namespace std;
 
-
 int main()
 {
     string fileName;
@@ -15,5 +14,6 @@ int main()
     exportToMap(fileName);
     return 0;
 }
+
 
 
