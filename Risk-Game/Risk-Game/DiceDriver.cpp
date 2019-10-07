@@ -9,7 +9,7 @@ void validatateDiceContainer(std::vector<int> diceRolled) {
 	}
 }
 
-int main() {
+/**int main() {
 	int armiesOnCountry = 0;
 	std::string s1 = "";
 
@@ -29,6 +29,6 @@ int main() {
 	}
 	dice->printDiceFacePercentageRolled();
 	validatateDiceContainer(diceRolled);
-}
+}**/
 
 

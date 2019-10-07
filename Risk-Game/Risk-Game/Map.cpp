@@ -1,162 +1,199 @@
 #pragma once
 #include "Map.h"
-#include <stdlib.h>
 #include <iostream>
 #include <string>
 #include <list>
 #include <vector>
 
-
-using namespace std;
-
-list<int>* neighbours;   //pointer to list 
-
-//Constructor for graph object
-Graph::Graph(int numOfCountries)
+//----------------------------------------------------------------------------------------------------------------------------------
+Country::Country(int countryID, std::string countryName, int countryContinentID, int countryArmies)
 {
-	this->numOfCountries = numOfCountries;
-	neighbours = new list<int>[numOfCountries];      //create an array of lists, save pointer in neighbours
-}                                                    
-
-//Constructor for Country object
-Country::Country(int countryNum, std::string countryName, std::string continent, int playerNum, int armies)
-{
-	this->countryNum = countryNum;
-	this->countryName = countryName;
-	this->continent = continent; 
-	this->playerNum = playerNum;
-	this->armies = armies;
+	ID = new int(countryID);
+	name = new std::string(countryName);
+	continentID = new int(countryContinentID);
+	playerID = new int(0);
+	armies = new int(countryArmies);
+	visited = new bool(false);
+	neighbours = new std::vector<Country*>();
 }
 
-//Constructor for continent object
-Continent::Continent(int continentNum, string continentName, std::vector<Country> listOfCountries) {
-	this->continentNum = continentNum;
-	this->continentName = continentName;
-	this->listOfCountries = listOfCountries;
+Country::~Country() {
+	delete ID;
+	delete name;
+	delete continentID;
+	delete armies;
+	for (auto neighbour : *neighbours)
+		delete neighbour;
+	delete neighbours;
 }
 
-//Function to add a neighbouring country 
-void Graph::addNeighbour(int country, int neighbour)
-{
-	neighbours[country].push_back(neighbour); // Add neighbour to country’s list. 
-	neighbours[neighbour].push_back(country); // Also arrow to backwards
+void Country::addNeighbour(Country* country) {
+	neighbours->push_back(country);
 }
 
-//Function to display number of Countries
-void Graph::displayNumOfCountries()
-{
-	cout << numOfCountries << endl;
+int Country::getID() {
+	return *ID;
 }
 
+std::string Country::getName() {
+	return *name;
+}
 
-//Function to check if the map is a connected graph
-//This is a Breadth First Search Algoirthm (takes the first country number as parameter)
-void Graph::checkConnectedGraph(int s)
+std::vector<Country*> Country::getNeighbours(){
+	return *neighbours;
+}
+
+int Country::getContinentID() {
+	return *continentID;
+}
+
+bool Country::getVisited() {
+	return *visited;
+}
+
+void Country::setVisited(bool countryVisited) {
+	*visited = countryVisited;
+}
+
+//----------------------------------------------------------------------------------------------------------------------------------
+Continent::Continent(int continentID, std::string continentName, int continentArmyValue) {
+	ID = new int(continentID);
+	name = new std::string(continentName);
+	armyValue = new int(continentArmyValue);
+	countries = new std::vector<Country*>();
+}
+
+Continent::~Continent() {
+	delete ID;
+	delete name;
+	delete armyValue;
+	for (auto country : *countries)
+		delete country;
+	delete countries;
+}
+
+void Continent::addCountry(Country* country) {
+	countries->push_back(country);
+}
+
+std::vector<Country*>* Continent::getCountries() {
+	return countries;
+}
+
+std::string Continent::getName() {
+	return *name;
+}
+
+int Continent::getID() {
+	return *ID;
+}
+
+//-----------------------------------------------------------------------------------------------------------------------------------
+Map::Map(int amountOfCountries)
 {
-	int numVisited = 1;
-	// Mark all the vertices as not visited 
-	bool* visited = new bool[numOfCountries]; //Create array of booleans for the countries visited
-	for (int i = 0; i < numOfCountries; i++)  //Initialize all to false (all countries have not been visited yet)
-		visited[i] = false;
-	list<int> queue;  //Create a queue needed for the BFS algorithm
-	visited[s] = true;    //Mark first country node as visited
-	queue.push_back(s);   //Add the first country to the queue
-	// 'i' will be used to get all adjacent 
-	// vertices of a vertex 
-	list<int>::iterator i;
-	while (!queue.empty())
+	numOfCountries = new int(amountOfCountries);
+	continents = new std::vector<Continent*>();
+}               
+
+Map::~Map() {
+	delete numOfCountries;
+	for (auto continent : *continents)
+		delete continent;
+	delete continents;
+}
+
+void Map::addContinent(Continent* continent) {
+	continents->push_back(continent);
+}
+
+int Map::getNumOfCountries()
+{
+	return *numOfCountries;
+}
+
+void Map::checkConnectedGraph()
+{
+	std::list<Country*> BFSqueue;
+	int numVisited = 0;
+
+	//Start BFS algorithm by visiting a random country
+	Country* rootCountry = continents->at(0)->getCountries()->at(0);
+	BFSqueue.push_back(rootCountry);
+	numVisited++;
+
+	while (!BFSqueue.empty())
 	{
-		// Dequeue a vertex from queue and print it 
-		s = queue.front();
-		//cout << s << " ";
-		queue.pop_front();
-		// Get all adjacent vertices of the dequeued 
-		// vertex s. If a adjacent has not been visited,  
-		// then mark it visited and enqueue it 
-		for (i = neighbours[s].begin(); i != neighbours[s].end(); ++i)
+		// Dequeue a vertex from BFSqueue and print it 
+		rootCountry = BFSqueue.front();
+		rootCountry->setVisited(true);
+		BFSqueue.pop_front();
+		std::cout << rootCountry->getName() << " was popped of the BFSqueue" << std::endl;
+		
+		//Visit all unvisited neighbouring countries and add them to the BFSqueue
+		for (auto neighbour : rootCountry->getNeighbours())
 		{
-			if (!visited[*i])
+			if (!neighbour->getVisited())
 			{
-				visited[*i] = true;
+				neighbour->setVisited(true);
 				numVisited++;
-				queue.push_back(*i);
+				BFSqueue.push_back(neighbour);
 			}
 		}
 	}
-	if (numVisited < numOfCountries)
-		cout << "\nInvalid Map. The map is not a connected graph.\n" << endl;
+
+	if (numVisited < *numOfCountries)
+		std::cout << "Invalid Map. The map is not a connected graph." << std::endl << std::endl;
 	else
-		cout << "\nValid Map. The map is a connected graph.\n" << endl;
+		std::cout << "Valid Map. The map is a connected graph." << std::endl << std::endl;
+
+	resetVisitedCountries();
 }
 
-
-//Function to check if continents are a connected subgraph 
-//This is a Breadth First Search Algorithm (takes the first country number and continent object as parameters)
-
-bool Graph::checkConnectedSubgraph(int s, Continent cont)
+void Map::checkConnectedSubgraph()
 {
-	int numVisited = 1;
-	int numOfCountriesInContinent = cont.listOfCountries.size();
+	std::list<Country*> BFSqueue;
+	int numVisited = 0;
+	Country* rootCountry;
 
-	// Mark all the vertices as not visited 
-	bool* visited = new bool[numOfCountries]; //Create array of booleans for the countries visited
-	for (int i = 0; i < numOfCountries; i++)  //Initialize all to false (all countries have not been visited yet)
-		visited[i] = false;
-
-	int* specificNum = new int[numOfCountriesInContinent];
-	bool* continentCheck = new bool(false);
-	for (int i = 0; i < numOfCountriesInContinent; i++) {
-		specificNum[i] = cont.listOfCountries.at(i).countryNum;
-		if (specificNum[i] == s)
-			*continentCheck = true;
-	}
-	if (!*continentCheck) {
-		cout << "Current node does not exist in given Continent";
-		return false;
-	}
-	list<int> queue;  //Create a queue needed for the BFS algorithm
-
-	visited[s] = true;    //Mark first country node as visited
-	queue.push_back(s);   //Add the first country to the queue
-
-	// 'i' will be used to get all adjacent 
-	// vertices of a vertex 
-	list<int>::iterator i;
-
-	while (!queue.empty())
-	{
-		// Dequeue a vertex from queue and print it 
-		s = queue.front();
-		//cout << s << " ";
-		queue.pop_front();
-
-		// Get all adjacent vertices of the dequeued 
-		// vertex s. If a adjacent has not been visited,  
-		// then mark it visited and enqueue it 
-		for (i = neighbours[s].begin(); i != neighbours[s].end(); ++i)
+	for (auto continent : *continents) {
+		std::cout << "Checking the connected graph of the following continent -> " << continent->getName() << std::endl;
+		numVisited = 0;
+		BFSqueue.push_back(continent->getCountries()->at(0));
+		numVisited++;
+		while (!BFSqueue.empty())
 		{
-			for (int j = 0; j < numOfCountriesInContinent; j++) {
-				if (specificNum[j] == *i) {
-					if (!visited[*i])
-					{
-						visited[*i] = true;
-						numVisited++;
-						queue.push_back(*i);
+			// Dequeue a vertex from BFSqueue and print it 
+			rootCountry = BFSqueue.front();
+			rootCountry->setVisited(true);
+			BFSqueue.pop_front();
+			std::cout << rootCountry->getName() << " was popped of the BFSqueue" << std::endl;
 
-					}
+			//Visit all unvisited neighbouring countries and add them to the BFSqueue
+			for (auto neighbour : rootCountry->getNeighbours())
+			{
+				if (!neighbour->getVisited() && (neighbour->getContinentID() == continent->getID()))
+				{
+					neighbour->setVisited(true);
+					numVisited++;
+					BFSqueue.push_back(neighbour);
 				}
 			}
 		}
-	}
 
-	for (int i = 0; i < numOfCountriesInContinent; i++) {
-		if (!visited[specificNum[i]]) {
-			cout << "Invalid continent. The continent is not a connected subgraph.\n" << endl;
-			return false;
-		}
+		if (numVisited < continent->getCountries()->size())
+			std::cout << "Subraph for continent " << continent->getName() << " is not a connected graph :(" << std::endl << std::endl;
+		else
+			std::cout << "Subraph for continent " << continent->getName() << " is a connected graph!" << std::endl << std::endl;
 	}
-	cout << "Valid continent. The continent is a connected subgraph.\n" << endl;
-	return true;
+	
+	resetVisitedCountries();
 }
 
-
+void Map::resetVisitedCountries() {
+	for (int i = 0; i < continents->size(); i++) {
+		std::vector<Country*> countryList = *continents->at(i)->getCountries();
+		for (int j = 0; j < countryList.size(); j++) {
+			countryList.at(j)->setVisited(false);
+		}
+	}
+}

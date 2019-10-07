@@ -1,120 +1,106 @@
-
 #include "Map.h"
-#include <stdlib.h>
 #include <iostream>
 #include <string>
 #include <list>
 
-
-using namespace std;
-
-// Driver program to test methods of graph class 
 int main()
 {
+	/**
+	Use Case 1
+	A---B
+	|	|
+	C---D , where A&B belong to Continent1 and C&D belong to Continent2
+	**/
+	std::cout << "Use case 1" << std::endl;
+	Map* map = new Map(4);
 
-		//Example of a Valid Map
-		
-		// Create a graph and specify the number of countries it contains
-		Graph g(8);
+	Continent* Continent1 = new Continent(1, "continent1", 5);
+	Continent* Continent2 = new Continent(2, "continent2", 5);
+	map->addContinent(Continent1);
+	map->addContinent(Continent2);
 
-		//Create the individual countries
-		Country c0(0, "Canada", "North America", 1, 1);
-		Country c1(1, "USA", "North America", 1, 2);
-		Country c2(2, "Mexico", "NorthAmerica", 2, 1);
-		Country c3(3, "England", "Europe", 3, 2);
-		Country c4(4, "France", "Europe", 3, 1);
-		Country c5(5, "Netherlands", "Europe", 1, 0);
-		Country c6(6, "China", "Asia", 3, 1);
-		Country c7(7, "Japan", "Asia", 1, 0);
-
-		//Add neighbours for each country
-		//g.addNeighbour(c0.countryNum, c1.countryNum);
-		//g.addNeighbour(c0.countryNum, c2.countryNum);
-		//g.addNeighbour(c1.countryNum, c2.countryNum);
-		//g.addNeighbour(c2.countryNum, c3.countryNum);
-		//g.addNeighbour(c2.countryNum, c3.countryNum);
-		//g.addNeighbour(c3.countryNum, c4.countryNum);
-		//g.addNeighbour(c4.countryNum, c5.countryNum);
-		//g.addNeighbour(c4.countryNum, c6.countryNum);
-		//g.addNeighbour(c6.countryNum, c7.countryNum);
-
-		// Case where globally connected but not connected subgraph;
-		g.addNeighbour(c0.countryNum, c4.countryNum);
-		g.addNeighbour(c0.countryNum, c5.countryNum);
-		g.addNeighbour(c1.countryNum, c6.countryNum);
-		g.addNeighbour(c2.countryNum, c3.countryNum);
-		g.addNeighbour(c3.countryNum, c4.countryNum);
-		g.addNeighbour(c4.countryNum, c5.countryNum);
-		g.addNeighbour(c4.countryNum, c6.countryNum);
-		g.addNeighbour(c6.countryNum, c7.countryNum);
-
-		Continent ct0(0, "North America", std::vector<Country> { c0, c1, c2 });
-		Continent ct1(0, "Europe", std::vector<Country> { c3, c4, c5 });
-		Continent ct2(0, "Asia", std::vector<Country> { c6, c7 });
-
-
-		cout << "Number of countries used: "; g.displayNumOfCountries();  //Display total number of countries
-
-		//cout << "\nShowing path of Breadth First Search Algorithm \n" << endl;
-
-		//Check if the map is a connected graph
-		g.checkConnectedGraph(0);
-		
-		//Check if a continent is a connected subgraph
-		bool a = g.checkConnectedSubgraph(6, ct2);      
-
+	Country* A = new Country(1, "A", Continent1->getID(), 0);
+	Country* B = new Country(2, "B", Continent1->getID(), 0);
+	Country* C = new Country(3, "C", Continent2->getID(), 0);
+	Country* D = new Country(4, "D", Continent2->getID(), 0);
+	Continent1->addCountry(A);
+	Continent1->addCountry(B);
+	Continent2->addCountry(C);
+	Continent2->addCountry(D);
 	
-		//cout << "\n\nTotal unique countries visited in search = "; a;   //Display total number of countries able to visit
+	A->addNeighbour(B);
+	A->addNeighbour(C);
+	B->addNeighbour(A);
+	B->addNeighbour(D);
+	C->addNeighbour(A);
+	C->addNeighbour(D);
+	D->addNeighbour(B);
+	D->addNeighbour(C);
 
-		//g.checkConnectedGraph();       //Checks if graph is a connected graph and displays message
-		//
+	map->checkConnectedGraph();
+	map->checkConnectedSubgraph();
 
+	/**
+	Use Case 2
+	E   F
+	|	|
+	G---H , where E&F belong to Continent3 and G&H belong to Continent4
+	**/
+	std::cout << "Use case 2" << std::endl;
+	Map* map1 = new Map(4);
+
+	Continent* Continent3 = new Continent(3, "continent3", 5);
+	Continent* Continent4 = new Continent(4, "continent4", 5);
+	map1->addContinent(Continent3);
+	map1->addContinent(Continent4);
+
+	Country* E = new Country(5, "E", Continent3->getID(), 0);
+	Country* F = new Country(6, "F", Continent3->getID(), 0);
+	Country* G = new Country(7, "G", Continent4->getID(), 0);
+	Country* H = new Country(8, "H", Continent4->getID(), 0);
+	Continent3->addCountry(E);
+	Continent3->addCountry(F);
+	Continent4->addCountry(G);
+	Continent4->addCountry(H);
+
+	E->addNeighbour(G);
+	F->addNeighbour(H);
+	G->addNeighbour(E);
+	G->addNeighbour(H);
+	H->addNeighbour(F);
+	H->addNeighbour(G);
+
+	map1->checkConnectedGraph();
+	map1->checkConnectedSubgraph();
+
+	/**
+	Use Case 3
+	I   J
 		
+	K---L , where I&J belong to Continent5 and K&L belong to Continent6
+	**/
+	std::cout << "Use case 3" << std::endl;
+	Map* map2 = new Map(4);
 
-		
+	Continent* Continent5 = new Continent(5, "continent5", 5);
+	Continent* Continent6 = new Continent(6, "continent6", 5);
+	map2->addContinent(Continent5);
+	map2->addContinent(Continent6);
 
-		/*
-		//Example of an Invalid Map
-		
-		// Create a graph and specify the number of countries it contains
-		Graph g(8);
+	Country* I = new Country(9, "I", Continent5->getID(), 0);
+	Country* J = new Country(10, "J", Continent5->getID(), 0);
+	Country* K = new Country(11, "K", Continent6->getID(), 0);
+	Country* L = new Country(12, "L", Continent6->getID(), 0);
+	Continent5->addCountry(I);
+	Continent5->addCountry(J);
+	Continent6->addCountry(K);
+	Continent6->addCountry(L);
 
-		Country c0(0, "Canada", "North America", 1, 1);
-		Country c1(1, "USA", "North America", 1, 2);
-		Country c2(2, "Mexico", "NorthAmerica", 2, 1);
-		Country c3(3, "England", "Europe", 3, 2);
-		Country c4(4, "France", "Europe", 3, 1);
-		Country c5(5, "Netherlands", "Europe", 1, 0);
-		Country c6(6, "China", "Asia", 3, 1);
-		Country c7(7, "Japan", "Asia", 1, 0);
+	K->addNeighbour(L);
+	L->addNeighbour(K);
 
-
-		//Add neighbours for each country
-		g.addNeighbour(c0.countryNum, c1.countryNum);
-		g.addNeighbour(c0.countryNum, c2.countryNum);
-		g.addNeighbour(c1.countryNum, c2.countryNum);
-		g.addNeighbour(c2.countryNum, c3.countryNum);
-		g.addNeighbour(c2.countryNum, c3.countryNum);
-		g.addNeighbour(c3.countryNum, c4.countryNum);
-		g.addNeighbour(c4.countryNum, c5.countryNum);
-		g.addNeighbour(c6.countryNum, c7.countryNum);
-
-
-		cout << "Number of countries used: "; g.displayNumOfCountries();  //Display total number of countries
-
-		cout << "\nShowing path of Breadth First Search Algorithm \n" << endl;
-
-		g.BFS(0);       //Show traversal of all connected countries, specifying which country to start with
-
-		cout << "\n\nTotal unique countries visited in search = "; g.displayNumVisited();   //Display total number of countries able to visit
-
-		g.checkConnectedGraph();       //Checks if graph is a connected graph and displays message
-		*/
-
-
-
-		system("pause");
-
-		return 0;
-		
+	map2->checkConnectedGraph();
+	map2->checkConnectedSubgraph();
+	
+	return 0;
 }

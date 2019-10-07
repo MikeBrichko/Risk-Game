@@ -1,59 +1,61 @@
-
 #pragma once
 #include <string>
-#include <istream>
+#include <iostream>
 #include <vector>
-class Continent;
-
-class Graph {
-
-	int numOfCountries;                   //Total number of Countries 
-
-	//int numVisited = 1;					  //Number of countries visited by BFS algorithm
-
-public:
-
-	Graph(int numOfCountries);
-
-	void addNeighbour(int v, int w);	//function to add neighbour country to a country
-
-	bool checkConnectedSubgraph(int start, Continent cont);				//function that first country number as parameter and perform BFS algorithm
-
-	void checkConnectedGraph(int start);
-
-	void checkConnectedGraph();			//function that checks if the map is a connected graph
-
-	void displayNumOfCountries();		//function that displays total number of countries
-
-	void displayNumVisited();			//function that displays total number of unique countries visited by BFS algorithm
-};
 
 class Country {
+private:
+	int* ID;
+	std::string* name;
+	int* continentID;
+	int* playerID;
+	int* armies;
+	bool* visited;
+	std::vector<Country*>* neighbours;
 
 public:
-	int countryNum;             //Number identifier corresponding to a country
-
-	std::string countryName;			//Name of the country
-
-	std::string continent;			//Name of the continent the country belongs to
-
-	int playerNum;				//The player controlling the current country (ex: player 1, 2, 3, or 4 etc...)
-
-	int armies;					//The number of armies places on the country at the moment
-	//Constructors
-
-	//Country(int countryNum);
-
-	Country(int countryNum, std::string countryName, std::string continent, int playerNum, int armies);
+	Country(int countryID, std::string countryName, int countryContinentID, int countryArmies);
+	~Country();
+	void addNeighbour(Country* country);
+	int getID();
+	std::string getName();
+	std::vector<Country*> getNeighbours();
+	int getContinentID();
+	bool getVisited();
+	void setVisited(bool countryVisited);
 };
 
 class Continent {
-public:
-	Continent(int continentNum, std::string continentName, std::vector<Country> listOfCountries);
-	int continentNum;
-	std::string continentName;
-	std::vector<Country> listOfCountries;
-
 private:
+	int* ID;
+	std::string* name;
+	int* armyValue;
+	std::vector<Country*>* countries;
 
+public:
+	Continent(int continentID, std::string continentName, int continentArmyValue);
+	~Continent();
+	void addCountry(Country* country);
+	std::vector<Country*>* getCountries();
+	std::string getName();
+	int getID();
 };
+
+class Map {
+private:
+	int* numOfCountries;                
+	std::vector<Continent*>* continents;  
+
+public:
+	Map(int numOfCountries);
+	~Map();
+	void addContinent(Continent* continent);
+	int getNumOfCountries();
+	void checkConnectedGraph();
+	void checkConnectedSubgraph();
+	void resetVisitedCountries();
+};
+
+
+
+
