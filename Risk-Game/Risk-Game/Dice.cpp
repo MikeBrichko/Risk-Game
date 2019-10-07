@@ -4,31 +4,52 @@
 #include <time.h>
 
 	Dice::Dice(){
-		srand(time(NULL)); // Otherwise, it will always return same random values
-		recordsOfRolling = new std::vector<std::vector<int*>*>();
-		currentRollingDice = new std::vector<int*>();
-		percentDice = new int[6]();
-		numOfRolls = new int(0);
+		srand(time(NULL));
+		diceFaceRolledCounter = new std::vector<int>(6);
+		rollCounter = new int(0);
 	};
 
-	void Dice::rollDice(int* numOfDice) {
-		for (int i = 0; i < *numOfDice; i++) {
-			int* random = new int(rand() % 6 + 1);
-			percentDice[*random-1]++;
-			*numOfRolls += 1;
-			currentRollingDice->push_back(random);
-			std::cout << "From dice #" << i+1 << ": " << *random << "\n";
-			delete(random);
-		}
-		recordsOfRolling->push_back(currentRollingDice);
-		currentRollingDice = new std::vector<int*>();
-
+	Dice::~Dice() {
+		delete diceFaceRolledCounter;
+		delete rollCounter;
 	}
 
-	void Dice::printCurrentState() {
+	int Dice::diceToBeRolled(int armiesOnCountry) {
+		if (armiesOnCountry == 1)
+			return armiesOnCountry;
 
+		int diceToBeRolled = 0;
+		while (diceToBeRolled == 0 && 0 < diceToBeRolled < 4) {
+			std::cout << "Please enter how many dice will be rolled ";
+			if(armiesOnCountry >= 3)
+				std::cout << " (input 1, 2 or 3): ";
+			else 
+				std::cout << " (input 1 or 2): ";
+			std::cin >> diceToBeRolled;
+		};
+
+		return diceToBeRolled;
+
+		return armiesOnCountry;
+	}
+
+	std::vector<int> Dice::rollDice(int armiesOnCountry) {
+		int diceToBeRolled = Dice::diceToBeRolled(armiesOnCountry);
+		std::vector<int> diceRolled = std::vector<int>();
+		
+		int diceFaceRolled = 0;
+		for (int i = 0; i < diceToBeRolled; i++) {
+			diceFaceRolled = rand() % 6 + 1;
+			diceRolled.push_back(diceFaceRolled);
+			diceFaceRolledCounter->at((double)diceFaceRolled-1) += 1;
+			*rollCounter += 1;
+		}
+
+		return diceRolled;
+	}
+
+	void Dice::printDiceFacePercentageRolled() {
 		for (int i = 0; i < 6; i++) {
-			int* temp1 = &i;
-			std::cout << "Dice percentage " << i + 1 << ": " << double(percentDice[i]) / *numOfRolls * 100 << "%\n";
+			std::cout << "Percentage of dice face " << i + 1 << " rolled: " << ((double)diceFaceRolledCounter->at(i) / *rollCounter) * 100 << std::endl;
 		}
 	}

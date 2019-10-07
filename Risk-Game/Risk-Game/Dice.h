@@ -9,11 +9,11 @@ class Dice
 {
 public:
 	Dice();
-	void rollDice(int* numOfDices);
-	void printCurrentState();
+	~Dice();
+	std::vector<int> rollDice(int armiesOnCountry);
+	void printDiceFacePercentageRolled();
 private:
-	int* percentDice;
-	int* numOfRolls;
-	std::vector<int*>* currentRollingDice;
-	std::vector<std::vector<int*>*>* recordsOfRolling;
+	std::vector<int>* diceFaceRolledCounter;
+	int* rollCounter;
+	int diceToBeRolled(int armiesOnCountry);
 };
