@@ -2,7 +2,7 @@
 #include<iostream>
 #include <time.h>
 
-int main() {
+/**int main() {
 	std::cout << "Demonstrating creation of Deck with the same amount of card types (infantry, artillery, cavalry)" << std::endl;
 	int numberOfCountries = 0;
 	std::cout << "Enter the amount of countries on the board" << std::endl;
@@ -54,4 +54,4 @@ int main() {
 	}
 
 	return 0;
-}
+}**/
