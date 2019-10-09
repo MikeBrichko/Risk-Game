@@ -16,6 +16,9 @@
     <Filter Include="Source Files\Drivers">
       <UniqueIdentifier>{74ba11f3-0cdc-4464-951b-07c4ea66e475}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Maps">
+      <UniqueIdentifier>{da1631df-2dde-42b8-9356-d2854eb60aef}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Map.cpp">
@@ -42,6 +45,9 @@
     <ClCompile Include="MapDriver.cpp">
       <Filter>Source Files\Drivers</Filter>
     </ClCompile>
+    <ClCompile Include="MapLoaderDriver.cpp">
+      <Filter>Source Files\Drivers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Map.h">
@@ -59,5 +65,10 @@
     <ClInclude Include="Cards.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="europe.map">
+      <Filter>Source Files\Maps</Filter>
+    </None>
   </ItemGroup>
 </Project>
