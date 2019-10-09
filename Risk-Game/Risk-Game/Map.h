@@ -55,7 +55,3 @@ public:
 	void checkConnectedSubgraph();
 	void resetVisitedCountries();
 };
-
-
-
-

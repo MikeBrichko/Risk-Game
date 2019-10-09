@@ -29,8 +29,6 @@
 		};
 
 		return diceToBeRolled;
-
-		return armiesOnCountry;
 	}
 
 	std::vector<int> Dice::rollDice(int armiesOnCountry) {

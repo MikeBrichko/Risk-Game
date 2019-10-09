@@ -5,235 +5,219 @@
 #include <sstream>
 #include <vector>
 
-using namespace std;
-
-Map :: Map(int numCountries){
-    this->numCountries = numCountries;
-    cout << "there are " << numCountries << " on this map" <<endl;
-}
-Country :: Country(){
-        countryNum = 0;
-        countryName = "noname";
-        continentNum = 0;
-        xC = 0;
-        yC = 0;
-    }
-Country :: Country(int countryNum, string countryName, int continentNum, int xC, int yC){
-    this->countryNum = countryNum;
-    this->countryName = countryName;
-    this->continentNum = continentNum;
-    this->xC = xC;
-    this->yC = yC;
+MapLoader::MapLoader(std::string fileName) {
+	this->fileName = new std::string(fileName);
 }
 
-Continent :: Continent(){
-    continentName = "noname";
-    armyValue = 0;
-    color = "noColor";
-}
-Continent :: Continent(string continentName, int armyValue, string color ){
-    this-> continentName = continentName;
-    this-> armyValue = armyValue;
-    this->color = color;
+MapLoader::~MapLoader() {
+	delete fileName;
 }
 
-Border :: Border(){
-    initCountry = 0;
-    neighbourCountry = 0;
-}
-Border :: Border(int initCountry, int neighbourCountry){
-    this->initCountry = initCountry;
-    this->neighbourCountry = neighbourCountry;
-}
+void MapLoader::validateMap() {
+	std::string line = "";
+	std::cout << "Validating file with name -> " << *fileName << std::endl;
 
-string line, fileName;                  //strings that will iterate through file
-string guideWord;                       //used to separate sections in splitString()
-bool continentFound = false;            //at the end of validation, if one is false, invalid file
-bool countryFound = false;
-bool bordersFound = false;
-bool valid = true;                  
-vector<Continent> listOfContinents;     //store continents
-vector<Country> listOfCountries;
-vector<Border> listOfBorders;        
-vector<string> words;                   //store words on each line of file
-int numContinent = 0;                   
-int numCountry = 0;
-int numBorders = 0;
+	std::ifstream inFile;
+	inFile.open(*fileName);
 
+	if (!inFile) {
+		std::cerr << "Unable to open file " + *fileName;
+		exit(1);
+	}
 
-void validateMap(string s){
-    cout << "validating file......" << endl;
-    ifstream infile(s);
-    
-    while(getline(infile, line)!= NULL){  
-        
-    if( line.find("[continents]") == 0){
-        getline(infile, line); 
-        guideWord = "continent";
-        while(line.find("[countries]") != 0){
-            splitStringValidate(line);
-            getline(infile, line);
-        }
-  
-    }
-       
-    if( line.find("[countries]") == 0){
-        getline(infile, line);
-        guideWord = "country";
-        while(line.find("[borders]") != 0){
-            splitStringValidate(line);
-            getline(infile, line);
-            }
-         }
-         
-         //procedure for borders
-    if( line.find("[borders]") == 0){
-        getline(infile, line);
-        guideWord = "border";
-        while(!line.empty()){
-            splitStringValidate(line);
-            getline(infile, line);
-            } 
-        }         
-    }
-    
-    if((continentFound && countryFound && bordersFound && valid) == false){
-        cout << "invalid file. Program will terminate." <<endl;
-        exit(0);
-    }  
-      
-    cout << "end of file has been reached, validation SUCCESSFULL \n\n" << endl;
+	while (std::getline(inFile, line)) {
+		//validate continent objects
+		if (line.find("[continents]") == 0) {
+			getline(inFile, line);
+			while (line.find("[countries]") != 0) {
+				validateContinents(line);
+				getline(inFile, line);
+			}
+		}
 
-    infile.close(); 
- 
-}
-void splitStringValidate(string s){
-    string element;            
-    stringstream ss(s);       // Insert the string into a stream
-    
-    while (ss >> element){    //figure out how many words there are in the string
-        words.push_back(element);
-    }
-    
-    if(guideWord == "continent"){       //when continent is reached in file
-        continentFound = true;
-        if(!(words.size() == 3 || words.size() == 0)){
-            valid = false;
-        }
-    } 
-    if(guideWord == "country"){      //when country is reached in file
-        countryFound = true;
-        if(!(words.size() == 5 || words.size() == 0)){
-            valid = false;
-        }
-    }
-    if(guideWord == "border"){      //when continent is reached in file
-        bordersFound = true;
-        if(words.size() < 2){
-            valid = false;
-        }
-    }
-      
-    words.clear();
-}
-//from .map file to an actual map object
-void exportToMap(string s){
-    //valid
-    
-    ifstream infile(s);
-    
-    
-    while(getline(infile, line)!= NULL){  
-         
-         //procedure for continents
-         if( line.find("[continents]") == 0){           //when found
-             getline(infile, line);                     //go to next line
-             cout<<"[CONTINENTS]" <<endl; 
-             guideWord = "continent";
-             while(line.find("[countries]") != 0){      //as long as country is not found
-                splitString(line);
-                numContinent++;
-                getline(infile, line);
-             }
-  
-         }
-         
-         //procedure for countries
-         if( line.find("[countries]") == 0){
-             getline(infile, line);
-             cout<<"[COUNTRIES]  "<<endl;
-             guideWord = "country";
-             while(line.find("[borders]") != 0){
-                splitString(line);
-                numCountry++;
-                getline(infile, line);
-             }
-             
-         }
-         
-         
-         //procedure for borders
-         if( line.find("[borders]") == 0){
-             getline(infile, line);
-             cout<<"[BORDER]"<<endl;
-             guideWord = "border";
-             while(!line.empty()){
-                splitString(line);
-                getline(infile, line);
-             } 
-         }         
-         
-     } 
-    cout << "end of file has been reached" << endl;
- 
-    infile.close(); 
+		//validate country objects
+		if (line.find("[countries]") == 0) {
+			getline(inFile, line);
+			while (line.find("[borders]") != 0) {
+				validateCountries(line);
+				getline(inFile, line);
+			}
+		}
+
+		//validate borders
+		if (line.find("[borders]") == 0) {
+			getline(inFile, line);
+			while (!line.empty()) {
+				validateBorders(line);
+				getline(inFile, line);
+			}
+		}
+	}
+	
+	std::cout << "End of file has been reached. Map File is valid" << std::endl;
+	inFile.close();
 }
 
+bool MapLoader::validateContinents(std::string lineToValidate) {
+	std::string word;
+	std::vector<std::string> words = std::vector<std::string>();
+	std::stringstream ss(lineToValidate); 
 
-//function to split string into individual elements
-void splitString(string s){
+	while (ss >> word) {
+		words.push_back(word);
+	}
+	ss.clear();
 
-    string element;                 
-    stringstream ss(s);       // Insert the string into a stream
-     
-    while (ss >> element){
-        words.push_back(element);
-    }
+	if (!(words.size() == 3 || words.size() == 0)) {
+		std::cout << "Invalid Continent Format" << std::endl;
+		return false;
+	}
+
+	return true;
+}
+
+bool MapLoader::validateCountries(std::string lineToValidate) {
+	std::string word;
+	std::vector<std::string> words = std::vector<std::string>();
+	std::stringstream ss(lineToValidate);
+
+	while (ss >> word) {
+		words.push_back(word);
+	}
+	ss.clear();
+
+	if (!(words.size() == 5 || words.size() == 0)) {
+		std::cout << "Invalid Country Format" << std::endl;
+		return false;
+	}
+
+	return true;
+}
+
+bool MapLoader::validateBorders(std::string lineToValidate) {
+	std::string word;
+	std::vector<std::string> words = std::vector<std::string>();
+	std::stringstream ss(lineToValidate);
+
+	while (ss >> word) {
+		words.push_back(word);
+	}
+	ss.clear();
+
+	if (words.size() < 2) {
+		std::cout << "Invalid Border Format" << std::endl;
+		return false;
+	}
+
+	return true;
+}
+
+Map* MapLoader::exportToMap(){
+	std::cout << "Creating game map" << std::endl;
+
+	std::ifstream inFile;
+	inFile.open(*fileName);
+
+	if (!inFile) {
+		std::cerr << "Unable to open file " + *fileName;
+		exit(1);
+	}
     
-    listOfContinents.push_back(Continent());  //initialize the vector
-    listOfCountries.push_back(Country());
-    
-    if(guideWord == "continent"){
-        listOfContinents[numContinent].continentName = words[0];        //store values of parameters
-        listOfContinents[numContinent].armyValue = stoi(words[1]);
-        listOfContinents[numContinent].color = words[2];
-        
-        cout <<"continent " << (numContinent+1) << endl;
-        cout << listOfContinents[numContinent].continentName << endl;
-        cout << listOfContinents[numContinent].armyValue << endl;
-        cout << listOfContinents[numContinent].color <<"\n" << endl;
-        
-    }
-    if(guideWord == "country"){
-        listOfCountries[numCountry].countryNum = stoi(words[0]);
-        listOfCountries[numCountry].countryName = words[1];
-        listOfCountries[numCountry].continentNum =stoi(words[2]);
-        listOfCountries[numCountry].xC = stoi(words[3]);
-        listOfCountries[numCountry].yC = stoi(words[4]);
-        
-        cout <<"country " << (numCountry +1) << endl;
-        cout<< listOfCountries[numCountry].countryNum <<endl;
-        cout<< listOfCountries[numCountry].countryName <<endl;
-        cout<< listOfCountries[numCountry].continentNum <<endl;
-        cout<< listOfCountries[numCountry].xC <<endl;
-        cout<< listOfCountries[numCountry].yC <<"\n"<<endl;
-        
-    }
-    if(guideWord == "border"){
-        for(int i = 1; i < words.size();i++){
-            listOfBorders.push_back(Border(stoi(words[0]), stoi(words[i])));
-            cout<< words[0] << " can attack " << words[i] <<endl;
-        }
-    }
-    words.clear();
+	std::string line = "";
+	int continentID = 1;
+	std::vector<Continent*>* continents = new std::vector<Continent*>();
+	std::vector<Country*>* countries = new std::vector<Country*>();
+	while (getline(inFile, line)) {
+
+		//procedure for continents
+		if (line.find("[continents]") == 0) {
+			getline(inFile, line);
+			std::cout << "Creating Continent Objects" << std::endl;
+			while (line.find("[countries]") != 0) {
+				if (line == "")
+					break;
+				continents->push_back(createContinent(line, continentID));
+				continentID++;
+				getline(inFile, line);
+			}
+
+		}
+		
+		//procedure for countries
+		if( line.find("[countries]") == 0){
+			getline(inFile, line);
+			std::cout<<"Creating Country Objects"<<std::endl;
+			while(line.find("[borders]") != 0){
+				if (line == "")
+					break;
+			   countries->push_back(createCountry(line, continents));
+			   getline(inFile, line);
+			}
+
+		}
+
+		//procedure for borders
+		if( line.find("[borders]") == 0){
+			getline(inFile, line);
+			std::cout<<"Adding Neighbours to Countries"<< std::endl;
+			while(!line.empty()){
+				if (line == "")
+					break;
+				createBorders(line, countries);
+			   getline(inFile, line);
+			}
+		}
+
+	} 
+
+	Map* map = new Map(countries->size());
+	for (auto continent : *continents) {
+		map->addContinent(continent);
+	}
+
+	std::cout << "End of file has been reached. Map has been created." << std::endl;
+    inFile.close(); 
+
+	return map;
+}
+
+Continent* MapLoader::createContinent(std::string line, int continentID) {
+	std::string word;
+	std::vector<std::string> words = std::vector<std::string>();
+	std::stringstream ss(line);
+
+	while (ss >> word) {
+		words.push_back(word);
+	}
+	ss.clear();
+
+	return new Continent(continentID, words.at(0), stoi(words.at(1)));
+}
+
+Country* MapLoader::createCountry(std::string line, std::vector<Continent*>* continents) {
+	std::string word;
+	std::vector<std::string> words = std::vector<std::string>();
+	std::stringstream ss(line);
+
+	while (ss >> word) {
+		words.push_back(word);
+	}
+	ss.clear();
+	Country* createdCountry = new Country(stoi(words.at(0)), words.at(1), stoi(words.at(2)), 0);
+	continents->at((double)stoi(words.at(2)) - 1)->addCountry(createdCountry);
+	return createdCountry;
+}
+
+void MapLoader::createBorders(std::string line, std::vector<Country*>* countries) {
+	std::string word;
+	std::vector<std::string> words = std::vector<std::string>();
+	std::stringstream ss(line);
+
+	while (ss >> word) {
+		words.push_back(word);
+	}
+	ss.clear();
+
+	for (int i = 1; i < words.size(); i++)
+		countries->at((double)stoi(words.at(0))-1)->addNeighbour(countries->at((double)stoi(words.at(i))-1));
 }

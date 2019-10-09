@@ -1,52 +1,24 @@
 #pragma once
-
-#include <iostream>
-#include <fstream>
 #include <string>
-using namespace std;
+#include "Map.h"
 
-class Map{
-public: 
-    int numCountries;
-    Map(int numCountries);
-};
+class MapLoader {
+private: 
+	std::string* fileName;
+	bool validateContinents(std::string lineToValidate);
+	bool validateCountries(std::string lineToValidate);
+	bool validateBorders(std::string lineToValidate);
+	Continent* createContinent(std::string line, int continentID);
+	Country* createCountry(std::string line, std::vector<Continent*>* continents);
+	void createBorders(std::string line, std::vector<Country*>* countries);
 
-class Country{
 public:
-    int countryNum;
-    string countryName;
-    int continentNum;               
-    int xC;                          //xCoordinate
-    int yC;                          //yCoordinate
-    
-    Country();
-    Country(int countryNum, string countryName, int continentNum, int xC, int yC);
+	MapLoader(std::string fileName);
+	~MapLoader();
+	void validateMap();
+	Map* exportToMap();
 };
 
-class Continent{
-public :
-    string continentName;
-    int armyValue;
-    string color;
-    
-    Continent();
-    Continent(string continentName, int armyValue, string color );
-};
-
-class Border{
-public:
-    int initCountry;
-    int neighbourCountry;
-    
-    Border();
-    Border(int initCountry, int neighbourCountry);
-};
-
-void splitString(string s);
-void exportToMap(string s);
-void validateMap(string s);
-void splitStringValidate(string s);
-void countWords(string s);
 
     
     

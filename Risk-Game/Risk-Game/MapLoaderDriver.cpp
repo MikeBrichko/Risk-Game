@@ -1,18 +1,15 @@
+#include "MapLoader.h"'
 #include <iostream>
-#include <fstream>
 #include <string>
-#include "MapLoader.h"
-
-using namespace std;
 
 int main()
 {
-    string fileName;
+	MapLoader* mapLoader = new MapLoader("europe.map");
+    mapLoader->validateMap();
+	Map* map = mapLoader->exportToMap();
+	map->checkConnectedGraph();
+	map->checkConnectedSubgraph();
 
-    cout << "please enter a .map file" << endl;
-    cin >> fileName;
-    validateMap(fileName);
-    exportToMap(fileName);
     return 0;
 }
 
