@@ -1,5 +1,2 @@
-﻿  CardsDriver.cpp
-  MapLoaderDriver.cpp
-  Generating Code...
-C:\Users\wmike\source\repos\Risk-Game\Risk-Game\Risk-Game\MapLoaderDriver.cpp(1,10): warning C4067:  unexpected tokens following preprocessor directive - expected a newline
+﻿  PlayerDriver.cpp
   Risk-Game.vcxproj -> C:\Users\wmike\source\repos\Risk-Game\Risk-Game\x64\Debug\Risk-Game.exe

@@ -32,16 +32,16 @@ public:
 class Hand {
 private:
 	std::vector<Card*>* hand;
-	int* armies;
+	static int* armies;
 	std::string* playerName;
 	void removeCardsInHand(std::string);
 	int exchangeDecision(std::string, std::string);
-	void increasePlayersArmies(std::vector<Hand*>*);
-	void printCardsInHand();
-	void exchange(std::vector<Hand*>*);
+	void increasePlayersArmies();
+	void exchange();
 
 public:
 	Hand(std::string*);
 	~Hand();
-	void addCard(Card*, std::vector<Hand*>*);
+	void addCard(Card*);
+	void printCardsInHand();
 };

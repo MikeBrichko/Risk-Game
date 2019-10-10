@@ -7,7 +7,7 @@
 	int numberOfCountries = 0;
 	std::cout << "Enter the amount of countries on the board" << std::endl;
 	std::cin >> numberOfCountries;
-
+	e
 	Deck* deck = new Deck(numberOfCountries);
 	int amountOfEachCardType[3] = {};
 	while (deck->getDeckSize() != 0) {
@@ -50,7 +50,7 @@
 	std::cout << "All players draw cards and exchange cards for armies if they want" << std::endl;
 	while (true) {
 		for(auto hand : *handsInPlay)
-			hand->addCard(deck->draw(numberOfCountries), handsInPlay);
+			hand->addCard(deck->draw(numberOfCountries));
 	}
 
 	return 0;
