@@ -4,6 +4,8 @@
 #include <time.h>
 #include <algorithm>
 
+int* Hand::armies;
+
 //----------------------------------------------------------------------------------------
 Card::Card(CardType* type) {
 	cardType = type;
@@ -97,7 +99,7 @@ Hand::~Hand() {
 	delete playerName;
 }
 
-void Hand::exchange(std::vector<Hand*>* handsInPlay) {
+void Hand::exchange() {
 	if (hand->size() < 3)
 		return;
 
@@ -130,12 +132,12 @@ void Hand::exchange(std::vector<Hand*>* handsInPlay) {
 
 	case 1:
 		removeCardsInHand(similarCardTypes);
-		increasePlayersArmies(handsInPlay);
+		increasePlayersArmies();
 		break;
 
 	case 2:
 		removeCardsInHand(differentCardTypes);
-		increasePlayersArmies(handsInPlay);
+		increasePlayersArmies();
 		break;
 
 	default:
@@ -196,19 +198,21 @@ void Hand::removeCardsInHand(std::string cardsInHand) {
 	printCardsInHand();
 }
 
-void Hand::increasePlayersArmies(std::vector<Hand*>* handsInPlay) {
-	for (auto opponentHand : *handsInPlay) {
+void Hand::increasePlayersArmies() {
+	*Hand::armies += 5;
+	std::cout << std::endl << "The amount of armies " << *playerName << " received is " << *armies << std::endl << std::endl;
+	/**for (auto opponentHand : *handsInPlay) {
 		*opponentHand->armies += 5;
 
 		if(opponentHand->playerName == playerName)
 			std::cout << std::endl <<"The amount of armies " << *playerName << " received is " << *armies << std::endl << std::endl;
-	}
+	}**/
 } 
 
-void Hand::addCard(Card* card, std::vector<Hand*>* handsInPlay) {
+void Hand::addCard(Card* card) {
 	std::cout << "The card " << *playerName << " drew is a " << *card->getCardType() << " card!" << std::endl;
 	hand->push_back(card);
-	exchange(handsInPlay);
+	exchange();
 }
 
 void Hand::printCardsInHand() {

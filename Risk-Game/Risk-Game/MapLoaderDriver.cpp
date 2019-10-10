@@ -2,7 +2,7 @@
 #include <iostream>
 #include <string>
 
-int main()
+/**int main()
 {
 	MapLoader* mapLoader = new MapLoader("europe.map");
     mapLoader->validateMap();
@@ -11,7 +11,7 @@ int main()
 	map->checkConnectedSubgraph();
 
     return 0;
-}
+}**/
 
 
 
