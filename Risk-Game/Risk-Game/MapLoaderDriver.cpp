@@ -4,15 +4,20 @@
 
 int main()
 {
+	/*
+		Case 1: Valid map
+	*/
 	MapLoader* mapLoader = new MapLoader("europe.map");
     mapLoader->validateMap();
 	Map* map = mapLoader->exportToMap();
 	map->checkConnectedGraph();
 	map->checkConnectedSubgraph();
 
+	/*
+		Case 2: Invalid map
+	*/
 	MapLoader* mapLoaderFail = new MapLoader("europe_fail.map");
 	mapLoaderFail->validateMap();
-	Map* map2 = mapLoaderFail->exportToMap();
 
     return 0;
 }

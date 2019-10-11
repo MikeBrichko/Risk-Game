@@ -16,7 +16,7 @@ MapLoader::~MapLoader() {
 void MapLoader::validateMap() {
 	std::string line = "";
 	std::cout << "Validating file with name -> " << *fileName << std::endl;
-
+	int* componentCounter = new int();
 	std::ifstream inFile;
 	inFile.open(*fileName);
 
@@ -30,31 +30,51 @@ void MapLoader::validateMap() {
 		if (line.find("[continents]") == 0) {
 			getline(inFile, line);
 			while (line.find("[countries]") != 0) {
-				validateContinents(line);
-				getline(inFile, line);
+				if (validateContinents(line)) {
+					getline(inFile, line);
+				}
+				else {
+					exit(1);
+				}
 			}
+			++* componentCounter;
 		}
 
 		//validate country objects
-		if (line.find("[countries]") == 0) {
+		else if (line.find("[countries]") == 0) {
 			getline(inFile, line);
 			while (line.find("[borders]") != 0) {
-				validateCountries(line);
-				getline(inFile, line);
+				if (validateCountries(line)) {
+					getline(inFile, line);
+				}
+				else {
+					exit(1);
+				};
 			}
+			++* componentCounter;
 		}
 
 		//validate borders
-		if (line.find("[borders]") == 0) {
+		else if (line.find("[borders]") == 0) {
 			getline(inFile, line);
 			while (!line.empty()) {
-				validateBorders(line);
-				getline(inFile, line);
+				if (validateBorders(line)) {
+					getline(inFile, line);
+				}
+				else {
+					exit(1);
+				};
 			}
+			++* componentCounter;
 		}
 	}
-	
-	std::cout << "End of file has been reached. Map File is valid" << std::endl;
+	if (*componentCounter < 3) {
+		std::cout << "The Map file is invalid. One of the map components is missing." << std::endl;
+	}
+	else {
+		std::cout << "End of file has been reached. Map File is valid" << std::endl;
+	}
+	delete(componentCounter);
 	inFile.close();
 }
 
