@@ -15,8 +15,11 @@
 	}
 
 	int Dice::diceToBeRolled(int armiesOnCountry) {
-		if (armiesOnCountry == 1)
+		std::cout << "Number of armies on contry is :" << armiesOnCountry << std::endl;
+		if (armiesOnCountry == 1) {
+			std::cout << "Since number of armies is 1, the user can only roll one time" <<std::endl;
 			return armiesOnCountry;
+		}
 
 		int diceToBeRolled = 0;
 		while (diceToBeRolled == 0 && 0 < diceToBeRolled < 4) {
