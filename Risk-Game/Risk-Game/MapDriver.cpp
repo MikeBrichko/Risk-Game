@@ -3,13 +3,12 @@
 #include <string>
 #include <list>
 
-/**int main()
+int main()
 {
-	/**
-	Use Case 1
-	A---B
-	|	|
-	C---D , where A&B belong to Continent1 and C&D belong to Continent2
+	//Use Case 1
+	//A---B
+	//|	  |
+	//C---D , where A&B belong to Continent1 and C&D belong to Continent2
 	
 	std::cout << "Use case 1" << std::endl;
 	Map* map = new Map(4);
@@ -40,11 +39,10 @@
 	map->checkConnectedGraph();
 	map->checkConnectedSubgraph();
 
-	/**
-	Use Case 2
-	E   F
-	|	|
-	G---H , where E&F belong to Continent3 and G&H belong to Continent4
+	//Use Case 2
+	//E   F
+	//|	  |
+	//G---H , where E&F belong to Continent3 and G&H belong to Continent4
 	
 	std::cout << "Use case 2" << std::endl;
 	Map* map1 = new Map(4);
@@ -73,11 +71,11 @@
 	map1->checkConnectedGraph();
 	map1->checkConnectedSubgraph();
 
-	/**
-	Use Case 3
-	I   J
-		
-	K---L , where I&J belong to Continent5 and K&L belong to Continent6
+	
+	//Use Case 3
+	//I   J	
+	//
+	//K---L , where I&J belong to Continent5 and K&L belong to Continent6
 	
 	std::cout << "Use case 3" << std::endl;
 	Map* map2 = new Map(4);
@@ -103,4 +101,4 @@
 	map2->checkConnectedSubgraph();
 	
 	return 0;
-}**/
+}

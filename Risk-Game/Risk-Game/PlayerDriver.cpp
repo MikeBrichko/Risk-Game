@@ -1,7 +1,7 @@
 #include "Player.h"
 #include <iostream>
 
-int main() {
+/**int main() {
 	std::cout << "Creating a player" << std::endl;
 	Player* player = new Player(1, "Player 1");
 	std::cout << std::endl;
@@ -32,7 +32,7 @@ int main() {
 
 	//Validate Dice object
 	//60 is the amount of countries on the board. It will be retrieved from the map object.
-	player->rollDice(60);
+	player->rollDice(rand() % 3 + 1);
 	std::cout << std::endl;
 
 	//Valdate Reinforce
@@ -45,4 +45,4 @@ int main() {
 
 	//Validate Fortify
 	player->fortifiy();
-}
+}**/

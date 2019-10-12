@@ -29,8 +29,8 @@ void Player::printCarsInHand() {
 	hand->printCardsInHand();
 }
 
-void Player::rollDice(int numberOfCountries) {
-	std::vector<int> diceRolled = dice->rollDice(numberOfCountries);
+void Player::rollDice(int armiesOnCountry) {
+	std::vector<int> diceRolled = dice->rollDice(armiesOnCountry);
 	std::cout << *playerName << " rolled: ";
 	for (auto diceFace : diceRolled)
 		std::cout << diceFace << " ";
@@ -66,7 +66,7 @@ void Player::attack() {
 	std::cout << "Starting Attack Phase" << std::endl;
 	std::cout << *playerName << " picks what country he attacks" << std::endl;
 	std::cout << *playerName << " rolls dice to see if attack was succesfull" << std::endl;
-	rollDice(60);
+	rollDice(rand()%3+1);
 	std::cout << "Finished Attack Phase" << std::endl;
 }
 

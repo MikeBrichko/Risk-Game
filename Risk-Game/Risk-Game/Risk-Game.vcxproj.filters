@@ -73,5 +73,8 @@
     <None Include="europe.map">
       <Filter>Source Files\Maps</Filter>
     </None>
+    <None Include="europe_fail.map">
+      <Filter>Source Files\Maps</Filter>
+    </None>
   </ItemGroup>
 </Project>

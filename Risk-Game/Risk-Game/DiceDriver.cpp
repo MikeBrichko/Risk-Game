@@ -2,8 +2,7 @@
 #include "Dice.h"
 #include <istream>
 
-
-int main() {
+/**int main() {
 	int armiesOnCountry = 0;
 	std::string s1 = "";
 
@@ -19,10 +18,10 @@ int main() {
 		armiesOnCountry = rand() % 3 + 1;
 		diceRolled = dice->rollDice(armiesOnCountry);
 		for (auto diceFace : diceRolled) {
-			std::cout << "Rolled value: " <<diceFace << std::endl;
+			std::cout << "Rolled value: " << diceFace << std::endl;
 		}
 		numOfRolls--;
 	}
 	dice->printDiceFacePercentageRolled();
-}
+}**/
 

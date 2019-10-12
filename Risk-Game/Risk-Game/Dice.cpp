@@ -2,6 +2,7 @@
 #include <vector>
 #include <istream>
 #include <time.h>
+#include <algorithm>
 
 	Dice::Dice(){
 		srand(time(NULL));
@@ -15,7 +16,7 @@
 	}
 
 	int Dice::diceToBeRolled(int armiesOnCountry) {
-		std::cout << "Number of armies on contry is :" << armiesOnCountry << std::endl;
+		std::cout << "Number of armies on country is: " << armiesOnCountry << std::endl;
 		if (armiesOnCountry == 1) {
 			std::cout << "Since number of armies is 1, the user can only roll one time" <<std::endl;
 			return armiesOnCountry;
@@ -46,6 +47,7 @@
 			*rollCounter += 1;
 		}
 
+		std::sort(diceRolled.begin(), diceRolled.end());
 		return diceRolled;
 	}
 
