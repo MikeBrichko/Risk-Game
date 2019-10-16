@@ -41,7 +41,7 @@ void MapLoader::validateMap() {
 		}
 
 		//validate country objects
-		else if (line.find("[countries]") == 0) {
+		if (line.find("[countries]") == 0) {
 			getline(inFile, line);
 			while (line.find("[borders]") != 0) {
 				if (validateCountries(line)) {
@@ -55,7 +55,7 @@ void MapLoader::validateMap() {
 		}
 
 		//validate borders
-		else if (line.find("[borders]") == 0) {
+		if (line.find("[borders]") == 0) {
 			getline(inFile, line);
 			while (!line.empty()) {
 				if (validateBorders(line)) {
