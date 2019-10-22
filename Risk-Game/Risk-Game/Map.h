@@ -23,6 +23,7 @@ public:
 	int getContinentID();
 	bool getVisited();
 	void setVisited(bool countryVisited);
+	void addArmy(); // used in reinforce 
 };
 
 class Continent {

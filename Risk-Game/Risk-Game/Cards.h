@@ -36,6 +36,8 @@ private:
 	std::string* playerName;
 	void removeCardsInHand(std::string);
 	int exchangeDecision(std::string, std::string);
+
+	// We have to change void to return int
 	void increasePlayersArmies();
 	void exchange();
 
