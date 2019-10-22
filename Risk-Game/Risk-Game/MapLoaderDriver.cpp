@@ -7,7 +7,7 @@
 	
 	//Case 1: Valid map
 	
-	MapLoader* mapLoader = new MapLoader("europe.map");
+	MapLoader* mapLoader = new MapLoader("eupe.map");
     mapLoader->validateMap();
 	Map* map = mapLoader->exportToMap();
 	map->checkConnectedGraph();

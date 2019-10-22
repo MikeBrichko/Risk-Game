@@ -3,7 +3,7 @@
 #include <string>
 #include <list>
 
-int main()
+/**int main()
 {
 	//Use Case 1
 	//A---B
@@ -101,4 +101,4 @@ int main()
 	map2->checkConnectedSubgraph();
 	
 	return 0;
-}
+}**/

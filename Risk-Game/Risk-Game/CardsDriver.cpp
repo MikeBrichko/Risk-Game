@@ -7,7 +7,7 @@
 	int numberOfCountries = 0;
 	std::cout << "Enter the amount of countries on the board" << std::endl;
 	std::cin >> numberOfCountries;
-	e
+
 	Deck* deck = new Deck(numberOfCountries);
 	int amountOfEachCardType[3] = {};
 	while (deck->getDeckSize() != 0) {

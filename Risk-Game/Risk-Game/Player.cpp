@@ -56,7 +56,14 @@ void Player::reinforce() {
 	//armieCount += continentsOwned();
 
 	std::cout << "Adding armies based on Cards that " << *playerName << " owns." << std::endl;
-	//armieCount += exchange();
+	//armieCount += addCard();
+	//change existin mthod to return a number
+
+	std::cout << "Place Armies." << std::endl;
+	printCountriesOwned();
+	//loop based on armieCount where there is a addArmy()
+	//addArmy() will cmake sure that the player has effectively placed this exact number of 
+	//new armies somewhere on the map by the end of the reinforcement phase.
 
 	std::cout << "Finished reinforcement phase" << std::endl;
 }
@@ -65,13 +72,29 @@ void Player::attack() {
 
 	std::cout << "Starting Attack Phase" << std::endl;
 	std::cout << *playerName << " picks what country he attacks" << std::endl;
-	std::cout << *playerName << " rolls dice to see if attack was succesfull" << std::endl;
-	rollDice(rand()%3+1);
+	//print countries that can be attacked by which country
+	//dont print country with less than 2 armies on it
+	//Example
+	//Country A can attack Country B,C,D
+	//Country E can attack F,G
+	//etc...
+
+	std::cout << "Player chooses to attack" << std::endl;
+	//while loop -> playerAttack() returns boolean
+	//select country to attack
+	//void attackOutcome(Country* X, Country* Y);
+	//within the method above -> void removeArmy(Country*)
 	std::cout << "Finished Attack Phase" << std::endl;
 }
 
 void Player::fortifiy() {
 	std::cout << "Starting fortification phase" << std::endl;
 	std::cout << "Moving armies to different countries" << std::endl;
+	//if(player want to move armies){
+	//Countries that can move armies: 
+	//Country A to Country B, C or E
+	//Country C to Country A, Country E or Country H
+	//moveArmies(Country* X, Country* Y)
+	//}
 	std::cout << "Finished fortification phase" << std::endl;
 }

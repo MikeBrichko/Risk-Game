@@ -18,6 +18,7 @@ public:
 	Player(int,std::string);
 	~Player();
 	void reinforce();
+	//attack(Player* playerAttacked)
 	void attack();
 	void fortifiy();
 	void addCountryOwned(Country*);
