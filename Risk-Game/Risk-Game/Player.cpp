@@ -45,7 +45,7 @@ void Player::addCardToHand(Card* card) {
 	hand->addCard(card);
 }
 
-void Player::reinforce() {
+void Player::reinforce(Map gameMap) {
 	int armieCount = 0;
 	std::cout << "Starting reinforcement phase" << std::endl;
 
