@@ -1,7 +1,7 @@
 #include "Player.h"
 #include <iostream>
 
-/**int main() {
+int main() {
 	std::cout << "Creating a player" << std::endl;
 	Player* player = new Player(1, "Player 1");
 	std::cout << std::endl;
@@ -12,8 +12,9 @@
 	std::cout << "Add Countries that player owns" << std::endl;
 	Country* Alaska = new Country(1, "Alaska", 1, 5);
 	Country* Quebec = new Country(2, "Quebec", 1, 5);
-	player->addCountryOwned(Alaska);
-	player->addCountryOwned(Quebec);
+	Map* gameMap = new Map(2);
+	//player->addCountryOwned(Alaska);
+	//player->addCountryOwned(Quebec);
 
 	player->printCountriesOwned();
 	std::cout << std::endl;
@@ -30,13 +31,8 @@
 	player->printCarsInHand();
 	std::cout << std::endl;
 
-	//Validate Dice object
-	//60 is the amount of countries on the board. It will be retrieved from the map object.
-	player->rollDice(rand() % 3 + 1);
-	std::cout << std::endl;
-
 	//Valdate Reinforce
-	player->reinforce();
+	//player->reinforce();
 	std::cout << std::endl;
 
 	//Validate Attack
@@ -44,5 +40,5 @@
 	std::cout << std::endl;
 
 	//Validate Fortify
-	player->fortifiy();
-}**/
+	//player->fortifiy();
+}
