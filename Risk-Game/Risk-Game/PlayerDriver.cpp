@@ -7,41 +7,48 @@ int main() {
 	std::cout << std::endl;
 
 	//Validate Countries in player object
-	player->printCountriesOwned();
+	//player->printCountriesOwned();
 
-	std::cout << "Add Countries that player owns" << std::endl;
-	Map* map = new Map(4);
-	Continent* Continent1 = new Continent(1, "continent1", 5);
-	Continent* Continent2 = new Continent(2, "continent2", 5);
-	map->addContinent(Continent1);
-	map->addContinent(Continent2);
+	Map* gameMap = new Map(6);
 
-	Country* A = new Country(1, "A", Continent1->getID(), 0);
-	Country* B = new Country(1, "B", Continent1->getID(), 0);
-	Country* C = new Country(1, "C", Continent2->getID(), 0);
-	Country* D = new Country(1, "D", Continent2->getID(), 0);
-	Continent1->addCountry(A);
-	Continent1->addCountry(B);
-	Continent2->addCountry(C);
-	Continent2->addCountry(D);
+	//std::cout << "Add Countries that player owns" << std::endl;
+	Country* Canada = new Country(1, "Canada", 1, 5);
+	Country* Argentina = new Country(2, "Argentina", 2, 5);
+	Country* Spain = new Country(3, "Spain", 3, 5);
+	
 
-	A->addNeighbour(B);
-	A->addNeighbour(C);
-	B->addNeighbour(A);
-	B->addNeighbour(D);
-	C->addNeighbour(A);
-	C->addNeighbour(D);
-	D->addNeighbour(B);
-	D->addNeighbour(C);
-	player->addCountryOwned(A);
-	player->addCountryOwned(B);
-	player->addCountryOwned(C);
-	player->addCountryOwned(D);
+	player->addCountryOwned(Canada);
+	player->addCountryOwned(Argentina);
+	player->addCountryOwned(Spain);
+	
+	//Create a second player for testing purposes----------------------------------------------------------------------
+	Player* player2 = new Player(1, "Player 2");
 
-	std::cout << "print country owned" << std::endl;
-	player->printCountriesOwned();
-	std::cout << std::endl;
+	Country* USA = new Country(4, "USA", 1, 5);
+	Country* Mexico = new Country(5, "Mexico", 2, 5);
+	Country* Brazil = new Country(6, "Brazil", 2, 5);
 
+	player2->addCountryOwned(USA);
+	player2->addCountryOwned(Mexico);
+	player2->addCountryOwned(Brazil);
+	//------------------------------------------------------------------------------------------------------------------
+	
+	//Assign neighbours for each country
+	Canada->addNeighbour(USA);
+	Canada->addNeighbour(Spain);
+	Argentina->addNeighbour(Brazil);
+	Argentina->addNeighbour(Mexico);
+	Spain->addNeighbour(Canada);
+	USA->addNeighbour(Canada);
+	USA->addNeighbour(Mexico);
+	Mexico->addNeighbour(USA);
+	Mexico->addNeighbour(Brazil);
+	Mexico->addNeighbour(Argentina);
+	Brazil->addNeighbour(Mexico);
+	Brazil->addNeighbour(Argentina);
+
+
+	
 	//Validate Cards in Hand
 	player->printCarsInHand();
 
@@ -64,4 +71,7 @@ int main() {
 
 	//Validate Fortify
 	//player->fortifiy();
+
+
+
 }

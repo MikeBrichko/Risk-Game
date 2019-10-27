@@ -17,6 +17,9 @@ private:
 public:
 	Player(int,std::string);
 	~Player();
+
+	void addCountryOwned(Country*);              //Added this
+
 	// Validating reinforce
 	int armiesOnCountriesOwned();
 	void addArmyOnCountry(Country*);

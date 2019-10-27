@@ -18,10 +18,17 @@ Player::~Player() {
 	delete dice;
 }
 
-void Player::printCountriesOwned() {
-	std::cout << "These are the countries " << *playerName << " owns: ";
+void Player::addCountryOwned(Country* country)    
+{
+	countriesOwned->push_back(country);
+}
+
+void Player::printCountriesOwned() 
+{
+	std::cout << "These are the countries " << *playerName << " owns: " << std::endl;
+
 	for (auto country : *countriesOwned)
-		std::cout << country->getName() << " ";
+		std::cout << country->getID() << " " << country->getName() << std::endl;
 	std::cout << std::endl;
 }
 
@@ -47,26 +54,26 @@ void Player::addCardToHand(Card* card) {
 }
 
 void Player::reinforce(Map* gameMap) {
-	//	int armieCount = 0;
-	//	std::cout << "Starting reinforcement phase" << std::endl;
-	//
-	//	std::cout << "Adding armies based on Countries that " << *playerName << " owns."<< std::endl;
-	//	armieCount += floor(countriesOwned->size()/3);
-	//
-	//	std::cout << "Adding armies based on Continents that " << *playerName << " owns." << std::endl;
-	//	//armieCount += continentsOwned();
-	//
-	//	std::cout << "Adding armies based on Cards that " << *playerName << " owns." << std::endl;
-	//	//armieCount += addCard();
-	//	//change existin mthod to return a number
-	//
-	//	std::cout << "Place Armies." << std::endl;
-	//	printCountriesOwned();
-	//	//loop based on armieCount where there is a addArmy()
-	//	//addArmy() will cmake sure that the player has effectively placed this exact number of 
-	//	//new armies somewhere on the map by the end of the reinforcement phase.
-	//
-	//	std::cout << "Finished reinforcement phase" << std::endl;
+//	int armieCount = 0;
+//	std::cout << "Starting reinforcement phase" << std::endl;
+//
+//	std::cout << "Adding armies based on Countries that " << *playerName << " owns."<< std::endl;
+//	armieCount += floor(countriesOwned->size()/3);
+//
+//	std::cout << "Adding armies based on Continents that " << *playerName << " owns." << std::endl;
+//	//armieCount += continentsOwned();
+//
+//	std::cout << "Adding armies based on Cards that " << *playerName << " owns." << std::endl;
+//	//armieCount += addCard();
+//	//change existin mthod to return a number
+//
+//	std::cout << "Place Armies." << std::endl;
+//	printCountriesOwned();
+//	//loop based on armieCount where there is a addArmy()
+//	//addArmy() will cmake sure that the player has effectively placed this exact number of 
+//	//new armies somewhere on the map by the end of the reinforcement phase.
+//
+//	std::cout << "Finished reinforcement phase" << std::endl;
 }
 
 
@@ -76,6 +83,7 @@ void Player::attack() {
 	//std::cout << *playerName << " picks what country he attacks" << std::endl;
 	std::cout << "List of countries " << *playerName << " can attack: " << std::endl;
 	//this->attackableCountries();
+
 	//print countries that can be attacked by which country
 	//dont print country with less than 2 armies on it
 	//Example
@@ -85,10 +93,11 @@ void Player::attack() {
 	bool decision = playerAttackDecision();
 	while (decision == true)
 	{
-		std::cout << *playerName << " chooses to attack" << std::endl;
+		std::cout << *playerName <<" chooses to attack" << std::endl;
 
 		std::cout << "List of countries " << *playerName << " can attack: " << std::endl;
 		this->neighbourCountries(true);
+
 		std::cout << "Please choose a country from the list above (enter country number)" << std::endl;
 
 		int countryToAttack;
@@ -104,7 +113,10 @@ void Player::attack() {
 
 void Player::neighbourCountries(bool isAttack) {
 	//std::cout << "Please choose an attackable countries from :" << std::endl;
-	for (auto country : *countriesOwned)
+
+	std::cout << "Countries you own     -------->      Neighbouring enemy countries to attack" << std::endl;
+	std::cout << "-----------------                    --------------------------------------" << std::endl;
+	for (auto country : *countriesOwned) 
 	{
 		std::vector<std::string> listOfNeighbour = std::vector<std::string>();
 		for (auto neighbour : country->getNeighbours()) {
@@ -132,12 +144,12 @@ void Player::neighbourCountries(bool isAttack) {
 
 bool Player::playerAttackDecision()
 {
-	//Need to check if player can attack
+	//todo: Need to check if player can attack
 
 	bool attack;
 	std::string decision;
 
-	std::cout << "Would you like to attack a country? (yes/no)" << std::endl;
+	std::cout << "\nWould you like to attack a country? (yes/no)" << std::endl;
 	std::cin >> decision;
 	if ((decision == "yes") || (decision == "y"))
 	{
