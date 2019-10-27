@@ -47,26 +47,26 @@ void Player::addCardToHand(Card* card) {
 }
 
 void Player::reinforce(Map* gameMap) {
-	//	int armieCount = 0;
-	//	std::cout << "Starting reinforcement phase" << std::endl;
-	//
-	//	std::cout << "Adding armies based on Countries that " << *playerName << " owns."<< std::endl;
-	//	armieCount += floor(countriesOwned->size()/3);
-	//
-	//	std::cout << "Adding armies based on Continents that " << *playerName << " owns." << std::endl;
-	//	//armieCount += continentsOwned();
-	//
-	//	std::cout << "Adding armies based on Cards that " << *playerName << " owns." << std::endl;
-	//	//armieCount += addCard();
-	//	//change existin mthod to return a number
-	//
-	//	std::cout << "Place Armies." << std::endl;
-	//	printCountriesOwned();
-	//	//loop based on armieCount where there is a addArmy()
-	//	//addArmy() will cmake sure that the player has effectively placed this exact number of 
-	//	//new armies somewhere on the map by the end of the reinforcement phase.
-	//
-	//	std::cout << "Finished reinforcement phase" << std::endl;
+//	int armieCount = 0;
+//	std::cout << "Starting reinforcement phase" << std::endl;
+//
+//	std::cout << "Adding armies based on Countries that " << *playerName << " owns."<< std::endl;
+//	armieCount += floor(countriesOwned->size()/3);
+//
+//	std::cout << "Adding armies based on Continents that " << *playerName << " owns." << std::endl;
+//	//armieCount += continentsOwned();
+//
+//	std::cout << "Adding armies based on Cards that " << *playerName << " owns." << std::endl;
+//	//armieCount += addCard();
+//	//change existin mthod to return a number
+//
+//	std::cout << "Place Armies." << std::endl;
+//	printCountriesOwned();
+//	//loop based on armieCount where there is a addArmy()
+//	//addArmy() will cmake sure that the player has effectively placed this exact number of 
+//	//new armies somewhere on the map by the end of the reinforcement phase.
+//
+//	std::cout << "Finished reinforcement phase" << std::endl;
 }
 
 
@@ -85,7 +85,7 @@ void Player::attack() {
 	bool decision = playerAttackDecision();
 	while (decision == true)
 	{
-		std::cout << *playerName << " chooses to attack" << std::endl;
+		std::cout << *playerName <<" chooses to attack" << std::endl;
 
 		std::cout << "List of countries " << *playerName << " can attack: " << std::endl;
 		this->attackableCountries();
@@ -105,7 +105,7 @@ void Player::attack() {
 void Player::attackableCountries() {
 	//std::cout << "Please choose an attackable countries from :" << std::endl;
 
-	for (auto country : *countriesOwned)
+	for (auto country : *countriesOwned) 
 	{
 		std::string listOfNeighbour = "";
 		for (auto neighbour : country->getNeighbours()) {
