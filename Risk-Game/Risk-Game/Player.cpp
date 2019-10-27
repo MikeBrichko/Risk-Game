@@ -18,10 +18,17 @@ Player::~Player() {
 	delete dice;
 }
 
-void Player::printCountriesOwned() {
-	std::cout << "These are the countries " << *playerName << " owns: ";
+void Player::addCountryOwned(Country* country)    
+{
+	countriesOwned->push_back(country);
+}
+
+void Player::printCountriesOwned() 
+{
+	std::cout << "These are the countries " << *playerName << " owns: " << std::endl;
+
 	for (auto country : *countriesOwned)
-		std::cout << country->getName() << " ";
+		std::cout << country->getID() << " " << country->getName() << std::endl;
 	std::cout << std::endl;
 }
 
@@ -38,9 +45,6 @@ void Player::rollDice(int armiesOnCountry) {
 	std::cout << std::endl;
 }
 
-//void Player::addCountryOwned(Country* country) {
-//	countriesOwned->push_back(country);
-//}
 
 void Player::addCardToHand(Card* card) {
 	hand->addCard(card);
@@ -74,7 +78,7 @@ void Player::attack() {
 
 	std::cout << "Starting Attack Phase" << std::endl;
 	//std::cout << *playerName << " picks what country he attacks" << std::endl;
-	std::cout << "List of countries " << *playerName << " can attack: " << std::endl;
+	std::cout << "List of countries " << *playerName << " can attack: \n" << std::endl;
 	this->attackableCountries();
 	//print countries that can be attacked by which country
 	//dont print country with less than 2 armies on it
@@ -88,6 +92,7 @@ void Player::attack() {
 		std::cout << *playerName <<" chooses to attack" << std::endl;
 
 		std::cout << "List of countries " << *playerName << " can attack: " << std::endl;
+		std::cout << std::endl;
 		this->attackableCountries();
 		std::cout << "Please choose a country from the list above (enter country number)" << std::endl;
 
@@ -104,7 +109,8 @@ void Player::attack() {
 
 void Player::attackableCountries() {
 	//std::cout << "Please choose an attackable countries from :" << std::endl;
-
+	std::cout << "Countries you own     -------->      Neighbouring enemy countries to attack" << std::endl;
+	std::cout << "-----------------                    --------------------------------------" << std::endl;
 	for (auto country : *countriesOwned) 
 	{
 		std::string listOfNeighbour = "";
@@ -121,12 +127,12 @@ void Player::attackableCountries() {
 
 bool Player::playerAttackDecision()
 {
-	//Need to check if player can attack
+	//todo: Need to check if player can attack
 
 	bool attack;
 	std::string decision;
 
-	std::cout << "Would you like to attack a country? (yes/no)" << std::endl;
+	std::cout << "\nWould you like to attack a country? (yes/no)" << std::endl;
 	std::cin >> decision;
 	if ((decision == "yes") || (decision == "y"))
 	{

@@ -7,14 +7,18 @@ int main() {
 	std::cout << std::endl;
 
 	//Validate Countries in player object
-	player->printCountriesOwned();
 
-	std::cout << "Add Countries that player owns" << std::endl;
+	//player->printCountriesOwned();
+
+	//std::cout << "Add Countries that player owns" << std::endl;
 	Country* Alaska = new Country(1, "Alaska", 1, 5);
 	Country* Quebec = new Country(2, "Quebec", 1, 5);
+	Country* Ontario = new Country(3, "Ontario", 1, 5);
 	Map* gameMap = new Map(2);
-	//player->addCountryOwned(Alaska);
-	//player->addCountryOwned(Quebec);
+
+	player->addCountryOwned(Alaska);
+	player->addCountryOwned(Quebec);
+	player->addCountryOwned(Ontario);
 
 	player->printCountriesOwned();
 	std::cout << std::endl;
