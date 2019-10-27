@@ -73,7 +73,8 @@ void Player::reinforce(Map* gameMap) {
 void Player::attack() {
 
 	std::cout << "Starting Attack Phase" << std::endl;
-	std::cout << *playerName << " picks what country he attacks" << std::endl;
+	//std::cout << *playerName << " picks what country he attacks" << std::endl;
+	std::cout << "List of countries " << *playerName << " can attack: " << std::endl;
 	this->attackableCountries();
 	//print countries that can be attacked by which country
 	//dont print country with less than 2 armies on it
@@ -81,17 +82,28 @@ void Player::attack() {
 	//Country A can attack Country B,C,D
 	//Country E can attack F,G
 	//etc...
+	bool decision = playerAttackDecision();
+	while (decision == true)
+	{
+		std::cout << *playerName <<" chooses to attack" << std::endl;
 
-	std::cout << "Player chooses to attack" << std::endl;
-	//while loop -> playerAttack() returns boolean
-	//select country to attack
-	//void attackOutcome(Country* X, Country* Y);
-	//within the method above -> void removeArmy(Country*)
+		std::cout << "List of countries " << *playerName << " can attack: " << std::endl;
+		this->attackableCountries();
+		std::cout << "Please choose a country from the list above (enter country number)" << std::endl;
+
+		int countryToAttack;
+		std::cin >> countryToAttack;
+
+		//while loop -> playerAttack() returns boolean
+		//select country to attack
+		//void attackOutcome(Country* X, Country* Y);
+		//within the method above -> void removeArmy(Country*)
+	}
 	std::cout << "Finished Attack Phase" << std::endl;
 }
 
 void Player::attackableCountries() {
-	std::cout << "Please choose an attackable countries from :" << std::endl;
+	//std::cout << "Please choose an attackable countries from :" << std::endl;
 
 	for (auto country : *countriesOwned) {
 		std::string listOfNeighbour = "";
@@ -106,6 +118,26 @@ void Player::attackableCountries() {
 	}
 }
 
+bool Player::playerAttackDecision()
+{
+	bool attack;
+	std::string decision;
+
+	std::cout << "Would you like to attack a country? (yes/no)" << std::endl;
+	std::cin >> decision;
+	if ((decision == "yes") || (decision == "y"))
+	{
+		attack = true;
+		//std::cout << "you chose to attack" << std::endl;
+	}
+	else if ((decision == "no")||(decision == "n"))
+	{
+		attack = false;
+		std::cout << "you chose not to attack" << std::endl;
+	}
+	return attack;
+
+}
 
 void Player::fortifiy() {
 	std::cout << "Starting fortification phase" << std::endl;
