@@ -18,11 +18,6 @@ Player::~Player() {
 	delete dice;
 }
 
-void Player::addCountryOwned(Country* country)    
-{
-	countriesOwned->push_back(country);
-}
-
 void Player::printCountriesOwned() 
 {
 	std::cout << "These are the countries " << *playerName << " owns: " << std::endl;
@@ -96,12 +91,28 @@ void Player::attack() {
 		std::cout << *playerName <<" chooses to attack" << std::endl;
 
 		std::cout << "List of countries " << *playerName << " can attack: " << std::endl;
-		this->neighbourCountries(true);
+		std::vector<std::vector<Country*>> listOfNeighbours = this->neighbourCountries(true);
+		bool validateAttacking = true;
+		while (validateAttacking){
+			std::cout << "Please choose a player's country from attack from the list above (enter country number)" << std::endl;
 
-		std::cout << "Please choose a country from the list above (enter country number)" << std::endl;
+			int countryFrom;
+			std::cin >> countryFrom;
+			std::cout << "Please choose a enemy's country to attack from the list above (enter country number)" << std::endl;
+			int countryToAttack;
+			std::cin >> countryToAttack;
+			std::cout << listOfNeighbours[0][0]->getID() << std::endl;
+			for (auto country : listOfNeighbours) {
+				if (country[0]->getID() == countryFrom) {
+					for (auto neighbour : country) {
+						if (neighbour->getID() == countryToAttack && neighbour->getID() != countryFrom) {
+							validateAttacking = false;
+						}
+					}
+				}
+			}
+		}
 
-		int countryToAttack;
-		std::cin >> countryToAttack;
 
 		//while loop -> playerAttack() returns boolean
 		//select country to attack
@@ -111,35 +122,38 @@ void Player::attack() {
 	std::cout << "Finished Attack Phase" << std::endl;
 }
 
-void Player::neighbourCountries(bool isAttack) {
+std::vector<std::vector<Country*>> Player::neighbourCountries(bool isAttack) {
 	//std::cout << "Please choose an attackable countries from :" << std::endl;
 
 	std::cout << "Countries you own     -------->      Neighbouring enemy countries to attack" << std::endl;
 	std::cout << "-----------------                    --------------------------------------" << std::endl;
+	std::vector<std::vector<Country*>> listOfNeighbours = std::vector<std::vector<Country*>>();
 	for (auto country : *countriesOwned) 
 	{
-		std::vector<std::string> listOfNeighbour = std::vector<std::string>();
+		std::vector<Country *> neighbours = std::vector<Country *>();
+		neighbours.push_back(country);
 		for (auto neighbour : country->getNeighbours()) {
 			if (isAttack) {
 				if (neighbour->getID() != *this->playerID) {
-					listOfNeighbour.push_back(neighbour->getName());
+					neighbours.push_back(neighbour);
 				}
 			}
 			else {
 				if (neighbour->getID() == *this->playerID) {
-					listOfNeighbour.push_back(neighbour->getName());
+					neighbours.push_back(neighbour);
 				}
 			}
 		}
-		if (listOfNeighbour.size() > 0) {
-			std::cout << country->getName() << " Has neighbours ";
-			std::vector<std::string>::iterator ptr;
-			for (ptr = listOfNeighbour.begin(); ptr < listOfNeighbour.end(); ptr++) {
-				std::cout << *ptr << " ";
+		if (neighbours.size() > 1) {
+			std::cout << country->getName() << "("<< country->getID() <<") Has neighbours ";
+			for (int i = 1; i < neighbours.size(); i++) {
+				std::cout << neighbours[i]->getName() << "(" << neighbours[i]->getID() << ") ";
 			}
 			std::cout << std::endl;
 		}
+		listOfNeighbours.push_back(neighbours);
 	}
+	return listOfNeighbours;
 }
 
 bool Player::playerAttackDecision()

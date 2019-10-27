@@ -17,19 +17,17 @@ private:
 public:
 	Player(int,std::string);
 	~Player();
-
-	void addCountryOwned(Country*);              //Added this
+	void addCountryOwned(Country*);
 
 	// Validating reinforce
 	int armiesOnCountriesOwned();
 	void addArmyOnCountry(Country*);
-	void addCountryOwned(Country*);
 
 	void reinforce(Map*);
 	
 	//attack(Player* playerAttacked)
 	void attack();
-	void neighbourCountries(bool);
+	std::vector<std::vector<Country*>> neighbourCountries(bool);
 	bool playerAttackDecision(); // Can player attack or not? -> ask to the player.. etc
 	bool validateNeighbour(std::string myCountry, std::string otherCountry, bool isAttack);
 	bool validateOwnedCountry(std::string countryName);

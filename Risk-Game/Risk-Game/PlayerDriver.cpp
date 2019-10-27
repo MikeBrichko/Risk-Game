@@ -10,7 +10,9 @@ int main() {
 	//player->printCountriesOwned();
 
 	Map* gameMap = new Map(6);
-
+	Continent* Continent1 = new Continent(1, "continent1", 5);
+	Continent* Continent2 = new Continent(2, "continent2", 5);
+	Continent* Continent3 = new Continent(3, "continent3", 5);
 	//std::cout << "Add Countries that player owns" << std::endl;
 	Country* Canada = new Country(1, "Canada", 1, 5);
 	Country* Argentina = new Country(2, "Argentina", 2, 5);
@@ -22,7 +24,7 @@ int main() {
 	player->addCountryOwned(Spain);
 	
 	//Create a second player for testing purposes----------------------------------------------------------------------
-	Player* player2 = new Player(1, "Player 2");
+	Player* player2 = new Player(2, "Player 2");
 
 	Country* USA = new Country(4, "USA", 1, 5);
 	Country* Mexico = new Country(5, "Mexico", 2, 5);
