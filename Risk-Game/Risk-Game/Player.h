@@ -36,7 +36,7 @@ public:
 	void moveArmies(Country* from, Country* to); // neighbour country
 
 	 
-	void fortifiy();
+	void fortify();
 
 	// Return int type
 	void addCardToHand(Card*);

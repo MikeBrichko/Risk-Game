@@ -55,6 +55,14 @@ void Country::setVisited(bool countryVisited) {
 	*visited = countryVisited;
 }
 
+void Country::setArmies(int arm) {
+	*armies = arm;
+}
+
+int Country::getArmies() {
+	return *armies;
+}
+
 //----------------------------------------------------------------------------------------------------------------------------------
 Continent::Continent(int continentID, std::string continentName, int continentArmyValue) {
 	ID = new int(continentID);

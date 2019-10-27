@@ -68,11 +68,11 @@ int main() {
 	std::cout << std::endl;
 
 	//Validate Attack
-	player->attack();
+	//player->attack();
 	std::cout << std::endl;
 
 	//Validate Fortify
-	//player->fortifiy();
+	player->fortify();
 
 
 

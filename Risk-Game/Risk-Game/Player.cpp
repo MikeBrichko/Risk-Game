@@ -112,8 +112,6 @@ void Player::attack() {
 				}
 			}
 		}
-
-
 		//while loop -> playerAttack() returns boolean
 		//select country to attack
 		//void attackOutcome(Country* X, Country* Y);
@@ -145,11 +143,20 @@ std::vector<std::vector<Country*>> Player::neighbourCountries(bool isAttack) {
 			}
 		}
 		if (neighbours.size() > 1) {
-			std::cout << country->getName() << "("<< country->getID() <<") Has neighbours ";
-			for (int i = 1; i < neighbours.size(); i++) {
-				std::cout << neighbours[i]->getName() << "(" << neighbours[i]->getID() << ") ";
+			if (isAttack) {
+				std::cout << country->getName() << "(" << country->getID() << ") Has neighbours ";
+				for (int i = 1; i < neighbours.size(); i++) {
+					std::cout << neighbours[i]->getName() << "(" << neighbours[i]->getID() << ") ";
+				}
+				std::cout << std::endl;
 			}
-			std::cout << std::endl;
+			else {
+				std::cout << country->getName() << "(" << country->getID() << ") Has armies: " << country->getArmies() << " with neighbours" <<std::endl;
+				for (int i = 1; i < neighbours.size(); i++) {
+					std::cout << "\t" << neighbours[i]->getName() << "(" << neighbours[i]->getID() << "): armies of " << neighbours[i]->getArmies() << std::endl;
+				}
+			}
+
 		}
 		listOfNeighbours.push_back(neighbours);
 	}
@@ -184,11 +191,35 @@ bool Player::playerAttackDecision()
 
 }
 
-void Player::fortifiy() {
+void Player::fortify() {
 	std::cout << "Starting fortification phase" << std::endl;
 	std::cout << "Moving armies to different countries" << std::endl;
+	bool validateFortify = true;
+	std::vector<std::vector<Country*>> listOfNeighbours = this->neighbourCountries(false);
 
-	//std::cin >> decision;	
+	while (validateFortify) {
+		std::cout << "Please choose a player's country from attack from the list above (enter country number)" << std::endl;
+
+		int countryFrom;
+		std::cin >> countryFrom;
+		std::cout << "Please choose a enemy's country to attack from the list above (enter country number)" << std::endl;
+		int countryToAttack;
+		std::cin >> countryToAttack;
+		std::cout << listOfNeighbours[0][0]->getID() << std::endl;
+		for (auto country : listOfNeighbours) {
+			if (country[0]->getID() == countryFrom) {
+				for (auto neighbour : country) {
+					if (neighbour->getID() == countryToAttack && neighbour->getID() != countryFrom) {
+						validateFortify = false;
+					}
+				}
+			}
+		}
+	}
+
+	std::cout << "Please choose how many you want to remove from " << std::endl;
+	std::cout << "Please choose a enemy's country to attack from the list above (enter country number)" << std::endl;
+
 	//if(player want to move armies){
 	//Countries that can move armies: 
 	//Country A to Country B, C or E
