@@ -20,11 +20,13 @@ public:
 	// Validating reinforce
 	int armiesOnCountriesOwned();
 	void addArmyOnCountry(Country*);
+	void addCountryOwned(Country*);
+
 	void reinforce(Map*);
 	
 	//attack(Player* playerAttacked)
 	void attack();
-	void attackableCountries();
+	void neighbourCountries(bool);
 	bool playerAttackDecision(); // Can player attack or not? -> ask to the player.. etc
 	bool validateNeighbour(std::string myCountry, std::string otherCountry, bool isAttack);
 	bool validateOwnedCountry(std::string countryName);

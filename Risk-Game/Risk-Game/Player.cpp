@@ -38,9 +38,9 @@ void Player::rollDice(int armiesOnCountry) {
 	std::cout << std::endl;
 }
 
-//void Player::addCountryOwned(Country* country) {
-//	countriesOwned->push_back(country);
-//}
+void Player::addCountryOwned(Country* country) {
+	countriesOwned->push_back(country);
+}
 
 void Player::addCardToHand(Card* card) {
 	hand->addCard(card);
@@ -75,7 +75,7 @@ void Player::attack() {
 	std::cout << "Starting Attack Phase" << std::endl;
 	//std::cout << *playerName << " picks what country he attacks" << std::endl;
 	std::cout << "List of countries " << *playerName << " can attack: " << std::endl;
-	this->attackableCountries();
+	//this->attackableCountries();
 	//print countries that can be attacked by which country
 	//dont print country with less than 2 armies on it
 	//Example
@@ -88,7 +88,7 @@ void Player::attack() {
 		std::cout << *playerName << " chooses to attack" << std::endl;
 
 		std::cout << "List of countries " << *playerName << " can attack: " << std::endl;
-		this->attackableCountries();
+		this->neighbourCountries(true);
 		std::cout << "Please choose a country from the list above (enter country number)" << std::endl;
 
 		int countryToAttack;
@@ -102,19 +102,30 @@ void Player::attack() {
 	std::cout << "Finished Attack Phase" << std::endl;
 }
 
-void Player::attackableCountries() {
+void Player::neighbourCountries(bool isAttack) {
 	//std::cout << "Please choose an attackable countries from :" << std::endl;
-
 	for (auto country : *countriesOwned)
 	{
-		std::string listOfNeighbour = "";
+		std::vector<std::string> listOfNeighbour = std::vector<std::string>();
 		for (auto neighbour : country->getNeighbours()) {
-			if (neighbour->getID() != *this->playerID) {
-				listOfNeighbour += neighbour->getName();
+			if (isAttack) {
+				if (neighbour->getID() != *this->playerID) {
+					listOfNeighbour.push_back(neighbour->getName());
+				}
+			}
+			else {
+				if (neighbour->getID() == *this->playerID) {
+					listOfNeighbour.push_back(neighbour->getName());
+				}
 			}
 		}
-		if (listOfNeighbour != "") {
-			std::cout << country->getName() << "Has neighbours " << listOfNeighbour << std::endl;
+		if (listOfNeighbour.size() > 0) {
+			std::cout << country->getName() << " Has neighbours ";
+			std::vector<std::string>::iterator ptr;
+			for (ptr = listOfNeighbour.begin(); ptr < listOfNeighbour.end(); ptr++) {
+				std::cout << *ptr << " ";
+			}
+			std::cout << std::endl;
 		}
 	}
 }
@@ -150,6 +161,8 @@ bool Player::playerAttackDecision()
 void Player::fortifiy() {
 	std::cout << "Starting fortification phase" << std::endl;
 	std::cout << "Moving armies to different countries" << std::endl;
+
+	//std::cin >> decision;	
 	//if(player want to move armies){
 	//Countries that can move armies: 
 	//Country A to Country B, C or E
