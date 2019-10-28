@@ -1,6 +1,7 @@
 #include "Player.h"
 #include <iostream>
 
+
 int main() {
 	std::cout << "Creating a player" << std::endl;
 	Player* player = new Player(1, "Player 1");
@@ -11,14 +12,18 @@ int main() {
 
 	Map* gameMap = new Map(6);
 	Continent* Continent1 = new Continent(1, "continent1", 5);
-	Continent* Continent2 = new Continent(2, "continent2", 5);
-	Continent* Continent3 = new Continent(3, "continent3", 5);
+	Continent* Continent2 = new Continent(2, "continent2", 6);
+	Continent* Continent3 = new Continent(3, "continent3", 7);
 	//std::cout << "Add Countries that player owns" << std::endl;
 	Country* Canada = new Country(1, "Canada", 1, 5);
 	Country* Argentina = new Country(2, "Argentina", 2, 5);
 	Country* Spain = new Country(3, "Spain", 3, 5);
 	
+	//comment out to see continent bonus
+	player->addContinentOwned(Continent1);
+	player->addContinentOwned(Continent3);
 
+	
 	player->addCountryOwned(Canada);
 	player->addCountryOwned(Argentina);
 	player->addCountryOwned(Spain);
@@ -64,7 +69,7 @@ int main() {
 	std::cout << std::endl;
 
 	//Valdate Reinforce
-	//player->reinforce();
+	player->reinforce(gameMap);
 	std::cout << std::endl;
 
 	//Validate Attack

@@ -96,6 +96,10 @@ int Continent::getID() {
 	return *ID;
 }
 
+int Continent::getArmyValue() {
+	return *armyValue;
+}
+
 //-----------------------------------------------------------------------------------------------------------------------------------
 Map::Map(int amountOfCountries)
 {

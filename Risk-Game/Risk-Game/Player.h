@@ -5,6 +5,7 @@
 #include "Player.h"
 #include "Cards.h"
 #include "Dice.h"
+#include "MapLoader.h"
 
 class Player {
 private:
@@ -14,16 +15,20 @@ private:
 	Hand* hand;
 	Dice* dice;
 
+	std::vector<Continent*>* continentsOwned;
+
 public:
 	Player(int,std::string);
 	~Player();
 	void addCountryOwned(Country*);
+	void addContinentOwned(Continent* continent);
 
 	// Validating reinforce
 	int armiesOnCountriesOwned();
 	void addArmyOnCountry(Country*);
 
 	void reinforce(Map*);
+	
 	
 	//attack(Player* playerAttacked)
 	void attack();
@@ -41,6 +46,7 @@ public:
 	// Return int type
 	void addCardToHand(Card*);
 
+	void printContinentsOwned();
 	void printCountriesOwned();
 	void printCarsInHand();
 	void rollDice(int);

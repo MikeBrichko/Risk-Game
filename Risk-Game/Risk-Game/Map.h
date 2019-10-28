@@ -41,6 +41,7 @@ public:
 	std::vector<Country*>* getCountries();
 	std::string getName();
 	int getID();
+	int getArmyValue();
 };
 
 class Map {
