@@ -17,11 +17,22 @@ Country::Country(int countryID, std::string countryName, int countryContinentID,
 	neighbours = new std::vector<Country*>();
 }
 
+Country::Country(int countryID, std::string countryName, int countryContinentID, int countryArmies, int id)
+{
+	ID = new int(countryID);
+	name = new std::string(countryName);
+	continentID = new int(countryContinentID);
+	playerID = new int(id);
+	armies = new int(countryArmies);
+	visited = new bool(false);
+	neighbours = new std::vector<Country*>();
+}
 Country::~Country() {
 	delete ID;
 	delete name;
 	delete continentID;
 	delete armies;
+	delete playerID;
 	for (auto neighbour : *neighbours)
 		delete neighbour;
 	delete neighbours;
@@ -62,6 +73,14 @@ void Country::setArmies(int arm) {
 int Country::getArmies() {
 	return *armies;
 }
+int Country::getPlayerID() {
+	return *playerID;
+};
+void Country::setPlayerID(int id) {
+	*playerID = id;
+}
+
+
 
 //----------------------------------------------------------------------------------------------------------------------------------
 Continent::Continent(int continentID, std::string continentName, int continentArmyValue) {

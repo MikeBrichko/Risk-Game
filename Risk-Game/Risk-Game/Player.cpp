@@ -131,12 +131,12 @@ std::vector<std::vector<Country*>> Player::neighbourCountries(bool isAttack) {
 		neighbours.push_back(country);
 		for (auto neighbour : country->getNeighbours()) {
 			if (isAttack) {
-				if (neighbour->getID() != *this->playerID) {
+				if (neighbour->getPlayerID() != *this->playerID) {
 					neighbours.push_back(neighbour);
 				}
 			}
 			else {
-				if (neighbour->getID() == *this->playerID) {
+				if (neighbour->getPlayerID() == *this->playerID) {
 					neighbours.push_back(neighbour);
 				}
 			}
