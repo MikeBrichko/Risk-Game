@@ -101,7 +101,6 @@ void Player::attack() {
 			std::cout << "Please choose a enemy's country to attack from the list above (enter country number)" << std::endl;
 			int countryToAttack;
 			std::cin >> countryToAttack;
-			std::cout << listOfNeighbours[0][0]->getID() << std::endl;
 			for (auto country : listOfNeighbours) {
 				if (country[0]->getID() == countryFrom) {
 					for (auto neighbour : country) {
@@ -196,7 +195,8 @@ void Player::fortify() {
 	std::cout << "Moving armies to different countries" << std::endl;
 	bool validateFortify = true;
 	std::vector<std::vector<Country*>> listOfNeighbours = this->neighbourCountries(false);
-
+	Country* removingCountry = NULL;
+	Country* addingCountry = NULL;
 	while (validateFortify) {
 		std::cout << "Please choose a player's country from attack from the list above (enter country number)" << std::endl;
 
@@ -205,20 +205,34 @@ void Player::fortify() {
 		std::cout << "Please choose a enemy's country to attack from the list above (enter country number)" << std::endl;
 		int countryToAttack;
 		std::cin >> countryToAttack;
-		std::cout << listOfNeighbours[0][0]->getID() << std::endl;
 		for (auto country : listOfNeighbours) {
 			if (country[0]->getID() == countryFrom) {
+				removingCountry = country[0];
 				for (auto neighbour : country) {
 					if (neighbour->getID() == countryToAttack && neighbour->getID() != countryFrom) {
+						addingCountry = neighbour;
 						validateFortify = false;
 					}
 				}
 			}
 		}
 	}
-
-	std::cout << "Please choose how many you want to remove from " << std::endl;
-	std::cout << "Please choose a enemy's country to attack from the list above (enter country number)" << std::endl;
+	std::cout << removingCountry->getName();
+	int val;
+	while (true) {
+		std::cout << "How many you want to remove from " << removingCountry->getName() << "(" << removingCountry->getID() << ") armies(" << removingCountry->getArmies() << ")" <<
+			"\n\tand add to " << addingCountry->getName() << "(" << addingCountry->getID() << ") armies(" << addingCountry->getArmies() <<")" << std::endl;
+		std::cin >> val;
+		if (removingCountry->getArmies() - val> 0 && val >0) {
+			removingCountry->setArmies(removingCountry->getArmies() - val);
+			addingCountry->setArmies(addingCountry->getArmies() + val);
+			break;
+		}
+		std::cout << "Your input is incorrect, try again" << std::endl;
+	}
+	std::cout << "Your armies successfully moved!" << std::endl;
+	std::cout << removingCountry->getName() << "(" << removingCountry->getID() << ") has " << removingCountry->getArmies() << " armies" << std::endl;
+	std::cout << addingCountry->getName() << "(" << addingCountry->getID() << ") has " << addingCountry->getArmies() << " armies" << std::endl;
 
 	//if(player want to move armies){
 	//Countries that can move armies: 
