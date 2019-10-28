@@ -14,7 +14,7 @@ int main() {
 	Continent* Continent2 = new Continent(2, "continent2", 5);
 	Continent* Continent3 = new Continent(3, "continent3", 5);
 	//std::cout << "Add Countries that player owns" << std::endl;
-	Country* Canada = new Country(1, "Canada", 1, 5,1);
+	Country* Canada = new Country(1, "Canada", 1, 2,1);
 	Country* Argentina = new Country(2, "Argentina", 2, 5,1);
 	Country* Spain = new Country(3, "Spain", 3, 5,1);
 	
@@ -68,7 +68,7 @@ int main() {
 	std::cout << std::endl;
 
 	//Validate Attack
-	//player->attack();
+	player->attack();
 	std::cout << std::endl;
 
 	//Validate Fortify

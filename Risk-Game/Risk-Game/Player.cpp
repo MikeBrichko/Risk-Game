@@ -18,13 +18,15 @@ Player::~Player() {
 	delete dice;
 }
 
-void Player::printCountriesOwned() 
+void Player::printCountriesOwned()
 {
 	std::cout << "These are the countries " << *playerName << " owns: " << std::endl;
-
 	for (auto country : *countriesOwned)
+	{
 		std::cout << country->getID() << " " << country->getName() << std::endl;
+	}
 	std::cout << std::endl;
+
 }
 
 void Player::printCarsInHand() {
@@ -72,12 +74,40 @@ void Player::reinforce(Map* gameMap) {
 }
 
 
+
+//method to display countries player can attack
+void Player::attackableCountries()
+{
+	std::cout << "\nThese are the countries " << *playerName << " can attack with:\n\n" << std::endl;
+	std::cout << "Countries owned (with 2 or more armies)                  Neighbouring Enemy countries you can attack" << std::endl;
+	std::cout << "---------------------------------------                  -------------------------------------------" << std::endl;
+	std::cout << std::endl;
+
+	for (auto country : *countriesOwned)
+	{
+		if (country->getArmies() >= 2)
+		{
+			std::cout << country->getID() << ". " << country->getName() << " (has " << country->getArmies() << " armies)               ----->               ";
+			std::vector<Country*> neighbours = std::vector<Country*>();
+			for (auto neighbour : country->getNeighbours()) 
+			{
+				if(neighbour->getPlayerID() != *this->playerID)
+				{ 
+					std::cout << neighbour->getID() << ". " << neighbour->getName() << " (has " << neighbour->getArmies() << " armies)" << "    ";
+				}
+			}
+			std::cout << std::endl;
+		}
+	}
+	std::cout << std::endl;
+
+
+}
+
 void Player::attack() {
 
-	std::cout << "Starting Attack Phase" << std::endl;
-	//std::cout << *playerName << " picks what country he attacks" << std::endl;
-	std::cout << "List of countries " << *playerName << " can attack: " << std::endl;
-	//this->attackableCountries();
+	std::cout << "Starting Attack Phase\n" << std::endl;
+	this->attackableCountries();
 
 	//print countries that can be attacked by which country
 	//dont print country with less than 2 armies on it
@@ -88,9 +118,21 @@ void Player::attack() {
 	bool decision = playerAttackDecision();
 	while (decision == true)
 	{
-		std::cout << *playerName <<" chooses to attack" << std::endl;
+		this->attackableCountries();
 
-		std::cout << "List of countries " << *playerName << " can attack: " << std::endl;
+		std::cout << "Please choose one of your countries to start the attack (enter country number)" << std::endl;
+		int countryFrom;
+		std::cin >> countryFrom;
+
+		std::cout << "Please choose an enemy's country to attack (enter country number)" << std::endl;
+		int countryToAttack;
+		std::cin >> countryToAttack;
+
+		
+
+		
+		
+		/*
 		std::vector<std::vector<Country*>> listOfNeighbours = this->neighbourCountries(true);
 		bool validateAttacking = true;
 		while (validateAttacking){
@@ -111,6 +153,9 @@ void Player::attack() {
 				}
 			}
 		}
+		*/
+
+
 		//while loop -> playerAttack() returns boolean
 		//select country to attack
 		//void attackOutcome(Country* X, Country* Y);
@@ -122,8 +167,6 @@ void Player::attack() {
 std::vector<std::vector<Country*>> Player::neighbourCountries(bool isAttack) {
 	//std::cout << "Please choose an attackable countries from :" << std::endl;
 
-	std::cout << "Countries you own     -------->      Neighbouring enemy countries to attack" << std::endl;
-	std::cout << "-----------------                    --------------------------------------" << std::endl;
 	std::vector<std::vector<Country*>> listOfNeighbours = std::vector<std::vector<Country*>>();
 	for (auto country : *countriesOwned) 
 	{
@@ -164,7 +207,20 @@ std::vector<std::vector<Country*>> Player::neighbourCountries(bool isAttack) {
 
 bool Player::playerAttackDecision()
 {
-	//todo: Need to check if player can attack
+	//check if player is able to attack
+	bool ableToAttack = false;
+	for (auto country : *countriesOwned)
+	{
+		if (country->getArmies() >= 2)
+		{
+			ableToAttack = true;
+		}
+	}
+	if(ableToAttack == false)
+	{
+		std::cout << "You do not have sufficient resources to perform an attack" << std::endl;
+	}
+	std::cout << std::endl;
 
 	bool attack;
 	std::string decision;

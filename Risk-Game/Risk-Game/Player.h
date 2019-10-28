@@ -26,6 +26,7 @@ public:
 	void reinforce(Map*);
 	
 	//attack(Player* playerAttacked)
+	void attackableCountries();
 	void attack();
 	std::vector<std::vector<Country*>> neighbourCountries(bool);
 	bool playerAttackDecision(); // Can player attack or not? -> ask to the player.. etc
@@ -41,7 +42,9 @@ public:
 	// Return int type
 	void addCardToHand(Card*);
 
+	//void printNeighbourCountries(Country*);
 	void printCountriesOwned();
+	void countriesCanAttackWith();
 	void printCarsInHand();
 	void rollDice(int);
 };
