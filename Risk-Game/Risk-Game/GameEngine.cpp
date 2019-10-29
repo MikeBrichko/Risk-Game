@@ -10,6 +10,7 @@
 GameEngine::GameEngine() {
 	map = selectMap();
 	players = selectNumberOfPlayers();
+	deck = new Deck(map->getNumOfCountries());
 }
 
 GameEngine::~GameEngine() {
@@ -167,7 +168,7 @@ void GameEngine::startupPhase() {
 			players->at(i)->printCountriesOwned();
 			std::cout << "Enter a Country that you would like to add armies to: ";
 			std::cin >> countryName;
-			//players->at(i)->addArmyToCountry(countryName, 1);
+			players->at(i)->addArmyToCountry(countryName, 1);
 
 			armiesPerPlayer.at(i)--;
 			armiesPlacedCounter++;
@@ -175,7 +176,7 @@ void GameEngine::startupPhase() {
 	}
 
 	std::cout << "Armies on the field after players add armies:" << std::endl;
-	totalArmyCountForEachPlayer();
+	armiesPerPlayer = totalArmyCountForEachPlayer();
 }
 
 void GameEngine::mainGameLoop() {

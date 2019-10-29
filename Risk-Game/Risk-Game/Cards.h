@@ -18,6 +18,7 @@ public:
 
 class Deck {
 private:
+	int* size;
 	std::vector<Card*>* deck;
 	std::vector<Card*>* buildDeck(int);
 	void shuffle();
@@ -25,7 +26,7 @@ private:
 public:
 	Deck(int);
 	~Deck();
-	Card* draw(int);
+	Card* draw();
 	int getDeckSize();
 };
 
@@ -38,12 +39,12 @@ private:
 	int exchangeDecision(std::string, std::string);
 
 	// We have to change void to return int
-	void increasePlayersArmies();
-	void exchange();
+	int increasePlayersArmies();
+	int exchange();
 
 public:
 	Hand(std::string*);
 	~Hand();
-	void addCard(Card*);
+	int addCard(Card*);
 	void printCardsInHand();
 };

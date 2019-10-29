@@ -14,6 +14,7 @@ private:
 	std::vector<Country*>* countriesOwned;
 	Hand* hand;
 	Dice* dice;
+	static Deck* deck;
 
 	std::vector<Continent*>* continentsOwned;
 
@@ -44,7 +45,7 @@ public:
 	void fortify();
 
 	// Return int type
-	void addCardToHand(Card*);
+	int addCardToHand();
 
 	void printContinentsOwned();
 	void printCountriesOwned();
@@ -52,4 +53,5 @@ public:
 	void rollDice(int);
 	int getPlayerID();
 	int getAmountOfCountriesOwned();
+	void setDeck(Deck* newDeck);
 };

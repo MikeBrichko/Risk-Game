@@ -2,6 +2,8 @@
 #include <iostream>
 #include <string>
 
+Deck* Player::deck;
+
 Player::Player(int playerID, std::string playerName) {
 	this->playerID = new int(playerID);
 	this->playerName = new std::string(playerName);
@@ -17,6 +19,10 @@ Player::~Player() {
 	delete countriesOwned;
 	delete hand;
 	delete dice;
+}
+
+void Player::setDeck(Deck* newDeck) {
+	deck = newDeck;
 }
 
 int Player::armiesOnCountriesOwned() {
@@ -65,8 +71,8 @@ void Player::addContinentOwned(Continent* continent) {
 	continentsOwned->push_back(continent);
 }
 
-void Player::addCardToHand(Card* card) {
-	hand->addCard(card);
+int Player::addCardToHand() {
+	return hand->addCard(deck->draw());
 }
 
 int Player::addArmyToCountry(std::string countryName, int numOfArmies){
@@ -82,39 +88,33 @@ int Player::addArmyToCountry(std::string countryName, int numOfArmies){
 			return numOfArmies;
 		}
 	}
-	
 
 	return numArmies;
 }
 
 void Player::reinforce(Map* gameMap) {
-	int armyCount = 0;
 	int armiesToAdd, armiesAdded = 0;
 	int armyInput;
-	std::string countryInput;
 
 	std::cout << "Starting reinforcement phase" << std::endl;
 
 	std::cout << "Adding armies based on COUNTRIES that " << *playerName << " owns." << std::endl;
-	armyCount += floor(countriesOwned->size() / 3);
+	armiesToAdd += floor(countriesOwned->size() / 3);
 
 	std::cout << "Adding armies based on CONTINENTS that " << *playerName << " owns." << std::endl;
 	for (auto continent : *continentsOwned) {
-		armyCount += continent->getArmyValue();
+		armiesToAdd += continent->getArmyValue();
 	}
 
 
 	std::cout << "Adding armies based on CARDS that " << *playerName << " owns." << std::endl;
+	armiesToAdd += addCardToHand();
 
-	//armyCount += addCard();
-//	//change existin mthod to return a number
-
-	armiesToAdd = armyCount;
-
-	std::cout << "armies available to place: " << armyCount << std::endl;
+	std::cout << "armies available to place: " << armiesToAdd << std::endl;
 	printCountriesOwned();
 
-	for (int i = 0; i < armyCount; i++) {
+	std::string countryInput;
+	for (int i = 0; i < armiesToAdd; i++) {
 		std::cout << "\nfor which country would you like to add armies? (enter country name)" << std::endl;
 		std::cin >> countryInput;
 		std::cout << "you have " << armiesToAdd << " armies left to place" << std::endl;
@@ -133,8 +133,8 @@ void Player::reinforce(Map* gameMap) {
 //	//loop based on armyCount where there is a addArmy()
 //	//addArmy() will cmake sure that the player has effectively placed this exact number of 
 //	//new armies somewhere on the map by the end of the reinforcement phase.
-//
-//	std::cout << "Finished reinforcement phase" << std::endl;
+
+	std::cout << "Finished reinforcement phase" << std::endl;
 }
 
 
