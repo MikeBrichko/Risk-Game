@@ -77,7 +77,7 @@ int main() {
 	std::cout << std::endl;
 
 	//Validate Fortify
-	player->fortify();
+	//player->fortify();
 
 
 

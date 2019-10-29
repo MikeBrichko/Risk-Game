@@ -25,7 +25,7 @@ public:
 
 	// Validating reinforce
 	int armiesOnCountriesOwned();
-	void addArmyOnCountry(Country*);
+	int addArmyToCountry(std :: string, int numOfArmies);
 
 	void reinforce(Map*);
 	
