@@ -42,12 +42,13 @@ void Player::printCarsInHand() {
 	hand->printCardsInHand();
 }
 
-void Player::rollDice(int armiesOnCountry) {
-	std::vector<int> diceRolled = dice->rollDice(armiesOnCountry);
+std::vector<int> Player::rollDice(int armiesOnCountry, bool attacker) {
+	std::vector<int> diceRolled = dice->rollDice(armiesOnCountry, attacker);
 	std::cout << *playerName << " rolled: ";
 	for (auto diceFace : diceRolled)
 		std::cout << diceFace << " ";
 	std::cout << std::endl;
+	return diceRolled;
 }
 
 void Player::addCountryOwned(Country* country) {
@@ -174,12 +175,12 @@ void Player::attack(std::vector<Player*>* listOfPlayer) {
 
 		std::vector<int> attackDice;
 		std::vector<int> enemyDice;
-		attackDice = this->dice->rollDice(countryFrom->getArmies() - 1);
+		attackDice = rollDice(countryFrom->getArmies() - 1, true);
 		std::cout << "Currently we have armies (countryFrom): " << countryFrom->getArmies() << std::endl;
 		for (auto player : *listOfPlayer) {
 			if (player->getPlayerID() == countryToAttack->getPlayerID()) {
 				enemyPlayer = player;
-				enemyDice = this->dice->rollDice(countryToAttack->getArmies());
+				enemyDice = rollDice(countryToAttack->getArmies(), false);
 				std::cout << "Currently we have armies (countryToAttack): " << countryToAttack->getArmies() << std::endl;
 			}
 		}
@@ -193,12 +194,6 @@ void Player::attack(std::vector<Player*>* listOfPlayer) {
 		//}
 		std::vector<int>::iterator ptr;
 		int minimumSize = (attackDice.size() < enemyDice.size() ? attackDice.size() : enemyDice.size());
-		for (ptr = attackDice.begin(); ptr < attackDice.end(); ptr++)
-			std::cout << *ptr << " ";
-		std::cout << std::endl;
-		for (ptr = enemyDice.begin(); ptr < enemyDice.end(); ptr++)
-			std::cout << *ptr << " ";
-		std::cout << std::endl;
 		for (int i = 0; i < minimumSize; i++) {
 			if (attackDice[attackDice.size()-1] <= enemyDice[enemyDice.size() - 1]) {
 				countryFrom->setArmies(countryFrom->getArmies() - 1);

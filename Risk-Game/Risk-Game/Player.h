@@ -49,5 +49,5 @@ public:
 	void printCountriesOwned();
 	void countriesCanAttackWith();
 	void printCarsInHand();
-	void rollDice(int);
+	std::vector<int> rollDice(int,bool);
 };

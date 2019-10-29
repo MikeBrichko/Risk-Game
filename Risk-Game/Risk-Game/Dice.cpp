@@ -15,8 +15,13 @@
 		delete rollCounter;
 	}
 
-	int Dice::diceToBeRolled(int armiesOnCountry) {
-		std::cout << "Number of armies on country is: " << armiesOnCountry << std::endl;
+	int Dice::diceToBeRolled(int armiesOnCountry, bool attacker) {
+		if (attacker) {
+			std::cout << "Number of armies on country is: " << armiesOnCountry +1 << std::endl;
+		}
+		else {
+			std::cout << "Number of armies on country is: " << armiesOnCountry - 1 << std::endl;
+		}
 		if (armiesOnCountry == 1) {
 			std::cout << "Since number of armies is 1, the user can only roll one time" <<std::endl;
 			return armiesOnCountry;
@@ -35,8 +40,8 @@
 		return diceToBeRolled;
 	}
 
-	std::vector<int> Dice::rollDice(int armiesOnCountry) {
-		int diceToBeRolled = Dice::diceToBeRolled(armiesOnCountry);
+	std::vector<int> Dice::rollDice(int armiesOnCountry, bool attacker) {
+		int diceToBeRolled = Dice::diceToBeRolled(armiesOnCountry, attacker);
 		std::vector<int> diceRolled = std::vector<int>();
 		
 		int diceFaceRolled = 0;
