@@ -27,7 +27,7 @@ int main() {
 	Player* player2 = new Player(2, "Player 2");
 
 	Country* USA = new Country(4, "USA", 1, 5,2);
-	Country* Mexico = new Country(5, "Mexico", 2, 5,2);
+	Country* Mexico = new Country(5, "Mexico", 2, 1,2);
 	Country* Brazil = new Country(6, "Brazil", 2, 5,2);
 
 	player2->addCountryOwned(USA);

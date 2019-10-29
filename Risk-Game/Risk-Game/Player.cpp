@@ -54,6 +54,12 @@ void Player::addCountryOwned(Country* country) {
 	countriesOwned->push_back(country);
 }
 
+void Player::removeCountryOwned(int countryID) {
+	
+	//Need to do this method
+}
+
+
 void Player::addCardToHand(Card* card) {
 	hand->addCard(card);
 }
@@ -192,8 +198,52 @@ void Player::attack(std::vector<Player*>* listOfPlayer) {
 		std::cout << "now we have armies (countryFrom): " << countryFrom->getArmies() << std::endl;
 		std::cout << "now we have armies (countryToAttack): " << countryToAttack->getArmies() << std::endl;
 
-		if (countryToAttack->getArmies() == 0) {
-			// Do SOMETHING here
+		if (countryToAttack->getArmies() == 0) 
+		{
+			
+
+			int numArmiesToMove;
+			bool correctNumOfArmies = false;
+
+			std::cout << "You have defeated the defending country" << std::endl;
+			while (correctNumOfArmies == false)
+			{
+				std::cout << "How many armies would you like to move from the attacking country to defeated country" << std::endl;
+
+				std::cin >> numArmiesToMove;
+
+				if (numArmiesToMove > (countryFrom->getArmies() - 1)) 
+					std::cout << "Can't move that many armies" << std::endl;
+				else
+					correctNumOfArmies = true;
+			}
+
+			//Decrement num of armies from attacking Country
+			countryFrom->setArmies(countryFrom->getArmies() - numArmiesToMove);
+
+			//Increment num of armies from defeated Country
+			countryToAttack->setArmies(countryToAttack->getArmies() + numArmiesToMove);
+
+			std::cout << "Your armies successfully moved!" << std::endl;
+
+			std::cout << countryFrom->getName() <<" now has " << countryFrom->getArmies() <<" armies" << std::endl;
+			std::cout << countryToAttack->getName() << " now has " << countryToAttack->getArmies() << " armies" << std::endl;
+
+			//Add defeated country to players "countriesOwned" list
+			addCountryOwned(countryToAttack);
+
+			//Remove defeated country from opponent players "countriesOwned" list
+			//  (need to complete remove from ownedCountries method)
+
+
+
+			//display countries again for testing purposes 
+			std::vector<std::vector<Country*>> listOfNeighbours = this->neighbourCountries(true);
+
+
+			
+			
+
 		}
 		
 		

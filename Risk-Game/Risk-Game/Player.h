@@ -19,6 +19,7 @@ public:
 	Player(int,std::string);
 	~Player();
 	void addCountryOwned(Country*);
+	void removeCountryOwned(int countryID);
 	int getPlayerID();
 	std::vector<Country*> getCountriesOwned();
 	// Validating reinforce
