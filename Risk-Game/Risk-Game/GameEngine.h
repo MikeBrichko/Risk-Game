@@ -9,20 +9,21 @@ private:
 	Deck* deck;
 
 	//Part 1 & 2
-	Map* selectMap(); //predetermmined list of maps
+	Map* selectMap();
 	std::vector<Player*>* selectNumberOfPlayers();
-	void determinePlayerOrder(); //sort players vector
+	void determinePlayerOrder();
 	void assignCountriesToPlayers();
+	std::vector<int> totalArmyCountForEachPlayer();
 
 	//Part 3
-	bool removePlayer(int playerID);
+	void removePlayer(int playerID);
 
 public:
 	//Part 1 & 2
 	GameEngine();
 	~GameEngine();
+	void startupPhase();
 	bool allCountriesHavePlayers();
-	bool validateArmiesOnCountry(int playerID);
 
 	//Part 3
 	void mainGameLoop();

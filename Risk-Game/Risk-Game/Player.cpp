@@ -17,6 +17,13 @@ Player::~Player() {
 	delete dice;
 }
 
+int Player::armiesOnCountriesOwned() {
+	int armieCount = 0;
+	for (auto country : *countriesOwned)
+		armieCount += country->getArmies();
+	return armieCount;
+}
+
 void Player::printCountriesOwned() {
 	std::cout << "These are the countries " << *playerName << " owns: ";
 	for (auto country : *countriesOwned)
@@ -97,4 +104,8 @@ void Player::fortifiy() {
 	//moveArmies(Country* X, Country* Y)
 	//}
 	std::cout << "Finished fortification phase" << std::endl;
+}
+
+int Player::getPlayerID() {
+	return *playerID;
 }

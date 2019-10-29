@@ -1,7 +1,7 @@
 #include "Cards.h"
 #include <vector>
 #include <iostream>
-#include <time.h>
+#include <ctime>
 #include <algorithm>
 
 int* Hand::armies;
@@ -39,12 +39,13 @@ Deck::~Deck() {
 
 std::vector<Card*>* Deck::buildDeck(int numberOfCountries) {
 	std::vector<Card*>* newDeck = new std::vector<Card*>;
-	for (int i = 0; i < numberOfCountries; i++) {
-		if (i < numberOfCountries / 3) {
+	int totalCards = numberOfCountries - (numberOfCountries % 3);
+	for (int i = 0; i < totalCards; i++) {
+		if (i < totalCards / 3) {
 			CardType* cardType = new CardType(infantry);
 			newDeck->push_back(new Card(cardType));
 		}
-		else if (i < (numberOfCountries * 2 / 3)) {
+		else if (i < (totalCards * 2 / 3)) {
 			CardType* cardType = new CardType(artillery);
 			newDeck->push_back(new Card(cardType));
 		}
@@ -68,15 +69,8 @@ Card* Deck::draw(int numberOfCountries) {
 }
 
 void Deck::shuffle() {
-	int i = 0;
-	srand(time(0));
-	while (i <= 1000) {
-		int randomPosition = rand() % deck->size();
-		Card* card = deck->at(randomPosition);
-		deck->erase(deck->begin() + randomPosition);
-		deck->push_back(card);
-		i++;
-	}
+	std::srand(unsigned(std::time(0)));
+	std::random_shuffle(deck->begin(), deck->end(), std::rand());
 }
 
 int Deck::getDeckSize() {
@@ -201,12 +195,6 @@ void Hand::removeCardsInHand(std::string cardsInHand) {
 void Hand::increasePlayersArmies() {
 	*Hand::armies += 5;
 	std::cout << std::endl << "The amount of armies " << *playerName << " received is " << *armies << std::endl << std::endl;
-	/**for (auto opponentHand : *handsInPlay) {
-		*opponentHand->armies += 5;
-
-		if(opponentHand->playerName == playerName)
-			std::cout << std::endl <<"The amount of armies " << *playerName << " received is " << *armies << std::endl << std::endl;
-	}**/
 } 
 
 void Hand::addCard(Card* card) {

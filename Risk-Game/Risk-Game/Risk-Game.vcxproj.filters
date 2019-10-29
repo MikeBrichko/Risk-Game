@@ -88,5 +88,17 @@
     <None Include="europe_fail.map">
       <Filter>Source Files\Maps</Filter>
     </None>
+    <None Include="brasil.map">
+      <Filter>Source Files\Maps</Filter>
+    </None>
+    <None Include="estonia.map">
+      <Filter>Source Files\Maps</Filter>
+    </None>
+    <None Include="germany.map">
+      <Filter>Source Files\Maps</Filter>
+    </None>
+    <None Include="solar.map">
+      <Filter>Source Files\Maps</Filter>
+    </None>
   </ItemGroup>
 </Project>

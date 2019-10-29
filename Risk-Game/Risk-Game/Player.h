@@ -41,4 +41,6 @@ public:
 	void printCountriesOwned();
 	void printCarsInHand();
 	void rollDice(int);
+	void addCountryOwned(Country* newCountry);
+	int getPlayerID();
 };
