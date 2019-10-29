@@ -1,7 +1,7 @@
 #include "Cards.h"
 #include <vector>
 #include <iostream>
-#include <ctime>
+#include <time.h>
 #include <algorithm>
 
 int* Hand::armies;
@@ -69,8 +69,15 @@ Card* Deck::draw(int numberOfCountries) {
 }
 
 void Deck::shuffle() {
-	std::srand(unsigned(std::time(0)));
-	std::random_shuffle(deck->begin(), deck->end(), std::rand());
+	int i = 0;
+	srand(time(0));
+	while (i <= 1000) {
+		int randomPosition = rand() % deck->size();
+		Card* card = deck->at(randomPosition);
+		deck->erase(deck->begin() + randomPosition);
+		deck->push_back(card);
+		i++;
+	}
 }
 
 int Deck::getDeckSize() {

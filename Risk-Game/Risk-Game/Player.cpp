@@ -52,7 +52,7 @@ void Player::addCardToHand(Card* card) {
 	hand->addCard(card);
 }
 
-void Player::reinforce(Map gameMap) {
+void Player::reinforce(Map* gameMap) {
 	int armieCount = 0;
 	std::cout << "Starting reinforcement phase" << std::endl;
 
@@ -108,4 +108,8 @@ void Player::fortifiy() {
 
 int Player::getPlayerID() {
 	return *playerID;
+}
+
+int Player::getAmountOfCountriesOwned() {
+	return countriesOwned->size();
 }

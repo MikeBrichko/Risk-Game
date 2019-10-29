@@ -11,7 +11,7 @@ Country::Country(int countryID, std::string countryName, int countryContinentID,
 	ID = new int(countryID);
 	name = new std::string(countryName);
 	continentID = new int(countryContinentID);
-	playerID = NULL;
+	playerID = new int(0);
 	armies = new int(countryArmies);
 	visited = new bool(false);
 	neighbours = new std::vector<Country*>();

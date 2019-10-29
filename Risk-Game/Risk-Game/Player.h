@@ -19,6 +19,7 @@ public:
 	~Player();
 	// Validating reinforce
 	int armiesOnCountriesOwned();
+	void addArmyOnCountry(std::string countryName);
 	void addArmyOnCountry(Country*);
 	void reinforce(Map*);
 	
@@ -43,4 +44,5 @@ public:
 	void rollDice(int);
 	void addCountryOwned(Country* newCountry);
 	int getPlayerID();
+	int getAmountOfCountriesOwned();
 };
