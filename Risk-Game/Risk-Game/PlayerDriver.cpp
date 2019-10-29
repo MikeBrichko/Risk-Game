@@ -2,7 +2,7 @@
 #include <iostream>
 
 
-int main() {
+/**int main() {
 	std::cout << "Creating a player" << std::endl;
 	Player* player = new Player(1, "Player 1");
 	std::cout << std::endl;
@@ -81,4 +81,4 @@ int main() {
 
 
 
-}
+}**/

@@ -47,10 +47,6 @@ int Country::getContinentID() {
 	return *continentID;
 }
 
-int Country::getArmies() {
-	return *armies;
-}
-
 bool Country::getVisited() {
 	return *visited;
 }

@@ -194,7 +194,7 @@ void GameEngine::mainGameLoop() {
 				break;
 			}
 
-			player->fortifiy();
+			player->fortify();
 		}
 	}
 }
