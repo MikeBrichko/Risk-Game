@@ -68,11 +68,15 @@ int main() {
 	std::cout << std::endl;
 
 	//Validate Attack
-	player->attack();
+	std::vector<Player*>* listOfPlayer = new std::vector<Player*>();
+	listOfPlayer->push_back(player);
+	listOfPlayer->push_back(player2);
+
+	player->attack(listOfPlayer);
 	std::cout << std::endl;
 
 	//Validate Fortify
-	player->fortify();
+	//player->fortify();
 
 
 
