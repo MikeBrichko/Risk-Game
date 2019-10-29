@@ -55,7 +55,18 @@ void Player::addCountryOwned(Country* country) {
 }
 
 void Player::removeCountryOwned(int countryID) {
-	
+	int remove = NULL;
+	std::cout << countriesOwned->size();
+	for (int i = 0; i < countriesOwned->size(); i++) {
+		if ((*countriesOwned)[i]->getID() == countryID) {
+			remove = i;
+		}
+	}
+	if (remove) {
+		countriesOwned->erase(countriesOwned->begin() + remove);
+	}
+	std::cout << countriesOwned->size();
+
 	//Need to do this method
 }
 
@@ -122,6 +133,7 @@ void Player::attack(std::vector<Player*>* listOfPlayer) {
 
 	std::cout << "Starting Attack Phase\n" << std::endl;
 	//this->attackableCountries();
+	Player* enemyPlayer{};
 
 	bool decision = playerAttackDecision();
 	while (decision == true)
@@ -164,10 +176,10 @@ void Player::attack(std::vector<Player*>* listOfPlayer) {
 		std::vector<int> enemyDice;
 		attackDice = this->dice->rollDice(countryFrom->getArmies() - 1);
 		std::cout << "Currently we have armies (countryFrom): " << countryFrom->getArmies() << std::endl;
-
 		for (auto player : *listOfPlayer) {
 			if (player->getPlayerID() == countryToAttack->getPlayerID()) {
-				enemyDice = this->dice->rollDice(countryToAttack->getArmies() - 1);
+				enemyPlayer = player;
+				enemyDice = this->dice->rollDice(countryToAttack->getArmies());
 				std::cout << "Currently we have armies (countryToAttack): " << countryToAttack->getArmies() << std::endl;
 			}
 		}
@@ -188,11 +200,11 @@ void Player::attack(std::vector<Player*>* listOfPlayer) {
 			std::cout << *ptr << " ";
 		std::cout << std::endl;
 		for (int i = 0; i < minimumSize; i++) {
-			if (attackDice[i] < enemyDice[i]) {
+			if (attackDice[attackDice.size()-1] <= enemyDice[enemyDice.size() - 1]) {
 				countryFrom->setArmies(countryFrom->getArmies() - 1);
 			}
 			else {
-				countryToAttack->setArmies(countryToAttack->getArmies() - 1);
+				countryToAttack->setArmies(countryToAttack->getArmies()-1);
 			}
 		}
 		std::cout << "now we have armies (countryFrom): " << countryFrom->getArmies() << std::endl;
@@ -231,10 +243,11 @@ void Player::attack(std::vector<Player*>* listOfPlayer) {
 
 			//Add defeated country to players "countriesOwned" list
 			addCountryOwned(countryToAttack);
+			countryToAttack->setPlayerID(this->getPlayerID());
 
 			//Remove defeated country from opponent players "countriesOwned" list
 			//  (need to complete remove from ownedCountries method)
-
+			enemyPlayer->removeCountryOwned(countryToAttack->getID());
 
 
 			//display countries again for testing purposes 
