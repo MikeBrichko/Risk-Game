@@ -50,4 +50,6 @@ public:
 	void printCountriesOwned();
 	void printCarsInHand();
 	void rollDice(int);
+	int getPlayerID();
+	int getAmountOfCountriesOwned();
 };

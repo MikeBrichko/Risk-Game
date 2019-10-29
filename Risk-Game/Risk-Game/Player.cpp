@@ -7,11 +7,8 @@ Player::Player(int playerID, std::string playerName) {
 	this->playerName = new std::string(playerName);
 	countriesOwned = new std::vector<Country*>();
 	continentsOwned = new std::vector<Continent*>();
-
 	hand = new Hand(new std::string(playerName));
 	dice = new Dice();
-
-	
 }
 
 Player::~Player() {
@@ -289,4 +286,12 @@ void Player::fortify() {
 	//moveArmies(Country* X, Country* Y)
 	//}
 	std::cout << "Finished fortification phase" << std::endl;
+}
+
+int Player::getPlayerID() {
+	return *playerID;
+}
+
+int Player::getAmountOfCountriesOwned() {
+	return countriesOwned->size();
 }
