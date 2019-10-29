@@ -12,6 +12,8 @@
 	Map* map = mapLoader->exportToMap();
 	map->checkConnectedGraph();
 	map->checkConnectedSubgraph();
+	
+	std :: cout <<"--------------------------------------" << std :: endl;
 
 	//Case 2: Invalid map
 	
