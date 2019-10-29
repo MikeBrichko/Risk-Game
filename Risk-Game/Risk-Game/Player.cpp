@@ -79,7 +79,7 @@ void Player::reinforce(Map* gameMap) {
 void Player::attackableCountries()
 {
 	std::cout << "\nThese are the countries " << *playerName << " can attack with:\n\n" << std::endl;
-	std::cout << "Countries owned (with 2 or more armies)                  Neighbouring Enemy countries you can attack" << std::endl;
+	std::cout << "Countries owned (with 2 or more armies)                  Neighbourin Enemy countries you can attack" << std::endl;
 	std::cout << "---------------------------------------                  -------------------------------------------" << std::endl;
 	std::cout << std::endl;
 
@@ -128,7 +128,28 @@ void Player::attack() {
 		int countryToAttack;
 		std::cin >> countryToAttack;
 
+		int maxNumAttackDice;
+		int maxNumDefendDice;
+
+		int attackerNumOfArmies;
+		int defenderNumOfArmies;
 		
+		for (auto country : *countriesOwned)
+		{
+			if (country->getID() == countryFrom)
+			{
+				attackerNumOfArmies = country->getArmies();
+			}
+		}
+	
+		if (attackerNumOfArmies >= 4)
+			maxNumAttackDice = 3;
+		else if (attackerNumOfArmies = 3)
+			maxNumAttackDice = 2;
+		else
+			maxNumAttackDice = 1;
+	
+
 
 		
 		
