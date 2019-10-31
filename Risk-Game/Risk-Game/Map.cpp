@@ -58,6 +58,10 @@ int Country::getContinentID() {
 	return *continentID;
 }
 
+int Country::getArmies() {
+	return *armies;
+}
+
 bool Country::getVisited() {
 	return *visited;
 }
@@ -66,21 +70,21 @@ void Country::setVisited(bool countryVisited) {
 	*visited = countryVisited;
 }
 
-void Country::setArmies(int arm) {
-	*armies = arm;
-}
-
 int Country::getArmies() {
 	return *armies;
 }
+
 int Country::getPlayerID() {
 	return *playerID;
-};
-void Country::setPlayerID(int id) {
-	*playerID = id;
 }
 
+void Country::setPlayerID(int newPlayerID) {
+	*playerID = newPlayerID;
+}
 
+void Country::addArmy(int numberOfArmies) {
+	*armies = numberOfArmies;
+}
 
 //----------------------------------------------------------------------------------------------------------------------------------
 Continent::Continent(int continentID, std::string continentName, int continentArmyValue) {
@@ -136,6 +140,10 @@ void Map::addContinent(Continent* continent) {
 int Map::getNumOfCountries()
 {
 	return *numOfCountries;
+}
+
+std::vector<Continent*>* Map::getContinents() {
+	return continents;
 }
 
 void Map::checkConnectedGraph()

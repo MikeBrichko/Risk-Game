@@ -22,12 +22,13 @@ public:
 	std::string getName();
 	std::vector<Country*> getNeighbours();
 	int getContinentID();
+	int getArmies();
 	bool getVisited();
 	void setVisited(bool countryVisited);
-	void setArmies(int armies); // used in reinforce 
 	int getArmies();
-	void setPlayerID(int id);
 	int getPlayerID();
+	void setPlayerID(int newPlayerID);
+	void addArmy(int numberOfArmies); 
 };
 
 class Continent {
@@ -56,6 +57,7 @@ public:
 	~Map();
 	void addContinent(Continent* continent);
 	int getNumOfCountries();
+	std::vector<Continent*>* getContinents();
 	void checkConnectedGraph();
 	void checkConnectedSubgraph();
 	void resetVisitedCountries();

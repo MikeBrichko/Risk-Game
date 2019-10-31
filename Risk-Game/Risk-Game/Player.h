@@ -24,6 +24,7 @@ public:
 	std::vector<Country*> getCountriesOwned();
 	// Validating reinforce
 	int armiesOnCountriesOwned();
+	void addArmyOnCountry(std::string countryName);
 	void addArmyOnCountry(Country*);
 	std::string getPlayerName();
 
@@ -50,5 +51,8 @@ public:
 	void printCountriesOwned();
 	void countriesCanAttackWith();
 	void printCarsInHand();
-	std::vector<int> rollDice(int);
+	void rollDice(int);
+	void addCountryOwned(Country* newCountry);
+	int getPlayerID();
+	int getAmountOfCountriesOwned();
 };

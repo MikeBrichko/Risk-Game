@@ -6,24 +6,17 @@ class GameEngine {
 private:
 	Map* map;
 	std::vector<Player*>* players;
-	Deck* deck;
 
-	//Part 1 & 2
-	Map* selectMap(); //predetermmined list of maps
+	Map* selectMap();
 	std::vector<Player*>* selectNumberOfPlayers();
-	void determinePlayerOrder(); //sort players vector
+	void determinePlayerOrder();
 	void assignCountriesToPlayers();
-
-	//Part 3
-	bool removePlayer(int playerID);
+	std::vector<int> totalArmyCountForEachPlayer();
 
 public:
-	//Part 1 & 2
 	GameEngine();
 	~GameEngine();
-	bool allCountriesHavePlayers();
-	bool validateArmiesOnCountry(int playerID);
-
-	//Part 3
+	void startupPhase();
 	void mainGameLoop();
+	bool allCountriesHavePlayers();
 };

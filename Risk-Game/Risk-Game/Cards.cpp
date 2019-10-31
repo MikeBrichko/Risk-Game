@@ -39,12 +39,13 @@ Deck::~Deck() {
 
 std::vector<Card*>* Deck::buildDeck(int numberOfCountries) {
 	std::vector<Card*>* newDeck = new std::vector<Card*>;
-	for (int i = 0; i < numberOfCountries; i++) {
-		if (i < numberOfCountries / 3) {
+	int totalCards = numberOfCountries - (numberOfCountries % 3);
+	for (int i = 0; i < totalCards; i++) {
+		if (i < totalCards / 3) {
 			CardType* cardType = new CardType(infantry);
 			newDeck->push_back(new Card(cardType));
 		}
-		else if (i < (numberOfCountries * 2 / 3)) {
+		else if (i < (totalCards * 2 / 3)) {
 			CardType* cardType = new CardType(artillery);
 			newDeck->push_back(new Card(cardType));
 		}
@@ -201,12 +202,6 @@ void Hand::removeCardsInHand(std::string cardsInHand) {
 void Hand::increasePlayersArmies() {
 	*Hand::armies += 5;
 	std::cout << std::endl << "The amount of armies " << *playerName << " received is " << *armies << std::endl << std::endl;
-	/**for (auto opponentHand : *handsInPlay) {
-		*opponentHand->armies += 5;
-
-		if(opponentHand->playerName == playerName)
-			std::cout << std::endl <<"The amount of armies " << *playerName << " received is " << *armies << std::endl << std::endl;
-	}**/
 } 
 
 void Hand::addCard(Card* card) {

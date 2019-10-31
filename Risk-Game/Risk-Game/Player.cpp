@@ -177,10 +177,10 @@ void Player::attack(std::vector<Player*>* listOfPlayer) {
 		int minimumSize = (attackDice.size() < enemyDice.size() ? attackDice.size() : enemyDice.size());
 		for (int i = 0; i < minimumSize; i++) {
 			if (attackDice[attackDice.size()-1-i] <= enemyDice[enemyDice.size() - 1 -i]) {
-				countryFrom->setArmies(countryFrom->getArmies() - 1);
+				countryFrom->addArmy(countryFrom->getArmies() - 1);
 			}
 			else {
-				countryToAttack->setArmies(countryToAttack->getArmies()-1);
+				countryToAttack->addArmy(countryToAttack->getArmies()-1);
 			}
 		}
 		std::cout << "------------------------------------------------" << std::endl;
@@ -208,10 +208,10 @@ void Player::attack(std::vector<Player*>* listOfPlayer) {
 			}
 
 			//Decrement num of armies from attacking Country
-			countryFrom->setArmies(countryFrom->getArmies() - numArmiesToMove);
+			countryFrom->addArmy(countryFrom->getArmies() - numArmiesToMove);
 
 			//Increment num of armies from defeated Country
-			countryToAttack->setArmies(countryToAttack->getArmies() + numArmiesToMove);
+			countryToAttack->addArmy(countryToAttack->getArmies() + numArmiesToMove);
 
 			std::cout << "Your armies successfully moved!" << std::endl;
 
@@ -355,8 +355,8 @@ void Player::fortify() {
 			"\n\tand add to " <<addingCountry->getID()<< "." <<addingCountry->getName() << " (" << addingCountry->getArmies() << " armies)"<< std::endl;
 		std::cin >> val;
 		if (removingCountry->getArmies() - val> 0 && val >0) {
-			removingCountry->setArmies(removingCountry->getArmies() - val);
-			addingCountry->setArmies(addingCountry->getArmies() + val);
+			removingCountry->addArmy(removingCountry->getArmies() - val);
+			addingCountry->addArmy(addingCountry->getArmies() + val);
 			break;
 		}
 		std::cout << "Your input is incorrect, try again" << std::endl;

@@ -173,8 +173,12 @@
     <ClInclude Include="Player.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="brasil.map" />
+    <None Include="estonia.map" />
     <None Include="europe.map" />
     <None Include="europe_fail.map" />
+    <None Include="germany.map" />
+    <None Include="solar.map" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
