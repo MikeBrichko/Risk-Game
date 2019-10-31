@@ -25,6 +25,7 @@ public:
 	// Validating reinforce
 	int armiesOnCountriesOwned();
 	void addArmyOnCountry(Country*);
+	std::string getPlayerName();
 
 	void reinforce(Map*);
 	
@@ -49,5 +50,5 @@ public:
 	void printCountriesOwned();
 	void countriesCanAttackWith();
 	void printCarsInHand();
-	std::vector<int> rollDice(int,bool);
+	std::vector<int> rollDice(int);
 };
