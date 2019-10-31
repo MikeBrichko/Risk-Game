@@ -25,7 +25,6 @@ public:
 	int getArmies();
 	bool getVisited();
 	void setVisited(bool countryVisited);
-	int getArmies();
 	int getPlayerID();
 	void setPlayerID(int newPlayerID);
 	void addArmy(int numberOfArmies); 

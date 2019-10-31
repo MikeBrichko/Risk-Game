@@ -52,7 +52,5 @@ public:
 	void countriesCanAttackWith();
 	void printCarsInHand();
 	void rollDice(int);
-	void addCountryOwned(Country* newCountry);
-	int getPlayerID();
 	int getAmountOfCountriesOwned();
 };

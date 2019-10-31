@@ -70,10 +70,6 @@ void Country::setVisited(bool countryVisited) {
 	*visited = countryVisited;
 }
 
-int Country::getArmies() {
-	return *armies;
-}
-
 int Country::getPlayerID() {
 	return *playerID;
 }

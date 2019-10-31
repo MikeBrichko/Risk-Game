@@ -19,6 +19,16 @@ Player::~Player() {
 	delete dice;
 }
 
+int Player::armiesOnCountriesOwned() {
+	int armieCount = 0;
+	for (auto country : *countriesOwned)
+		armieCount += country->getArmies();
+	return armieCount;
+}
+
+int Player::getAmountOfCountriesOwned() {
+	return countriesOwned->size();
+}
 int Player::getPlayerID() {
 	return *playerID;
 }
