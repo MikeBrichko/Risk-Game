@@ -8,7 +8,6 @@ Player::Player(int playerID, std::string playerName) {
 	this->playerID = new int(playerID);
 	this->playerName = new std::string(playerName);
 	countriesOwned = new std::vector<Country*>();
-	continentsOwned = new std::vector<Continent*>();
 	hand = new Hand(new std::string(playerName));
 	dice = new Dice();
 }
@@ -41,14 +40,6 @@ void Player::printCountriesOwned()
 	std::cout << std::endl;
 }
 
-void Player::printContinentsOwned()
-{
-	std::cout << "These are the continents " << *playerName << " owns: " << std::endl;
-
-	for (auto continent : *continentsOwned)
-		std::cout << continent->getID() << " " << continent->getName() << std::endl;
-	std::cout << std::endl;
-}
 
 void Player::printCarsInHand() {
 	std::cout << "These are the cards " << *playerName << " owns: ";
@@ -67,9 +58,6 @@ void Player::addCountryOwned(Country* country) {
 	countriesOwned->push_back(country);
 }
 
-void Player::addContinentOwned(Continent* continent) {
-	continentsOwned->push_back(continent);
-}
 
 int Player::addCardToHand() {
 	return hand->addCard(deck->draw());
@@ -93,7 +81,7 @@ int Player::addArmyToCountry(std::string countryName, int numOfArmies){
 }
 
 void Player::reinforce(Map* gameMap) {
-	int armiesToAdd, armiesAdded = 0;
+	int armiesToAdd = 0, armiesAdded = 0;
 	int armyInput;
 
 	std::cout << "Starting reinforcement phase" << std::endl;
@@ -102,13 +90,42 @@ void Player::reinforce(Map* gameMap) {
 	armiesToAdd += floor(countriesOwned->size() / 3);
 
 	std::cout << "Adding armies based on CONTINENTS that " << *playerName << " owns." << std::endl;
-	for (auto continent : *continentsOwned) {
-		armiesToAdd += continent->getArmyValue();
+
+	std::vector<Continent*>* mapContinents = gameMap->getContinents();
+	for (auto continents: *mapContinents)
+	{
+		mapContinents->push_back(continents);
+		std::cout << continents->getID() << std::endl;
 	}
 
+	for (auto continents : *mapContinents) {
+		//	//take the element of continenet vectr and store in a country vector
+		//	vector <counrties> = continent.countries
+		std::vector<Country*>* continentCountries = mapContinents->getCountries();
 
-	std::cout << "Adding armies based on CARDS that " << *playerName << " owns." << std::endl;
-	armiesToAdd += addCardToHand();
+		
+		//		for (every elemet of country vector) {
+
+		//			//compare to an element of a player country
+		//			for (every player country) {
+
+		//				if (countryVector'sCountryID == playerCountryVector'sCountryID)
+		//					//store it in potentialContinent vector (holds country objects)
+		//					potentialCountryVector = pushback playerCountryvector
+
+		//			}
+		//			if (countryVector.size == playerCountryVector.size)
+		//				(armies += continent.getArmies);
+		//			else {
+		//				cout << "no continent bonus from " << continent.getName() << endl
+		//			}
+		//			clearcountryVector
+		//		}
+		continentCountries->clear();
+	}
+
+	/*std::cout << "Adding armies based on CARDS that " << *playerName << " owns." << std::endl;
+	armiesToAdd += addCardToHand();*/
 
 	std::cout << "armies available to place: " << armiesToAdd << std::endl;
 	printCountriesOwned();
