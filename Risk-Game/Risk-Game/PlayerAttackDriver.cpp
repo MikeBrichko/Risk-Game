@@ -49,20 +49,6 @@ int main() {
 	Brazil->addNeighbour(Mexico);
 	Brazil->addNeighbour(Argentina);
 
-
-
-	//Validate Cards in Hand
-	player->printCarsInHand();
-
-	std::cout << "Add cards to players hand" << std::endl;
-	Card* card1 = new Card(new CardType(infantry));
-	Card* card2 = new Card(new CardType(cavalry));
-	player->addCardToHand(card1);
-	player->addCardToHand(card2);
-
-	player->printCarsInHand();
-	std::cout << std::endl;
-
 	//Validate Attack
 	std::vector<Player*>* listOfPlayer = new std::vector<Player*>();
 	listOfPlayer->push_back(player);

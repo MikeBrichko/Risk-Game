@@ -175,7 +175,13 @@ void Player::attack(std::vector<Player*>* listOfPlayer) {
 		for (auto player : *listOfPlayer) {
 			if (player->getPlayerID() == countryToAttack->getPlayerID()) {
 				enemyPlayer = player;
-				enemyDice = enemyPlayer->dice->rollDice(countryToAttack->getArmies());
+				if (countryToAttack->getArmies() > 2) {
+					enemyDice = enemyPlayer->dice->rollDice(2);
+				}
+				else {
+					enemyDice = enemyPlayer->dice->rollDice(countryToAttack->getArmies());
+
+				}
 				std::cout << enemyPlayer->getPlayerName() << " rolled: ";
 				for (auto diceFace : enemyDice)
 					std::cout << diceFace << " ";
@@ -307,9 +313,10 @@ bool Player::playerAttackDecision()
 	bool attack;
 	std::string decision;
 
-	std::cout << "\nWould you like to attack a country? (yes/no)" << std::endl;
-	std::cin >> decision;
+
 	while (true) {
+		std::cout << "\nWould you like to attack a country? (yes/no)" << std::endl;
+		std::cin >> decision;
 		if ((decision == "yes") || (decision == "y"))
 		{
 			attack = true;
@@ -323,8 +330,7 @@ bool Player::playerAttackDecision()
 		}
 		else
 		{
-			std::cout << "Please enter valid option (yes/no) or (y/n)" << std::endl;
-			std::cin >> decision;
+			std::cout << "Please enter valid option" << std::endl;
 		}
 	}
 
