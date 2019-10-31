@@ -16,7 +16,7 @@ private:
 	Dice* dice;
 	static Deck* deck;
 
-	std::vector<Continent*>* continentsOwned;
+	std::vector<Continent*>* mapContinents;
 
 public:
 	Player(int,std::string);

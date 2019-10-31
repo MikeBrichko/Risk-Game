@@ -92,37 +92,32 @@ void Player::reinforce(Map* gameMap) {
 	std::cout << "Adding armies based on CONTINENTS that " << *playerName << " owns." << std::endl;
 
 	std::vector<Continent*>* mapContinents = gameMap->getContinents();
-	for (auto continents: *mapContinents)
-	{
-		mapContinents->push_back(continents);
-		std::cout << continents->getID() << std::endl;
-	}
+	std::vector<Country* >* tempCountriesVector = new std::vector<Country*>();
 
-	for (auto continents : *mapContinents) {
-		//	//take the element of continenet vectr and store in a country vector
-		//	vector <counrties> = continent.countries
-		std::vector<Country*>* continentCountries = mapContinents->getCountries();
+	for (auto continents : *mapContinents){
+		std::vector<Country*>* continentCountries = continents->getCountries();
+		std::cout << "\n" << continents->getName() << std::endl;
 
+		for (auto countries : *continentCountries) {
+			std::cout << countries->getName()<< std::endl;
+			
+			int comparedID = countries->getID();
+			
+			for (auto countries : *countriesOwned) {
+				if (comparedID == countries->getID()) {
+					tempCountriesVector->push_back(countries);
+				}
+			}
+			
+		}
 		
-		//		for (every elemet of country vector) {
+		if (tempCountriesVector->size() == continentCountries->size()) {
+			armiesToAdd += continents->getArmyValue();
+		}
+		tempCountriesVector->clear();
 
-		//			//compare to an element of a player country
-		//			for (every player country) {
-
-		//				if (countryVector'sCountryID == playerCountryVector'sCountryID)
-		//					//store it in potentialContinent vector (holds country objects)
-		//					potentialCountryVector = pushback playerCountryvector
-
-		//			}
-		//			if (countryVector.size == playerCountryVector.size)
-		//				(armies += continent.getArmies);
-		//			else {
-		//				cout << "no continent bonus from " << continent.getName() << endl
-		//			}
-		//			clearcountryVector
-		//		}
-		continentCountries->clear();
 	}
+	delete tempCountriesVector;
 
 	/*std::cout << "Adding armies based on CARDS that " << *playerName << " owns." << std::endl;
 	armiesToAdd += addCardToHand();*/

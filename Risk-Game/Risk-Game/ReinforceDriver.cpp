@@ -15,32 +15,36 @@ int main() {
 	Continent* Continent2 = new Continent(2, "continent2", 6);
 	Continent* Continent3 = new Continent(3, "continent3", 7);
 
+	//access continents through player
 	gameMap->addContinent(Continent1);
-	gameMap->addContinent(Continent1);
-	gameMap->addContinent(Continent1);
+	gameMap->addContinent(Continent2);
+	gameMap->addContinent(Continent3);
 
 	//std::cout << "Add Countries that player owns" << std::endl;
 	Country* Canada = new Country(1, "Canada", 1, 5);
 	Country* Argentina = new Country(2, "Argentina", 2, 5);
 	Country* Spain = new Country(3, "Spain", 3, 5);
-
-
-
-	player->addCountryOwned(Canada);
-	player->addCountryOwned(Argentina);
-	player->addCountryOwned(Spain);
-
-	//Create a second player for testing purposes----------------------------------------------------------------------
-	Player* player2 = new Player(2, "Player 2");
-
-	Country* USA = new Country(4, "USA", 1, 5);
+    Country* USA = new Country(4, "USA", 1, 5);
 	Country* Mexico = new Country(5, "Mexico", 2, 5);
 	Country* Brazil = new Country(6, "Brazil", 2, 5);
 
-	player2->addCountryOwned(USA);
-	player2->addCountryOwned(Mexico);
-	player2->addCountryOwned(Brazil);
-	//------------------------------------------------------------------------------------------------------------------
+	Continent1->addCountry(Canada);
+	Continent1->addCountry(USA);
+
+	Continent2->addCountry(Brazil);
+	Continent2->addCountry(Argentina);
+	Continent2->addCountry(Mexico);
+
+	Continent3->addCountry(Spain);
+
+	player->addCountryOwned(Canada);
+	player->addCountryOwned(Mexico);
+	player->addCountryOwned(Argentina);
+	player->addCountryOwned(Brazil);
+
+	
+
+
 
 	//Assign neighbours for each country
 	Canada->addNeighbour(USA);
