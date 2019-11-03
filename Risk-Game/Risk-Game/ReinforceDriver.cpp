@@ -2,7 +2,7 @@
 #include <iostream>
 
 
-int main() {
+/*int main() {
 	std::cout << "Creating Game Map" << std::endl;
 	Map* gameMap = new Map(6);
 	Continent* Continent1 = new Continent(1, "continent1", 5);
@@ -65,4 +65,4 @@ int main() {
 	//Valdate Reinforce
 	player->reinforce();
 	std::cout << std::endl;
-}
+}*/

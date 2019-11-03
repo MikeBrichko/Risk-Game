@@ -9,8 +9,8 @@
 
 GameEngine::GameEngine() {
 	map = selectMap();
-	players = selectNumberOfPlayers();
 	deck = new Deck(map->getNumOfCountries());
+	players = selectNumberOfPlayers();
 }
 
 GameEngine::~GameEngine() {
@@ -18,6 +18,7 @@ GameEngine::~GameEngine() {
 	for (auto player : *players)
 		delete player;
 	delete players;
+	delete deck;
 }
 
 Map* GameEngine::selectMap() {
