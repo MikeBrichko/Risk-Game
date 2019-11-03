@@ -8,7 +8,7 @@
 
 class Player {
 private:
-	static std::vector<Player>* playerList;
+	static std::vector<Player*>* listOfPlayer;
 	int* playerID;
 	std::string* playerName;
 	std::vector<Country*>* countriesOwned;
@@ -18,6 +18,7 @@ private:
 public:
 	Player(int,std::string);
 	~Player();
+	void static addListOfPlayer(Player*);
 	void addCountryOwned(Country*);
 	void removeCountryOwned(int countryID);
 	int getPlayerID();
@@ -31,8 +32,7 @@ public:
 	void reinforce(Map*);
 	
 	//attack(Player* playerAttacked)
-	void attackableCountries();
-	void attack(std::vector<Player*>*);
+	void attack();
 	std::vector<std::vector<Country*>> neighbourCountries(bool);
 	bool playerAttackDecision(); // Can player attack or not? -> ask to the player.. etc
 	bool validateNeighbour(std::string myCountry, std::string otherCountry, bool isAttack);

@@ -186,7 +186,7 @@ void GameEngine::mainGameLoop() {
 				continue;
 
 			player->reinforce(map);
-			player->attack(players);
+			player->attack();
 
 			if (player->getAmountOfCountriesOwned() == map->getNumOfCountries()) {
 				std::cout << "Player " << player->getPlayerID() << " wins!!!" << std::endl;

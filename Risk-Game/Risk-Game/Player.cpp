@@ -3,12 +3,14 @@
 #include <iostream>
 #include <string>
 
+std::vector<Player*>* Player::listOfPlayer = new std::vector<Player*>();
 Player::Player(int playerID, std::string playerName) {
 	this->playerID = new int(playerID);
 	this->playerName = new std::string(playerName);
 	countriesOwned = new std::vector<Country*>();
 	hand = new Hand(new std::string(playerName));
 	dice = new Dice();
+	listOfPlayer;
 }
 
 Player::~Player() {
@@ -17,6 +19,10 @@ Player::~Player() {
 	delete countriesOwned;
 	delete hand;
 	delete dice;
+}
+
+void Player::addListOfPlayer(Player* player) {
+	listOfPlayer->push_back(player);
 }
 
 int Player::armiesOnCountriesOwned() {
@@ -103,7 +109,7 @@ void Player::reinforce(Map* gameMap) {
 }
 
 
-void Player::attack(std::vector<Player*>* listOfPlayer) {
+void Player::attack() {
 
 	std::cout << "Starting Attack Phase" << std::endl;
 	std::cout << "For " << *playerName <<"\n"<< std::endl;
