@@ -81,9 +81,20 @@ int Player::addArmyToCountry(std::string countryName, int numOfArmies){
 	return numArmies;
 }
 
+bool Player::validateCountryInput(std::string cInput) {
+	for (auto countries : *countriesOwned) {
+		if (cInput == countries->getName()) {
+			return true;
+		}
+	}
+	return false;
+}
+
 void Player::reinforce(Map* gameMap) {
+	
+	std::string countryInput;
+	int armyInput, armiesLeftToPlace;
 	int armiesToAdd = 0, armiesAdded = 0;
-	int armyInput;
 
 	std::cout << "Starting reinforcement phase" << std::endl;
 
@@ -95,28 +106,25 @@ void Player::reinforce(Map* gameMap) {
 	std::vector<Continent*>* mapContinents = gameMap->getContinents();
 	std::vector<Country* >* tempCountriesVector = new std::vector<Country*>();
 
-	for (auto continents : *mapContinents){
+	for (auto continents : *mapContinents) {
 		std::vector<Country*>* continentCountries = continents->getCountries();
 		std::cout << "\n" << continents->getName() << std::endl;
 
 		for (auto countries : *continentCountries) {
-			std::cout << countries->getName()<< std::endl;
-			
+			std::cout << countries->getName() << std::endl;
+
 			int comparedID = countries->getID();
-			
+
 			for (auto countries : *countriesOwned) {
 				if (comparedID == countries->getID()) {
 					tempCountriesVector->push_back(countries);
 				}
 			}
-			
 		}
-		
 		if (tempCountriesVector->size() == continentCountries->size()) {
 			armiesToAdd += continents->getArmyValue();
 		}
 		tempCountriesVector->clear();
-
 	}
 	delete tempCountriesVector;
 
@@ -125,17 +133,21 @@ void Player::reinforce(Map* gameMap) {
 
 	printCountriesOwned();
 
-	std::string countryInput;
-	int armiesLeftToPlace = armiesToAdd;
+	
+	armiesLeftToPlace = armiesToAdd;
 
 	for (int i = 0; i < armiesToAdd; i++) {
 		std::cout << "armies available to place: " << armiesLeftToPlace << "\n" << std::endl;
 		std::cout << "\nfor which country would you like to add armies? (enter country name)" << std::endl;
 		std::cin >> countryInput;
+		while (!validateCountryInput(countryInput)) {
+			std::cout << "invalid string. input a Country Name" << std::endl;
+			std::cin >> countryInput;
+		}
 		std::cout << "how many armies to add to this country?" << std::endl;
 		std::cin >> armyInput;
 		while (armyInput < 0 || (armiesLeftToPlace - armyInput) < 0) {
-			std::cout << "invalid number. Please enter a value between 0 and" << armiesLeftToPlace << "inclusively" << std::endl;
+			std::cout << "invalid number. Please enter a value between 0 and " << armiesLeftToPlace << " inclusively" << std::endl;
 			std::cin >> armyInput;
 		}
 		armiesAdded += addArmyToCountry(countryInput, armyInput);
