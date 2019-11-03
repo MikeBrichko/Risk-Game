@@ -1,5 +1,3 @@
 ﻿  GameEngine.cpp
-  Map.cpp
-  Generating Code...
-C:\Users\wmike\source\repos\Risk-Game\Risk-Game\Risk-Game\GameEngine.cpp(53,12): warning C4244:  'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-  Risk-Game.vcxproj -> C:\Users\wmike\source\repos\Risk-Game\Risk-Game\x64\Debug\Risk-Game.exe
+C:\Users\wmike\Desktop\Risk-Game\Risk-Game\Risk-Game\GameEngine.cpp(55,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+  Risk-Game.vcxproj -> C:\Users\wmike\Desktop\Risk-Game\Risk-Game\x64\Debug\Risk-Game.exe

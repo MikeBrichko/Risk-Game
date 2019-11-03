@@ -9,6 +9,7 @@
 
 GameEngine::GameEngine() {
 	map = selectMap();
+	deck = new Deck(map->getNumOfCountries());
 	players = selectNumberOfPlayers();
 }
 
@@ -17,6 +18,7 @@ GameEngine::~GameEngine() {
 	for (auto player : *players)
 		delete player;
 	delete players;
+	delete deck;
 }
 
 Map* GameEngine::selectMap() {
@@ -43,7 +45,7 @@ std::vector<Player*>* GameEngine::selectNumberOfPlayers() {
 	for (int i = 0; i < numberOfPlayers; i++) {
 		std::cout << "Enter the name of Player " << i + 1 << ": ";
 		std::cin >> playerName;
-		newPlayers->push_back(new Player(i + 1, playerName));
+		newPlayers->push_back(new Player(i + 1, playerName, deck, map));
 	}
 	return newPlayers;
 }
@@ -167,7 +169,7 @@ void GameEngine::startupPhase() {
 			players->at(i)->printCountriesOwned();
 			std::cout << "Enter a Country that you would like to add armies to: ";
 			std::cin >> countryName;
-			//players->at(i)->addArmyToCountry(countryName, 1);
+			players->at(i)->addArmyToCountry(countryName, 1);
 
 			armiesPerPlayer.at(i)--;
 			armiesPlacedCounter++;
@@ -175,7 +177,7 @@ void GameEngine::startupPhase() {
 	}
 
 	std::cout << "Armies on the field after players add armies:" << std::endl;
-	totalArmyCountForEachPlayer();
+	armiesPerPlayer = totalArmyCountForEachPlayer();
 }
 
 void GameEngine::mainGameLoop() {
@@ -185,7 +187,7 @@ void GameEngine::mainGameLoop() {
 			if (player->getAmountOfCountriesOwned() == 0)
 				continue;
 
-			player->reinforce(map);
+			player->reinforce();
 			player->attack();
 
 			if (player->getAmountOfCountriesOwned() == map->getNumOfCountries()) {

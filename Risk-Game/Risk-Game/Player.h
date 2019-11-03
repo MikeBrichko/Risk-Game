@@ -5,6 +5,7 @@
 #include "Player.h"
 #include "Cards.h"
 #include "Dice.h"
+#include "MapLoader.h"
 
 class Player {
 private:
@@ -14,43 +15,36 @@ private:
 	std::vector<Country*>* countriesOwned;
 	Hand* hand;
 	Dice* dice;
+	Deck* gameDeck;
+	Map* gameMap;
 
 public:
-	Player(int,std::string);
+	Player(int playerID, std::string playerName);
+	Player(int playerID, std::string playerName, Deck* pointToDeck);
+	Player(int playerID, std::string playerName, Deck* deck, Map* map);
 	~Player();
-	void static addListOfPlayer(Player*);
 	void addCountryOwned(Country*);
-	void removeCountryOwned(int countryID);
-	int getPlayerID();
-	std::vector<Country*> getCountriesOwned();
+
 	// Validating reinforce
 	int armiesOnCountriesOwned();
-	void addArmyOnCountry(std::string countryName);
-	void addArmyOnCountry(Country*);
-	std::string getPlayerName();
+	int addArmyToCountry(std :: string, int numOfArmies);
+	bool validateCountryInput(std::string cInput);
 
-	void reinforce(Map*);
+	void reinforce();
+	
 	
 	//attack(Player* playerAttacked)
 	void attack();
 	std::vector<std::vector<Country*>> neighbourCountries(bool);
-	bool playerAttackDecision(); // Can player attack or not? -> ask to the player.. etc
-	bool validateNeighbour(std::string myCountry, std::string otherCountry, bool isAttack);
-	bool validateOwnedCountry(std::string countryName);
-	void attackOutcome(Country* attker, Country* defender); // Calling dice
-	// in attackOutcome, attacker Roll, defender Roll, comparing pair-wise (with sorted dice)
-	void moveArmies(Country* from, Country* to); // neighbour country
-
-	 
+	bool playerAttackDecision();
 	void fortify();
-
-	// Return int type
-	void addCardToHand(Card*);
-
-	//void printNeighbourCountries(Country*);
+	int addCardToHand();
 	void printCountriesOwned();
-	void countriesCanAttackWith();
-	void printCarsInHand();
+	void printCardsInHand();
 	void rollDice(int);
+	int getPlayerID();
 	int getAmountOfCountriesOwned();
+	void printCardsInHand();
+	std::string getPlayerName();
+	void removeCountryOwned(int countryID);
 };
