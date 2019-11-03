@@ -14,45 +14,33 @@ private:
 	std::vector<Country*>* countriesOwned;
 	Hand* hand;
 	Dice* dice;
-	static Deck* deck;
-
-	std::vector<Continent*>* mapContinents;
+	Deck* gameDeck;
+	Map* gameMap;
 
 public:
-	Player(int,std::string);
+	Player(int playerID, std::string playerName);
+	Player(int playerID, std::string playerName, Deck* pointToDeck);
+	Player(int playerID, std::string playerName, Deck* deck, Map* map);
 	~Player();
 	void addCountryOwned(Country*);
-	void addContinentOwned(Continent* continent);
 
 	// Validating reinforce
 	int armiesOnCountriesOwned();
 	int addArmyToCountry(std :: string, int numOfArmies);
 	bool validateCountryInput(std::string cInput);
 
-	void reinforce(Map*);
+	void reinforce();
 	
 	
 	//attack(Player* playerAttacked)
 	void attack();
 	std::vector<std::vector<Country*>> neighbourCountries(bool);
-	bool playerAttackDecision(); // Can player attack or not? -> ask to the player.. etc
-	bool validateNeighbour(std::string myCountry, std::string otherCountry, bool isAttack);
-	bool validateOwnedCountry(std::string countryName);
-	void attackOutcome(Country* attker, Country* defender); // Calling dice
-	// in attackOutcome, attacker Roll, defender Roll, comparing pair-wise (with sorted dice)
-	void moveArmies(Country* from, Country* to); // neighbour country
-
-	 
+	bool playerAttackDecision();
 	void fortify();
-
-	// Return int type
 	int addCardToHand();
-
-	void printContinentsOwned();
 	void printCountriesOwned();
 	void printCarsInHand();
 	void rollDice(int);
 	int getPlayerID();
 	int getAmountOfCountriesOwned();
-	void setDeck(Deck* newDeck);
 };

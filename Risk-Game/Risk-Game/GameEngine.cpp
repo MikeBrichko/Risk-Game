@@ -44,7 +44,7 @@ std::vector<Player*>* GameEngine::selectNumberOfPlayers() {
 	for (int i = 0; i < numberOfPlayers; i++) {
 		std::cout << "Enter the name of Player " << i + 1 << ": ";
 		std::cin >> playerName;
-		newPlayers->push_back(new Player(i + 1, playerName));
+		newPlayers->push_back(new Player(i + 1, playerName, deck, map));
 	}
 	return newPlayers;
 }
@@ -186,7 +186,7 @@ void GameEngine::mainGameLoop() {
 			if (player->getAmountOfCountriesOwned() == 0)
 				continue;
 
-			player->reinforce(map);
+			player->reinforce();
 			player->attack();
 
 			if (player->getAmountOfCountriesOwned() == map->getNumOfCountries()) {

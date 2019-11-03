@@ -1,2 +1,4 @@
-﻿  GameEngineDriver.cpp
-  Risk-Game.vcxproj -> C:\Users\wmike\source\repos\Risk-Game\Risk-Game\x64\Debug\Risk-Game.exe
+﻿  Player.cpp
+C:\Users\wmike\Desktop\Risk-Game\Risk-Game\Risk-Game\Player.cpp(111,50): warning C4244: '+=': conversion from 'double' to 'int', possible loss of data
+C:\Users\wmike\Desktop\Risk-Game\Risk-Game\Risk-Game\Player.cpp(340,31): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+  Risk-Game.vcxproj -> C:\Users\wmike\Desktop\Risk-Game\Risk-Game\x64\Debug\Risk-Game.exe
