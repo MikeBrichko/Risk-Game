@@ -1,8 +1,8 @@
 #include "GameEngine.h"
 
-int main() {
+/**int main() {
 	GameEngine game = GameEngine();
 	game.startupPhase();
 	game.mainGameLoop();
 	return 0;
-}
+}**/

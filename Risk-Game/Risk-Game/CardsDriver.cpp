@@ -11,7 +11,7 @@
 	Deck* deck = new Deck(numberOfCountries);
 	int amountOfEachCardType[3] = {};
 	while (deck->getDeckSize() != 0) {
-		Card* card = deck->draw(numberOfCountries);
+		Card* card = deck->draw();
 		if (*(card->getCardType()) == "infantry") {
 			amountOfEachCardType[0] += 1;
 		} else if (*(card->getCardType()) == "artillery") {
@@ -29,7 +29,7 @@
 	std::cout << std::endl << "Demonstrating the draw() method" << std::endl;
 	std::cout << "Deck size before drawing a card: " << deck->getDeckSize() << std::endl;
 	std::cout << "Drawing a card" << std::endl;
-	Card* card = deck->draw(numberOfCountries);
+	Card* card = deck->draw();
 	std::cout << "Deck size after drawing a card: " << deck->getDeckSize() << std::endl;
 	std::cout << "The Card that was drawn was a " << *(card->getCardType()) << " card." << std::endl;
 
@@ -50,7 +50,7 @@
 	std::cout << "All players draw cards and exchange cards for armies if they want" << std::endl;
 	while (true) {
 		for(auto hand : *handsInPlay)
-			hand->addCard(deck->draw(numberOfCountries));
+			hand->addCard(deck->draw());
 	}
 
 	return 0;

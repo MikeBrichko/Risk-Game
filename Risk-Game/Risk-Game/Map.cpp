@@ -47,16 +47,20 @@ int Country::getContinentID() {
 	return *continentID;
 }
 
-int Country::getArmies() {
-	return *armies;
-}
-
 bool Country::getVisited() {
 	return *visited;
 }
 
 void Country::setVisited(bool countryVisited) {
 	*visited = countryVisited;
+}
+
+void Country::setArmies(int arm) {
+	*armies = arm;
+}
+
+int Country::getArmies() {
+	return *armies;
 }
 
 int Country::getPlayerID() {
@@ -102,6 +106,10 @@ std::string Continent::getName() {
 
 int Continent::getID() {
 	return *ID;
+}
+
+int Continent::getArmyValue() {
+	return *armyValue;
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------------

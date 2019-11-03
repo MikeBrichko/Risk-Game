@@ -5,6 +5,7 @@
 #include "Player.h"
 #include "Cards.h"
 #include "Dice.h"
+#include "MapLoader.h"
 
 class Player {
 private:
@@ -13,36 +14,33 @@ private:
 	std::vector<Country*>* countriesOwned;
 	Hand* hand;
 	Dice* dice;
+	Deck* gameDeck;
+	Map* gameMap;
 
 public:
-	Player(int,std::string);
+	Player(int playerID, std::string playerName);
+	Player(int playerID, std::string playerName, Deck* pointToDeck);
+	Player(int playerID, std::string playerName, Deck* deck, Map* map);
 	~Player();
+	void addCountryOwned(Country*);
+
 	// Validating reinforce
 	int armiesOnCountriesOwned();
-	void addArmyOnCountry(std::string countryName);
-	void addArmyOnCountry(Country*);
-	void reinforce(Map*);
+	int addArmyToCountry(std :: string, int numOfArmies);
+	bool validateCountryInput(std::string cInput);
+
+	void reinforce();
+	
 	
 	//attack(Player* playerAttacked)
 	void attack();
-	void attackableCountries();
-	bool playerAttackDecision(); // Can player attack or not? -> ask to the player.. etc
-	bool validateNeighbour(std::string myCountry, std::string otherCountry, bool isAttack);
-	bool validateOwnedCountry(std::string countryName);
-	void attackOutcome(Country* attker, Country* defender); // Calling dice
-	// in attackOutcome, attacker Roll, defender Roll, comparing pair-wise (with sorted dice)
-	void moveArmies(Country* from, Country* to); // neighbour country
-
-	 
-	void fortifiy();
-
-	// Return int type
-	void addCardToHand(Card*);
-
+	std::vector<std::vector<Country*>> neighbourCountries(bool);
+	bool playerAttackDecision();
+	void fortify();
+	int addCardToHand();
 	void printCountriesOwned();
 	void printCarsInHand();
 	void rollDice(int);
-	void addCountryOwned(Country* newCountry);
 	int getPlayerID();
 	int getAmountOfCountriesOwned();
 };
