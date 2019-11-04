@@ -25,8 +25,6 @@ public:
 	int getArmies();
 	bool getVisited();
 	void setVisited(bool countryVisited);
-	void setArmies(int armies); // used in reinforce 
-	void addArmy(); // used in reinforce
 	int getPlayerID();
 	void setPlayerID(int newPlayerID);
 	void addArmy(int numberOfArmies);

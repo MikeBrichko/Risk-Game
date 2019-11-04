@@ -66,10 +66,6 @@ void Country::setVisited(bool countryVisited) {
 	*visited = countryVisited;
 }
 
-void Country::setArmies(int arm) {
-	*armies = arm;
-}
-
 int Country::getArmies() {
 	return *armies;
 }
@@ -83,7 +79,7 @@ void Country::setPlayerID(int newPlayerID) {
 }
 
 void Country::addArmy(int numberOfArmies) {
-	*armies = numberOfArmies;
+	*armies += numberOfArmies;
 }
 
 //----------------------------------------------------------------------------------------------------------------------------------

@@ -47,7 +47,7 @@
 			*rollCounter += 1;
 		}
 
-		std::sort(diceRolled.begin(), diceRolled.end());
+		std::sort(diceRolled.begin(), diceRolled.end(), std::greater<int>());
 		return diceRolled;
 	}
 

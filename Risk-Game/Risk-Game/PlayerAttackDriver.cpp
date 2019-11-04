@@ -1,7 +1,7 @@
 #include "Player.h"
 #include <iostream>
 
-/*int main() {
+int main() {
 	Map* gameMap = new Map(6);
 	Continent* Continent1 = new Continent(1, "continent1", 5);
 	Continent* Continent2 = new Continent(2, "continent2", 5);
@@ -40,9 +40,8 @@
 	std::vector<Player*>* listOfPlayer = new std::vector<Player*>();
 	listOfPlayer->push_back(player);
 	listOfPlayer->push_back(player2);
-	player->attack();
+	player->attack(listOfPlayer);
 
-	player->printNeighbouringOwnedCountries();
 	std::cout << std::endl;
 	player->fortify();
-}*/
+}
