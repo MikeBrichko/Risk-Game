@@ -35,7 +35,7 @@ public:
 	
 	//attack(Player* playerAttacked)
 	void attack();
-	std::vector<std::vector<Country*>> neighbourCountries(bool);
+	std::vector<std::vector<Country*>> neighbouringCountries(bool);
 	bool playerAttackDecision();
 	void fortify();
 	int addCardToHand();
@@ -44,7 +44,7 @@ public:
 	void rollDice(int);
 	int getPlayerID();
 	int getAmountOfCountriesOwned();
-	void printCardsInHand();
 	std::string getPlayerName();
 	void removeCountryOwned(int countryID);
+	void printNeighbouringOwnedCountries();
 };

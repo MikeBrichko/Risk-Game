@@ -103,6 +103,7 @@ void GameEngine::assignCountriesToPlayers() {
 	}
 
 	map->resetVisitedCountries();
+	//players->at(0)->fortify();
 }
 
 bool GameEngine::allCountriesHavePlayers() {

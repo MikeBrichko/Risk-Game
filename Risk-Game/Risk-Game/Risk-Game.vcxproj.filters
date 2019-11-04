@@ -63,6 +63,9 @@
     <ClCompile Include="ReinforceDriver.cpp">
       <Filter>Source Files\AssignmentTwoDrivers</Filter>
     </ClCompile>
+    <ClCompile Include="PlayerAttackDriver.cpp">
+      <Filter>Source Files\AssignmentTwoDrivers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Map.h">
