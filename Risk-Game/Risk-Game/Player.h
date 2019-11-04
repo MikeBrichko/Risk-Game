@@ -9,6 +9,7 @@
 
 class Player {
 private:
+	static std::vector<Player*>* listOfPlayer;
 	int* playerID;
 	std::string* playerName;
 	std::vector<Country*>* countriesOwned;
@@ -17,30 +18,33 @@ private:
 	Deck* gameDeck;
 	Map* gameMap;
 
+	void removeCountryOwned(int countryID);
+	void conquerEnemyCountry(Country* ownCountry, Country* enemyCountry, std::vector<Player*>* players);
+	std::vector<std::vector<Country*>> neighbouringEnemyCountries(bool);
+	bool validateCountryInput(std::string cInput);
+	bool playerAttackDecision();
+
 public:
 	Player(int playerID, std::string playerName);
 	Player(int playerID, std::string playerName, Deck* pointToDeck);
 	Player(int playerID, std::string playerName, Deck* deck, Map* map);
 	~Player();
-	void addCountryOwned(Country*);
 
-	// Validating reinforce
-	int armiesOnCountriesOwned();
-	int addArmyToCountry(std :: string, int numOfArmies);
-	bool validateCountryInput(std::string cInput);
-
+	//PlayerTurn
 	void reinforce();
-	
-	
-	//attack(Player* playerAttacked)
-	void attack();
-	std::vector<std::vector<Country*>> neighbourCountries(bool);
-	bool playerAttackDecision();
+	void attack(std::vector<Player*>* players);
 	void fortify();
-	int addCardToHand();
+
+	//PrintStatements
 	void printCountriesOwned();
-	void printCarsInHand();
-	void rollDice(int);
+	void printCardsInHand();
+	
+	//Mutators&Accessors
 	int getPlayerID();
+	std::string getPlayerName();
+	int addCardToHand();
 	int getAmountOfCountriesOwned();
+	int armiesOnCountriesOwned();
+	void addArmyToCountry(std::string countryName, int numOfArmies);
+	void addCountryOwned(Country* country);
 };

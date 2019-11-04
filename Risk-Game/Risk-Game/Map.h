@@ -15,6 +15,7 @@ private:
 
 public:
 	Country(int countryID, std::string countryName, int countryContinentID, int countryArmies);
+	Country(int countryID, std::string countryName, int countryContinentID, int countryArmies, int playerID);
 	~Country();
 	void addNeighbour(Country* country);
 	int getID();
@@ -24,8 +25,6 @@ public:
 	int getArmies();
 	bool getVisited();
 	void setVisited(bool countryVisited);
-	void setArmies(int armies); // used in reinforce 
-	void addArmy(); // used in reinforce
 	int getPlayerID();
 	void setPlayerID(int newPlayerID);
 	void addArmy(int numberOfArmies);

@@ -162,8 +162,10 @@
     <ClCompile Include="MapLoader.cpp" />
     <ClCompile Include="MapLoaderDriver.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PlayerAttackDriver.cpp" />
     <ClCompile Include="PlayerDriver.cpp" />
-    <ClCompile Include="ReinforceDriver.cpp" />
+    <ClCompile Include="PlayerFortifyDriver.cpp" />
+    <ClCompile Include="PlayerReinforceDriver.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Cards.h" />

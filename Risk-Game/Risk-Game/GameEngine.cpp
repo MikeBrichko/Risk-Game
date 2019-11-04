@@ -130,7 +130,7 @@ void GameEngine::startupPhase() {
 	determinePlayerOrder();
 	assignCountriesToPlayers();
 
-	int givenArmies;
+	int givenArmies = 40;
 	switch (players->size()) {
 		case 2:
 			givenArmies = 40;
@@ -155,7 +155,7 @@ void GameEngine::startupPhase() {
 	std::vector<int> armiesPerPlayer = totalArmyCountForEachPlayer();
 	int totalArmiesToBePlaced = 0;
 	for (int i = 0; i < players->size(); i++) {
-		armiesPerPlayer.at(i) = 20 - armiesPerPlayer.at(i);
+		armiesPerPlayer.at(i) = givenArmies - armiesPerPlayer.at(i);
 		totalArmiesToBePlaced += armiesPerPlayer.at(i);
 	}
 
@@ -188,7 +188,7 @@ void GameEngine::mainGameLoop() {
 				continue;
 
 			player->reinforce();
-			player->attack();
+			player->attack(players);
 
 			if (player->getAmountOfCountriesOwned() == map->getNumOfCountries()) {
 				std::cout << "Player " << player->getPlayerID() << " wins!!!" << std::endl;

@@ -60,7 +60,13 @@
     <ClCompile Include="GameEngineDriver.cpp">
       <Filter>Source Files\AssignmentTwoDrivers</Filter>
     </ClCompile>
-    <ClCompile Include="ReinforceDriver.cpp">
+    <ClCompile Include="PlayerAttackDriver.cpp">
+      <Filter>Source Files\AssignmentTwoDrivers</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerFortifyDriver.cpp">
+      <Filter>Source Files\AssignmentTwoDrivers</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerReinforceDriver.cpp">
       <Filter>Source Files\AssignmentTwoDrivers</Filter>
     </ClCompile>
   </ItemGroup>

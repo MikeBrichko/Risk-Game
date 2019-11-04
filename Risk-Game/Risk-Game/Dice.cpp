@@ -16,7 +16,7 @@
 	}
 
 	int Dice::diceToBeRolled(int armiesOnCountry) {
-		std::cout << "Number of armies on country is: " << armiesOnCountry << std::endl;
+
 		if (armiesOnCountry == 1) {
 			std::cout << "Since number of armies is 1, the user can only roll one time" <<std::endl;
 			return armiesOnCountry;
@@ -47,7 +47,7 @@
 			*rollCounter += 1;
 		}
 
-		std::sort(diceRolled.begin(), diceRolled.end());
+		std::sort(diceRolled.begin(), diceRolled.end(), std::greater<int>());
 		return diceRolled;
 	}
 
