@@ -20,7 +20,7 @@ private:
 
 	void removeCountryOwned(int countryID);
 	void conquerEnemyCountry(Country* ownCountry, Country* enemyCountry, std::vector<Player*>* players);
-	std::vector<std::vector<Country*>> neighbouringCountries(bool);
+	std::vector<std::vector<Country*>> neighbouringEnemyCountries(bool);
 	bool validateCountryInput(std::string cInput);
 	bool playerAttackDecision();
 

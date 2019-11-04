@@ -1,7 +1,7 @@
 #include "Player.h"
 #include <iostream>
 
-int main() {
+/*int main() {
 	Map* gameMap = new Map(6);
 	Continent* Continent1 = new Continent(1, "continent1", 5);
 	Continent* Continent2 = new Continent(2, "continent2", 5);
@@ -44,4 +44,4 @@ int main() {
 
 	std::cout << std::endl;
 	player->fortify();
-}
+}*/

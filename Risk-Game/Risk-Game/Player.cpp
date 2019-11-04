@@ -116,7 +116,7 @@ void Player::addArmyToCountry(std::string countryName, int numOfArmies){
 	}
 }
 
-std::vector<std::vector<Country*>> Player::neighbouringCountries(bool isAnEnemyNeighbour) {
+std::vector<std::vector<Country*>> Player::neighbouringEnemyCountries(bool isAnEnemyNeighbour) {
 	//std::cout << "Please choose an attackable countries from :" << std::endl;
 	std::vector<std::vector<Country*>> listOfNeighbours = std::vector<std::vector<Country*>>();
 	for (auto country : *countriesOwned)
@@ -277,7 +277,7 @@ void Player::attack(std::vector<Player*>* players) {
 	std::cout << "=====================Starting Attack Phase=====================" << std::endl;
 	std::cout << "For " << *playerName << std::endl;
 
-	std::vector<std::vector<Country*>> listOfNeighbours = this->neighbouringCountries(true);
+	std::vector<std::vector<Country*>> listOfNeighbours = this->neighbouringEnemyCountries(true);
 	Player* enemyPlayer{};
 	int countryFromID;
 	int countryToAttackID;
@@ -357,7 +357,7 @@ void Player::attack(std::vector<Player*>* players) {
 				}
 			}
 		}
-		listOfNeighbours = this->neighbouringCountries(true);
+		listOfNeighbours = this->neighbouringEnemyCountries(true);
 	}
 	std::cout << "=====================Finished Attack Phase=====================" << std::endl;
 }
@@ -366,46 +366,65 @@ void Player::fortify() {
 	std::cout << "=====================Starting fortification phase=====================" << std::endl;
 	std::cout << "Moving armies to different countries" << std::endl;
 	bool validateFortify = true;
-	std::vector<std::vector<Country*>> listOfNeighbours = this->neighbouringCountries(false);
+	std::vector<std::vector<Country*>> listOfNeighbours = this->neighbouringEnemyCountries(false);
 	Country* removingCountry = NULL;
+	int removingCountryIndex = 0;
 	Country* addingCountry = NULL;
-	while (validateFortify) {
-		std::cout << "Please choose a country to move armies from (enter country number)" << std::endl;
 
-		int countryFrom;
+	//Step 1. Select Country having armies removed
+	int countryFrom;
+	while (true)
+	{
+		std::cout << "Please enter the number of the country that you would like to remove armies from: " << std::endl;
 		std::cin >> countryFrom;
-		std::cout << "Please choose a country to move armies to (enter country number)" << std::endl;
-		int countryToAttack;
-		std::cin >> countryToAttack;
 		for (auto country : listOfNeighbours) {
 			if (country[0]->getID() == countryFrom) {
 				removingCountry = country[0];
-				for (auto neighbour : country) {
-					if (neighbour->getID() == countryToAttack && neighbour->getID() != countryFrom) {
-						addingCountry = neighbour;
-						validateFortify = false;
-					}
-				}
+				break;
+			}
+			removingCountryIndex++;
+		}
+
+		if (removingCountry->getArmies() >= 2 && std::find(countriesOwned->begin(), countriesOwned->end(), removingCountry) != countriesOwned->end())
+			break;
+		else
+			std::cout << "Invalid choice. You need to choose a country with at least 2 armies" << std::endl;
+	}
+
+	//Step 2. Select Friendly Neighbour
+	int countryTo = 0;
+	while (true) {
+		std::cout << "Please enter the number of the country that you want to attack: " << std::endl;
+		std::cin >> countryTo;
+		for (auto country : listOfNeighbours.at(removingCountryIndex)) {
+			if (country->getID() == countryTo && country->getID() != countryFrom) {
+				addingCountry = country;
 			}
 		}
-	}
 
-	int val;
-	while (true) {
-		std::cout << "How many do you want to remove from " << removingCountry->getID() << "." << removingCountry->getName() << " (" << removingCountry->getArmies() << " armies)" <<
-			"\n\tand add to " << addingCountry->getID() << "." << addingCountry->getName() << " (" << addingCountry->getArmies() << " armies)" << std::endl;
-		std::cin >> val;
-		if (removingCountry->getArmies() - val > 0 && val > 0) {
-			removingCountry->addArmy(removingCountry->getArmies() - val);
-			addingCountry->addArmy(addingCountry->getArmies() + val);
+		if (addingCountry == NULL)
+			std::cout << "Please make sure you entered correct country numbers." << std::endl;
+		else
 			break;
-		}
-		std::cout << "Your input is incorrect, try again" << std::endl;
 	}
-	std::cout << "Your armies successfully moved!" << std::endl;
-	std::cout << removingCountry->getID() << "." << removingCountry->getName() << " has " << removingCountry->getArmies() << " armies" << std::endl;
-	std::cout << addingCountry->getID() << "." << addingCountry->getName() << " has " << addingCountry->getArmies() << " armies" << std::endl;
 
+	//Step 3. Move armies to friendly Country
+	int armiesToMobilize = 0;
+	while (true) {
+		std::cout << removingCountry->getName() << " has " << removingCountry->getArmies() << " armies." << std::endl;
+		std::cout << "How many armies would you like to move from the attacking country to the defeated country?" << std::endl;
+		std::cin >> armiesToMobilize;
+
+		if (armiesToMobilize <= (removingCountry->getArmies() - 1) && armiesToMobilize >= 1)
+			break;
+		else
+			std::cout << "Can't move that many armies! Select the amount of armies in between 1 and " << removingCountry->getArmies() - 1 << std::endl;
+	}
+
+	removingCountry->addArmy(-armiesToMobilize);
+	addingCountry->addArmy(armiesToMobilize);
+
+	listOfNeighbours = this->neighbouringEnemyCountries(false);
 	std::cout << "=====================Finished fortification phase=====================" << std::endl;
 }
 
