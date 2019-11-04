@@ -178,7 +178,6 @@ void GameEngine::startupPhase() {
 
 	std::cout << "Armies on the field after players add armies:" << std::endl;
 	armiesPerPlayer = totalArmyCountForEachPlayer();
-	players->at(0)->fortify();
 }
 
 void GameEngine::mainGameLoop() {

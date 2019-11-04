@@ -412,7 +412,7 @@ void Player::fortify() {
 	int armiesToMobilize = 0;
 	while (true) {
 		std::cout << removingCountry->getName() << " has " << removingCountry->getArmies() << " armies." << std::endl;
-		std::cout << "How many armies would you like to move from the attacking country to the defeated country?" << std::endl;
+		std::cout << "How many armies would you like to move from " << removingCountry->getName() <<" to " << addingCountry->getName() << "?" << std::endl;
 		std::cin >> armiesToMobilize;
 
 		if (armiesToMobilize <= (removingCountry->getArmies() - 1) && armiesToMobilize >= 1)
