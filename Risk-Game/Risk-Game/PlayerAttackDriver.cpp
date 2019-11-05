@@ -41,7 +41,4 @@
 	listOfPlayer->push_back(player);
 	listOfPlayer->push_back(player2);
 	player->attack(listOfPlayer);
-
-	std::cout << std::endl;
-	player->fortify();
 }*/

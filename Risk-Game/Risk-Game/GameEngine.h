@@ -13,6 +13,8 @@ private:
 	void determinePlayerOrder();
 	void assignCountriesToPlayers();
 	std::vector<int> totalArmyCountForEachPlayer();
+	void validateAllCountriesHavePlayers();
+	void giveAllCountriesToOnePlayerBecauseWhyNot(Player* luckyPlayer);
 
 public:
 	GameEngine();

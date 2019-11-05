@@ -3,7 +3,6 @@
 #include <string>
 #include <algorithm>
 
-std::vector<Player*>* Player::listOfPlayer = new std::vector<Player*>();
 Player::Player(int playerID, std::string playerName) {
 	this->playerID = new int(playerID);
 	this->playerName = new std::string(playerName);
@@ -256,7 +255,7 @@ void Player::reinforce() {
 		std::cout << "how many armies to add to this country?" << std::endl;
 		std::cin >> armyInput;
 		while (armyInput < 0 || (armiesLeftToAdd - armyInput) < 0) {
-			std::cout << "invalid number. Please enter a value between 0 and " << armiesToAdd << " inclusively" << std::endl;
+			std::cout << "invalid number. Please enter a value between 0 and " << armiesLeftToAdd << " inclusively" << std::endl;
 			std::cin >> armyInput;
 		}
 		addArmyToCountry(countryInput, armyInput);
@@ -280,7 +279,6 @@ void Player::attack(std::vector<Player*>* players) {
 	std::vector<std::vector<Country*>> listOfNeighbours = this->neighbouringEnemyCountries(true);
 	Player* enemyPlayer{};
 	int countryFromID;
-	int countryToAttackID;
 	Country* attackingCountry = NULL;
 	Country* defendingCountry = NULL;
 	int attackingCountryIndex = 0;
@@ -302,24 +300,28 @@ void Player::attack(std::vector<Player*>* players) {
 				attackingCountryIndex++;
 			}
 
-			if (attackingCountry->getArmies() >= 2 && std::find(countriesOwned->begin(), countriesOwned->end(), attackingCountry) != countriesOwned->end())
-				break;
+			if (attackingCountry != NULL) {
+				if (attackingCountry->getArmies() >= 2)
+					break;
+			}
 			else
 				std::cout << "Invalid choice. You need to choose a country with at least 2 armies" << std::endl;
 		}
 
 		//Step 2. Select the defending country
+		int countryToAttackID;
 		while (true) {
 			std::cout << "Please enter the number of the country that you want to attack: " << std::endl;
 			std::cin >> countryToAttackID;
 			for (auto country : listOfNeighbours.at(attackingCountryIndex)) {
-				if (country->getID() == countryToAttackID && country->getID() != countryFromID) {
+				if (country->getID() == countryToAttackID) {
 					defendingCountry = country;
+					break;
 				}
 			}
 
 			if (defendingCountry == NULL)
-				std::cout << "Please make sure you entered correct country numbers." << std::endl;
+				std::cout << "Please make sure you entered correct country number." << std::endl;
 			else
 				break;
 		}
@@ -327,7 +329,7 @@ void Player::attack(std::vector<Player*>* players) {
 		//Step 3. Roll Dices
 		//Attacker Dice Roll
 		std::cout << "Attacker rolls" << std::endl;
-		attackingDice = dice->rollDice(attackingCountry->getArmies());
+		attackingDice = dice->rollDice(attackingCountry->getArmies(), true);
 		std::cout << "Attacking Player rolled: ";
 		for (auto diceFace : attackingDice)
 			std::cout << diceFace << " ";
@@ -335,7 +337,7 @@ void Player::attack(std::vector<Player*>* players) {
 
 		//Defender Dice Roll
 		std::cout << "Defender rolls " << std::endl;
-		defendingDice = dice->rollDice(defendingCountry->getArmies());
+		defendingDice = dice->rollDice(defendingCountry->getArmies(), false);
 		std::cout << "Defending Player rolled: ";
 		for (auto diceFace : defendingDice)
 			std::cout << diceFace << " ";
@@ -385,20 +387,23 @@ void Player::fortify() {
 			removingCountryIndex++;
 		}
 
-		if (removingCountry->getArmies() >= 2 && std::find(countriesOwned->begin(), countriesOwned->end(), removingCountry) != countriesOwned->end())
-			break;
+		if (removingCountry != NULL) {
+			if (removingCountry->getArmies() >= 2)
+				break;
+		}
 		else
-			std::cout << "Invalid choice. You need to choose a country with at least 2 armies" << std::endl;
+			std::cout << "Invalid choice." << std::endl;
 	}
 
 	//Step 2. Select Friendly Neighbour
 	int countryTo = 0;
 	while (true) {
-		std::cout << "Please enter the number of the country that you want to attack: " << std::endl;
+		std::cout << "Please enter the number of the country that you want to transfer armies to: " << std::endl;
 		std::cin >> countryTo;
 		for (auto country : listOfNeighbours.at(removingCountryIndex)) {
-			if (country->getID() == countryTo && country->getID() != countryFrom) {
+			if (country->getID() == countryTo) {
 				addingCountry = country;
+				break;
 			}
 		}
 

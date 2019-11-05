@@ -9,7 +9,6 @@
 
 class Player {
 private:
-	static std::vector<Player*>* listOfPlayer;
 	int* playerID;
 	std::string* playerName;
 	std::vector<Country*>* countriesOwned;
@@ -21,7 +20,6 @@ private:
 	void removeCountryOwned(int countryID);
 	void conquerEnemyCountry(Country* ownCountry, Country* enemyCountry, std::vector<Player*>* players);
 	std::vector<std::vector<Country*>> neighbouringEnemyCountries(bool);
-	bool validateCountryInput(std::string cInput);
 	bool playerAttackDecision();
 
 public:
@@ -29,6 +27,8 @@ public:
 	Player(int playerID, std::string playerName, Deck* pointToDeck);
 	Player(int playerID, std::string playerName, Deck* deck, Map* map);
 	~Player();
+
+	bool validateCountryInput(std::string cInput);
 
 	//PlayerTurn
 	void reinforce();
