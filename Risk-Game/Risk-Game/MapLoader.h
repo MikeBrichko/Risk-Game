@@ -15,7 +15,7 @@ private:
 public:
 	MapLoader(std::string fileName);
 	~MapLoader();
-	void validateMap();
+	bool validateMap();
 	Map* exportToMap();
 };
 

@@ -15,28 +15,66 @@
 		delete rollCounter;
 	}
 
-	int Dice::diceToBeRolled(int armiesOnCountry) {
-		std::cout << "Number of armies on country is: " << armiesOnCountry << std::endl;
+	int Dice::diceToBeRolledByAttacker(int armiesOnCountry) {
+
 		if (armiesOnCountry == 1) {
 			std::cout << "Since number of armies is 1, the user can only roll one time" <<std::endl;
 			return armiesOnCountry;
 		}
 
 		int diceToBeRolled = 0;
-		while (diceToBeRolled == 0 && 0 < diceToBeRolled < 4) {
+		while (true) {
 			std::cout << "Please enter how many dice will be rolled ";
-			if(armiesOnCountry >= 3)
+			if (armiesOnCountry >= 3) {
 				std::cout << " (input 1, 2 or 3): ";
-			else 
+				std::cin >> diceToBeRolled;
+
+				if (diceToBeRolled == 1 || diceToBeRolled == 2 || diceToBeRolled == 3)
+					return diceToBeRolled;
+				else
+					std::cout << "Invalid amount of dice selected" << std::endl;
+			}
+			else {
 				std::cout << " (input 1 or 2): ";
-			std::cin >> diceToBeRolled;
+				std::cin >> diceToBeRolled;
+				if (diceToBeRolled == 1 || diceToBeRolled == 2)
+					return diceToBeRolled;
+				else
+					std::cout << "Invalid amount of dice selected" << std::endl;
+			}
 		};
 
 		return diceToBeRolled;
 	}
 
-	std::vector<int> Dice::rollDice(int armiesOnCountry) {
-		int diceToBeRolled = Dice::diceToBeRolled(armiesOnCountry);
+	int Dice::diceToBeRolledByDefender(int armiesOnCountry) {
+
+		if (armiesOnCountry == 1) {
+			std::cout << "Since number of armies is 1, the user can only roll one time" << std::endl;
+			return armiesOnCountry;
+		}
+
+		int diceToBeRolled = 0;
+		while (true) {
+			std::cout << "Please enter how many dice will be rolled ";
+			std::cout << " (input 1 or 2): ";
+			std::cin >> diceToBeRolled;
+
+			if (diceToBeRolled == 1 || diceToBeRolled == 2)
+				return diceToBeRolled;
+			else
+				std::cout << "Invalid amount of dice selected" << std::endl;
+		}
+
+		return diceToBeRolled;
+	}
+
+	std::vector<int> Dice::rollDice(int armiesOnCountry, bool isAttacking) {
+		int diceToBeRolled = 0;
+		if(isAttacking)
+			diceToBeRolled = Dice::diceToBeRolledByAttacker(armiesOnCountry);
+		else
+			diceToBeRolled = Dice::diceToBeRolledByDefender(armiesOnCountry);
 		std::vector<int> diceRolled = std::vector<int>();
 		
 		int diceFaceRolled = 0;
@@ -47,7 +85,7 @@
 			*rollCounter += 1;
 		}
 
-		std::sort(diceRolled.begin(), diceRolled.end());
+		std::sort(diceRolled.begin(), diceRolled.end(), std::greater<int>());
 		return diceRolled;
 	}
 

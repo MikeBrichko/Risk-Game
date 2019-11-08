@@ -17,11 +17,22 @@ Country::Country(int countryID, std::string countryName, int countryContinentID,
 	neighbours = new std::vector<Country*>();
 }
 
+Country::Country(int countryID, std::string countryName, int countryContinentID, int countryArmies, int id)
+{
+	ID = new int(countryID);
+	name = new std::string(countryName);
+	continentID = new int(countryContinentID);
+	playerID = new int(id);
+	armies = new int(countryArmies);
+	visited = new bool(false);
+	neighbours = new std::vector<Country*>();
+}
 Country::~Country() {
 	delete ID;
 	delete name;
 	delete continentID;
 	delete armies;
+	delete playerID;
 	for (auto neighbour : *neighbours)
 		delete neighbour;
 	delete neighbours;
@@ -53,6 +64,22 @@ bool Country::getVisited() {
 
 void Country::setVisited(bool countryVisited) {
 	*visited = countryVisited;
+}
+
+int Country::getArmies() {
+	return *armies;
+}
+
+int Country::getPlayerID() {
+	return *playerID;
+}
+
+void Country::setPlayerID(int newPlayerID) {
+	*playerID = newPlayerID;
+}
+
+void Country::addArmy(int numberOfArmies) {
+	*armies += numberOfArmies;
 }
 
 //----------------------------------------------------------------------------------------------------------------------------------
@@ -88,6 +115,10 @@ int Continent::getID() {
 	return *ID;
 }
 
+int Continent::getArmyValue() {
+	return *armyValue;
+}
+
 //-----------------------------------------------------------------------------------------------------------------------------------
 Map::Map(int amountOfCountries)
 {
@@ -109,6 +140,10 @@ void Map::addContinent(Continent* continent) {
 int Map::getNumOfCountries()
 {
 	return *numOfCountries;
+}
+
+std::vector<Continent*>* Map::getContinents() {
+	return continents;
 }
 
 void Map::checkConnectedGraph()

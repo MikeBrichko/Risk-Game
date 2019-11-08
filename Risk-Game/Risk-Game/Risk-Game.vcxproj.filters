@@ -13,11 +13,14 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Source Files\Drivers">
-      <UniqueIdentifier>{74ba11f3-0cdc-4464-951b-07c4ea66e475}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Maps">
       <UniqueIdentifier>{da1631df-2dde-42b8-9356-d2854eb60aef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\AssignmentOneDrivers">
+      <UniqueIdentifier>{74ba11f3-0cdc-4464-951b-07c4ea66e475}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\AssignmentTwoDrivers">
+      <UniqueIdentifier>{872e103a-91c9-4de0-af00-ef029ac25c34}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -37,19 +40,34 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CardsDriver.cpp">
-      <Filter>Source Files\Drivers</Filter>
+      <Filter>Source Files\AssignmentOneDrivers</Filter>
     </ClCompile>
     <ClCompile Include="DiceDriver.cpp">
-      <Filter>Source Files\Drivers</Filter>
+      <Filter>Source Files\AssignmentOneDrivers</Filter>
     </ClCompile>
     <ClCompile Include="MapDriver.cpp">
-      <Filter>Source Files\Drivers</Filter>
+      <Filter>Source Files\AssignmentOneDrivers</Filter>
     </ClCompile>
     <ClCompile Include="MapLoaderDriver.cpp">
-      <Filter>Source Files\Drivers</Filter>
+      <Filter>Source Files\AssignmentOneDrivers</Filter>
     </ClCompile>
     <ClCompile Include="PlayerDriver.cpp">
-      <Filter>Source Files\Drivers</Filter>
+      <Filter>Source Files\AssignmentOneDrivers</Filter>
+    </ClCompile>
+    <ClCompile Include="GameEngine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameEngineDriver.cpp">
+      <Filter>Source Files\AssignmentTwoDrivers</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerAttackDriver.cpp">
+      <Filter>Source Files\AssignmentTwoDrivers</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerFortifyDriver.cpp">
+      <Filter>Source Files\AssignmentTwoDrivers</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerReinforceDriver.cpp">
+      <Filter>Source Files\AssignmentTwoDrivers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -68,12 +86,27 @@
     <ClInclude Include="Cards.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="GameEngine.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="europe.map">
       <Filter>Source Files\Maps</Filter>
     </None>
     <None Include="europe_fail.map">
+      <Filter>Source Files\Maps</Filter>
+    </None>
+    <None Include="brasil.map">
+      <Filter>Source Files\Maps</Filter>
+    </None>
+    <None Include="estonia.map">
+      <Filter>Source Files\Maps</Filter>
+    </None>
+    <None Include="germany.map">
+      <Filter>Source Files\Maps</Filter>
+    </None>
+    <None Include="solar.map">
       <Filter>Source Files\Maps</Filter>
     </None>
   </ItemGroup>

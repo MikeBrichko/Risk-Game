@@ -10,10 +10,11 @@ class Dice
 public:
 	Dice();
 	~Dice();
-	std::vector<int> rollDice(int armiesOnCountry);
+	std::vector<int> rollDice(int armiesOnCountry, bool isAttacking);
 	void printDiceFacePercentageRolled();
 private:
 	std::vector<int>* diceFaceRolledCounter;
 	int* rollCounter;
-	int diceToBeRolled(int armiesOnCountry);
+	int diceToBeRolledByAttacker(int armiesOnCountry);
+	int diceToBeRolledByDefender(int armiesOnCountry);
 };

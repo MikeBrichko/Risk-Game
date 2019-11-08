@@ -13,7 +13,7 @@ MapLoader::~MapLoader() {
 	delete fileName;
 }
 
-void MapLoader::validateMap() {
+bool MapLoader::validateMap() {
 	std::string line = "";
 	std::cout << "Validating file with name -> " << *fileName << std::endl;
 	int* componentCounter = new int();
@@ -22,7 +22,7 @@ void MapLoader::validateMap() {
 
 	if (!inFile) {
 		std::cerr << "Unable to open file " + *fileName;
-		exit(1);
+		return false;
 	}
 
 	while (std::getline(inFile, line)) {
@@ -70,12 +70,16 @@ void MapLoader::validateMap() {
 	}
 	if (*componentCounter < 3) {
 		std::cout << "The Map file is invalid. One of the map components is missing." << std::endl;
+		delete(componentCounter);
+		inFile.close();
+		return false;
 	}
 	else {
 		std::cout << "End of file has been reached. Map File is valid" << std::endl;
+		delete(componentCounter);
+		inFile.close();
+		return true;
 	}
-	delete(componentCounter);
-	inFile.close();
 }
 
 bool MapLoader::validateContinents(std::string lineToValidate) {

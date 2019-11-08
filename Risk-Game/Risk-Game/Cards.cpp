@@ -26,11 +26,13 @@ std::string* Card::getCardType() {
 
 //----------------------------------------------------------------------------------------
 Deck::Deck(int numberOfCountries) {
+	size = new int(numberOfCountries);
 	deck = buildDeck(numberOfCountries);
 	shuffle();
 }
 
 Deck::~Deck() {
+	delete size;
 	for (auto card : *deck) {
 		delete card;
 	}
@@ -39,12 +41,13 @@ Deck::~Deck() {
 
 std::vector<Card*>* Deck::buildDeck(int numberOfCountries) {
 	std::vector<Card*>* newDeck = new std::vector<Card*>;
-	for (int i = 0; i < numberOfCountries; i++) {
-		if (i < numberOfCountries / 3) {
+	int totalCards = numberOfCountries - (numberOfCountries % 3);
+	for (int i = 0; i < totalCards; i++) {
+		if (i < totalCards / 3) {
 			CardType* cardType = new CardType(infantry);
 			newDeck->push_back(new Card(cardType));
 		}
-		else if (i < (numberOfCountries * 2 / 3)) {
+		else if (i < (totalCards * 2 / 3)) {
 			CardType* cardType = new CardType(artillery);
 			newDeck->push_back(new Card(cardType));
 		}
@@ -56,9 +59,9 @@ std::vector<Card*>* Deck::buildDeck(int numberOfCountries) {
 	return newDeck;
 }
 
-Card* Deck::draw(int numberOfCountries) {
+Card* Deck::draw() {
 	if (deck->size() == 0) {
-		deck = buildDeck(numberOfCountries);
+		deck = buildDeck(*size);
 		shuffle();
 	}
 
@@ -99,9 +102,9 @@ Hand::~Hand() {
 	delete playerName;
 }
 
-void Hand::exchange() {
+int Hand::exchange() {
 	if (hand->size() < 3)
-		return;
+		return 0;
 
 	//Determine the position and the amount of each CardType that the hand contains
 	std::string exchangeArray[3] = {};
@@ -132,17 +135,18 @@ void Hand::exchange() {
 
 	case 1:
 		removeCardsInHand(similarCardTypes);
-		increasePlayersArmies();
+		return increasePlayersArmies();
 		break;
 
 	case 2:
 		removeCardsInHand(differentCardTypes);
-		increasePlayersArmies();
+		return increasePlayersArmies();
 		break;
 
 	default:
 		break;
 	}
+	return 0;
 }
 
 int Hand::exchangeDecision(std::string similarCardTypes, std::string differentCardTypes){
@@ -198,21 +202,16 @@ void Hand::removeCardsInHand(std::string cardsInHand) {
 	printCardsInHand();
 }
 
-void Hand::increasePlayersArmies() {
+int Hand::increasePlayersArmies() {
 	*Hand::armies += 5;
 	std::cout << std::endl << "The amount of armies " << *playerName << " received is " << *armies << std::endl << std::endl;
-	/**for (auto opponentHand : *handsInPlay) {
-		*opponentHand->armies += 5;
-
-		if(opponentHand->playerName == playerName)
-			std::cout << std::endl <<"The amount of armies " << *playerName << " received is " << *armies << std::endl << std::endl;
-	}**/
+	return *armies;
 } 
 
-void Hand::addCard(Card* card) {
+int Hand::addCard(Card* card) {
 	std::cout << "The card " << *playerName << " drew is a " << *card->getCardType() << " card!" << std::endl;
 	hand->push_back(card);
-	exchange();
+	return exchange();
 }
 
 void Hand::printCardsInHand() {
