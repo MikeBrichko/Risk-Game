@@ -22,6 +22,6 @@ public:
 	Subject();
 	~Subject();
 private:
-	std::list<Observer*> *observers;
+	std::list<Observer*> *_observers;
 
 };
