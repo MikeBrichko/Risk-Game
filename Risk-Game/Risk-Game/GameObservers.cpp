@@ -1,7 +1,19 @@
 #include "GameObservers.h"
 #include <list>
+
 using namespace std;
 
+
+//Observer class implementation
+Observer::Observer(){
+};
+
+Observer::~Observer(){
+};
+
+
+
+//Subject class implementation
 Subject::Subject()
 {
 	_observers = new list<Observer*>;

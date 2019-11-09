@@ -1,7 +1,10 @@
 #pragma once
 #include <list>
 
-//Abstract class Observer
+using namespace std;
+
+
+//Abstract Observer class
 class Observer   
 {
 public:
@@ -12,7 +15,7 @@ protected:
 };
 
 
-//Class Subject (Observable)
+//Subject class (Observable class)
 class Subject 
 {
 public:
@@ -22,6 +25,6 @@ public:
 	Subject();
 	~Subject();
 private:
-	std::list<Observer*> *_observers;
+	list<Observer*> *_observers;
 
 };
