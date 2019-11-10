@@ -3,6 +3,8 @@
 
 /*int main() {
 	Map* gameMap = new Map(6);
+	Deck* deck = new Deck(gameMap->getNumOfCountries());
+	Dice* dice = new Dice();
 	Continent* Continent1 = new Continent(1, "continent1", 5);
 	Continent* Continent2 = new Continent(2, "continent2", 5);
 	Continent* Continent3 = new Continent(3, "continent3", 5);
@@ -27,12 +29,12 @@
 	Brazil->addNeighbour(Mexico);
 	Brazil->addNeighbour(Argentina);
 
-	Player* player = new Player(1, "Player 1");
+	Player* player = new Player(1, "Player 1", deck, gameMap, dice);
 	player->addCountryOwned(Canada);
 	player->addCountryOwned(Argentina);
 	player->addCountryOwned(Spain);
 
-	Player* player2 = new Player(2, "Player 2");
+	Player* player2 = new Player(2, "Player 2", deck, gameMap, dice);
 	player2->addCountryOwned(USA);
 	player2->addCountryOwned(Mexico);
 	player2->addCountryOwned(Brazil);

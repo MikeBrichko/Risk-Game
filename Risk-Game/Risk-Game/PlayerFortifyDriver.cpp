@@ -35,6 +35,5 @@
 	player->addCountryOwned(USA);
 	player->addCountryOwned(Brazil);
 
-	std::cout << std::endl;
 	player->fortify();
 }*/
