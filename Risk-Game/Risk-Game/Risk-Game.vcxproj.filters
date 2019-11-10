@@ -22,6 +22,9 @@
     <Filter Include="Source Files\AssignmentTwoDrivers">
       <UniqueIdentifier>{872e103a-91c9-4de0-af00-ef029ac25c34}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\AssignmentThreeDrivers">
+      <UniqueIdentifier>{f0ca1621-5094-4923-999b-8c7ea34c5d23}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Map.cpp">
@@ -69,6 +72,12 @@
     <ClCompile Include="PlayerReinforceDriver.cpp">
       <Filter>Source Files\AssignmentTwoDrivers</Filter>
     </ClCompile>
+    <ClCompile Include="StrategyPatternDriver.cpp">
+      <Filter>Source Files\AssignmentThreeDrivers</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerStrategies.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Map.h">
@@ -87,6 +96,9 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="GameEngine.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerStrategies.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,7 +1,7 @@
 #include "Player.h"
 #include <iostream>
 
-int main() {
+/*int main() {
 	std::cout << "Creating Game Map" << std::endl;
 	Map* gameMap = new Map(6);
 	Continent* Continent1 = new Continent(1, "continent1", 5);
@@ -43,7 +43,8 @@ int main() {
 
 	std::cout << "Creating a player" << std::endl;
 	Deck* deck = new Deck(gameMap->getNumOfCountries());
-	Player * player = new Player(1, "Player 1", deck, gameMap);
+	Dice* dice = new Dice();
+	Player * player = new Player(1, "Player 1", deck, gameMap, dice);
 	std::cout << std::endl;
 
 	player->addCountryOwned(Canada);
@@ -62,6 +63,7 @@ int main() {
 	std::cout << std::endl;
 
 	//Valdate Reinforce
+	player->printCountriesOwned();
 	player->reinforce();
-	std::cout << std::endl;
-}
+	player->printCountriesOwned();
+}*/

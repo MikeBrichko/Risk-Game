@@ -8,9 +8,9 @@ Player::Player(int playerID, std::string playerName) {
 	this->playerName = new std::string(playerName);
 	countriesOwned = new std::vector<Country*>();
 	hand = new Hand(new std::string(playerName));
-	dice = new Dice();
 	gameDeck = NULL;
 	gameMap = NULL;
+	gameDice = NULL;
 }
 
 Player::Player(int playerID, std::string playerName, Deck* deck) {
@@ -18,19 +18,19 @@ Player::Player(int playerID, std::string playerName, Deck* deck) {
 	this->playerName = new std::string(playerName);
 	countriesOwned = new std::vector<Country*>();
 	hand = new Hand(new std::string(playerName));
-	dice = new Dice();
 	gameDeck = deck;
 	gameMap = NULL;
+	gameDice = NULL;
 }
 
-Player::Player(int playerID, std::string playerName, Deck* deck, Map* map) {
+Player::Player(int playerID, std::string playerName, Deck* deck, Map* map, Dice* dice) {
 	this->playerID = new int(playerID);
 	this->playerName = new std::string(playerName);
 	countriesOwned = new std::vector<Country*>();
 	hand = new Hand(new std::string(playerName));
-	dice = new Dice();
 	gameDeck = deck;
 	gameMap = map;
+	gameDice = dice;
 }
 
 Player::~Player() {
@@ -38,7 +38,9 @@ Player::~Player() {
 	delete playerName;
 	delete countriesOwned;
 	delete hand;
-	delete dice;
+	gameDeck = NULL;
+	gameMap = NULL;
+	gameDice = NULL;
 }
 
 int Player::armiesOnCountriesOwned() {
@@ -53,9 +55,8 @@ void Player::printCountriesOwned()
 	std::cout << "These are the countries " << *playerName << " owns: " << std::endl;
 	for (auto country : *countriesOwned)
 	{
-		std::cout << country->getID() << " " << country->getName() << std::endl;
+		std::cout << country->getID() << ". " << country->getName() << " (" << country->getArmies() << " armies)" << std::endl;
 	}
-	std::cout << std::endl;
 }
 
 void Player::printCardsInHand(){
@@ -105,57 +106,6 @@ void Player::conquerEnemyCountry(Country* ownCountry, Country* enemyCountry, std
 	enemyCountry->addArmy(armiesToMobilize);
 }
 
-void Player::addArmyToCountry(std::string countryName, int numOfArmies){
-	for (auto country : *countriesOwned) {
-		if (country->getName() == countryName) {
-			std::cout << country->getName() << " had " << country->getArmies() << std::endl;
-			country->addArmy(numOfArmies);
-			std::cout << country->getName() << " now has " << country->getArmies() << std::endl;	
-		}
-	}
-}
-
-std::vector<std::vector<Country*>> Player::neighbouringEnemyCountries(bool isAnEnemyNeighbour) {
-	//std::cout << "Please choose an attackable countries from :" << std::endl;
-	std::vector<std::vector<Country*>> listOfNeighbours = std::vector<std::vector<Country*>>();
-	for (auto country : *countriesOwned)
-	{
-		if (country->getArmies() >= 2) {
-			std::vector<Country*> neighbours = std::vector<Country*>();
-			neighbours.push_back(country);
-			for (auto neighbour : country->getNeighbours()) {
-				if (isAnEnemyNeighbour) {
-					if (neighbour->getPlayerID() != *this->playerID) {
-						neighbours.push_back(neighbour);
-					}
-				}
-				else {
-					if (neighbour->getPlayerID() == *this->playerID) {
-						neighbours.push_back(neighbour);
-					}
-				}
-			}
-
-			if (neighbours.size() > 1) {
-				if (isAnEnemyNeighbour) {
-					std::cout << country->getID() << "." << country->getName() << " (" << country->getArmies() << " armies) has enemy neighbours: " << std::endl;
-					for (int i = 1; i < neighbours.size(); i++) {
-						std::cout << "\t" << neighbours[i]->getID() << "." << neighbours[i]->getName() << " (" << neighbours[i]->getArmies() << " armies)" << std::endl;
-					}
-				}
-				else {
-					std::cout << country->getID() << "." << country->getName() << " (" << country->getArmies() << " armies)" << " with ally neighbours: " << std::endl;
-					for (int i = 1; i < neighbours.size(); i++) {
-						std::cout << "\t" << neighbours[i]->getID() << "." << neighbours[i]->getName() << " (" << neighbours[i]->getArmies() << " armies)" << std::endl;
-					}
-				}
-				listOfNeighbours.push_back(neighbours);
-			}
-		}
-	}
-	return listOfNeighbours;
-}
-
 bool Player::playerAttackDecision()
 {
 	bool ableToAttack = false;
@@ -167,7 +117,7 @@ bool Player::playerAttackDecision()
 	}
 
 	if (ableToAttack == false){
-		std::cout << "You do not have sufficient resources to perform an attack" << std::endl;
+		std::cout << "You do not have sufficient resources to perform an attack." << std::endl;
 		return false;
 	}
 
@@ -192,81 +142,141 @@ bool Player::playerAttackDecision()
 	return attack;
 }
 
-bool Player::validateCountryInput(std::string cInput) {
-	for (auto countries : *countriesOwned) {
-		if (cInput == countries->getName()) {
+bool Player::playerFortificationDecision() {
+	std::string decision;
+	while (true) {
+		std::cout << "Would you like to fortify one of your countries? (yes/no)" << std::endl;
+		std::cin >> decision;
+
+		if (decision == "yes" || decision == "y")
 			return true;
+		else if (decision == "no" || decision == "n")
+			return false;
+		else
+			std::cout << "Invalid input!" << std::endl;
+	}
+}
+
+int Player::getPlayerID() {
+	return *playerID;
+}
+
+std::string Player::getPlayerName() {
+	return *playerName;
+}
+
+int Player::addCardToHand() {
+	return hand->addCard(gameDeck->draw());
+}
+
+int Player::getAmountOfCountriesOwned() {
+	return countriesOwned->size();
+}
+
+void Player::printNeighbours(bool areEnemies) {
+	for (auto country : *countriesOwned) {
+		if (areEnemies)
+			std::cout << country->getID() << "." << country->getName() << " (" << country->getArmies() << " armies) has enemy neighbours: " << std::endl;
+		else
+			std::cout << country->getID() << "." << country->getName() << " (" << country->getArmies() << " armies) has friendly neighbours: " << std::endl;
+		for (auto neighbouringCountry : country->getNeighbours()) {
+			if (areEnemies) {
+				if (neighbouringCountry->getPlayerID() != *playerID) {
+					std::cout << "\t" << neighbouringCountry->getID() << "." << neighbouringCountry->getName() << " (" << neighbouringCountry->getArmies() << " armies)" << std::endl;
+				}
+
+			}
+			else {
+				std::cout << "\t" << neighbouringCountry->getID() << "." << neighbouringCountry->getName() << " (" << neighbouringCountry->getArmies() << " armies)" << std::endl;
+			}
 		}
 	}
-	return false;
+}
+
+Country* Player::getNeighbouringCountry(Country* countryOwned, std::string neighbouringCountryName, bool isEnemy) {
+	for (auto neighbouringCountry : countryOwned->getNeighbours()) {
+		if (isEnemy) {
+			if (neighbouringCountry->getName() == neighbouringCountryName && neighbouringCountry->getPlayerID() != *playerID)
+				return neighbouringCountry;
+		}
+		else {
+			if (neighbouringCountry->getName() == neighbouringCountryName && neighbouringCountry->getPlayerID() == *playerID)
+				return neighbouringCountry;
+		}
+	}
+	return NULL;
+}
+
+Country* Player::getCountryOwned(std::string countryOwnedName) {
+	for (auto country : *countriesOwned) {
+		if (country->getName() == countryOwnedName)
+			return country;
+	}
+	return NULL;
 }
 
 void Player::reinforce() {
-	int armiesToAdd = 0;
-	int armiesAdded = 0;
-
 	std::cout << "=====================Starting reinforcement phase=====================" << std::endl;
-
+	int armiesToAdd = 0;
 	std::cout << "Adding armies based on COUNTRIES that " << *playerName << " owns." << std::endl;
 	armiesToAdd += floor(countriesOwned->size() / 3);
 
 	std::cout << "Adding armies based on CONTINENTS that " << *playerName << " owns." << std::endl;
-	std::vector<Continent*>* continents = gameMap->getContinents();
-	std::vector<Country* >* tempCountriesVector = new std::vector<Country*>();
-
+	std::vector<Country* > tempCountriesVector = std::vector<Country*>();
 	int comparedID;
-	for (auto continent : *continents) {
-		std::vector<Country*>* continentCountries = continent->getCountries();
-
-		for (auto countries : *continentCountries) {
-			comparedID = countries->getID();
-
-			for (auto countries : *countriesOwned) {
-				if (comparedID == countries->getID()) {
-					tempCountriesVector->push_back(countries);
+	for (auto continent : *gameMap->getContinents()) {
+		for (auto country : *continent->getCountries()) {
+			comparedID = country->getID();
+			for (auto countryOwned : *countriesOwned) {
+				if (comparedID == countryOwned->getID()) {
+					tempCountriesVector.push_back(countryOwned);
 				}
 			}
 		}
-
-		if (tempCountriesVector->size() == continentCountries->size()) {
+		if (tempCountriesVector.size() == gameMap->getContinents()->size()) {
 			armiesToAdd += continent->getArmyValue();
 		}
-		tempCountriesVector->clear();
+		tempCountriesVector.clear();
 	}
-	delete tempCountriesVector;
-	tempCountriesVector = NULL;
 
 	std::cout << "Adding armies based on CARDS that " << *playerName << " owns." << std::endl;
 	armiesToAdd += addCardToHand();
 
 	printCountriesOwned();
 
-	std::string countryInput;
+	std::string countryOwnedName;
 	int armyInput;
 	int armiesLeftToAdd = armiesToAdd;
+	Country* countryToAddArmiesTo = NULL;
 	for (int i = 0; i < armiesToAdd; i++) {
-		std::cout << "armies available to place: " << armiesLeftToAdd << "\n" << std::endl;
-		std::cout << "\nfor which country would you like to add armies? (enter country name)" << std::endl;
-		std::cin >> countryInput;
-		while (!validateCountryInput(countryInput)) {
-			std::cout << "invalid string. input a Country Name" << std::endl;
-			std::cin >> countryInput;
+		std::cout << "Armies available to place: " << armiesLeftToAdd << "." << std::endl << std::endl;
+
+		//Step 1. Select Owned Country
+		while (true) {
+			std::cout << "Please enter the name of the country that you would like to add armies to:" << std::endl;
+			std::cin >> countryOwnedName;
+			countryToAddArmiesTo = getCountryOwned(countryOwnedName);
+
+			if (countryToAddArmiesTo != NULL)
+				break;
+			else
+				std::cout << "Invalid input! You do not own " << countryOwnedName << "." << std::endl;
 		}
-		std::cout << "how many armies to add to this country?" << std::endl;
-		std::cin >> armyInput;
-		while (armyInput < 0 || (armiesLeftToAdd - armyInput) < 0) {
-			std::cout << "invalid number. Please enter a value between 0 and " << armiesLeftToAdd << " inclusively" << std::endl;
+
+		//Step 2. Add armies to selected country
+		while (true) {
+			std::cout << "How many armies would you like to add to " << countryOwnedName << "?" << std::endl;
 			std::cin >> armyInput;
+
+			if (armyInput < 0 || (armiesLeftToAdd - armyInput) < 0)
+				std::cout << "Invalid input! Please enter a value between 0 and " << armiesLeftToAdd << " inclusively." << std::endl;
+			else
+				break;
 		}
-		addArmyToCountry(countryInput, armyInput);
+
+		countryToAddArmiesTo->addArmy(armyInput);
 		armiesLeftToAdd -= armyInput;
 		i += (armyInput - 1);
-	}
-
-	std::cout << "Number of armies added: " << armiesAdded << std::endl;
-	if (armiesOnCountriesOwned() == armiesToAdd)
-	{
-		std::cout << "all armies successfully added.\n\n" << std::endl;
 	}
 
 	std::cout << "=====================Finished reinforcement phase=========================" << std::endl;
@@ -275,14 +285,14 @@ void Player::reinforce() {
 void Player::attack(std::vector<Player*>* players) {
 	std::cout << "=====================Starting Attack Phase=====================" << std::endl;
 	std::cout << "For " << *playerName << std::endl;
+	printNeighbours(true);
 
-	std::vector<std::vector<Country*>> listOfNeighbours = this->neighbouringEnemyCountries(true);
-	Player* enemyPlayer{};
-	int countryFromID;
+	std::string attackingCountryName;
 	Country* attackingCountry = NULL;
-	Country* defendingCountry = NULL;
-	int attackingCountryIndex = 0;
 	std::vector<int> attackingDice;
+
+	std::string defendingCountryName;
+	Country* defendingCountry = NULL;
 	std::vector<int> defendingDice;
 
 	while (playerAttackDecision())
@@ -290,46 +300,36 @@ void Player::attack(std::vector<Player*>* players) {
 		//Step 1: Select the attacking country
 		while (true)
 		{
-			std::cout << "Please enter the number of the country that you would like to attack with: " << std::endl;
-			std::cin >> countryFromID;
-			for (auto country : listOfNeighbours) {
-				if (country[0]->getID() == countryFromID) {
-					attackingCountry = country[0];
-					break;
-				}
-				attackingCountryIndex++;
-			}
+			std::cout << "Please enter the name of the country that you would like to attack with: " << std::endl;
+			std::cin >> attackingCountryName;
+			attackingCountry = getCountryOwned(attackingCountryName);
 
 			if (attackingCountry != NULL) {
 				if (attackingCountry->getArmies() >= 2)
 					break;
+				else
+					std::cout << "Invalid input! " << attackingCountryName << " has less than 2 armies." << std::endl;
 			}
 			else
-				std::cout << "Invalid choice. You need to choose a country with at least 2 armies" << std::endl;
+				std::cout << "Invalid input! You do not own " << attackingCountryName << "." << std::endl;
 		}
 
 		//Step 2. Select the defending country
-		int countryToAttackID;
 		while (true) {
-			std::cout << "Please enter the number of the country that you want to attack: " << std::endl;
-			std::cin >> countryToAttackID;
-			for (auto country : listOfNeighbours.at(attackingCountryIndex)) {
-				if (country->getID() == countryToAttackID) {
-					defendingCountry = country;
-					break;
-				}
-			}
+			std::cout << "Please enter the name of the country that you want to attack: " << std::endl;
+			std::cin >> defendingCountryName;
+			defendingCountry = getNeighbouringCountry(attackingCountry, defendingCountryName, true);
 
-			if (defendingCountry == NULL)
-				std::cout << "Please make sure you entered correct country number." << std::endl;
-			else
+			if (defendingCountry != NULL)
 				break;
+			else
+				std::cout << "Invalid input! " << defendingCountryName << " is not an enemy country."<< std::endl;
 		}
 
 		//Step 3. Roll Dices
 		//Attacker Dice Roll
 		std::cout << "Attacker rolls" << std::endl;
-		attackingDice = dice->rollDice(attackingCountry->getArmies(), true);
+		attackingDice = gameDice->rollDice(attackingCountry->getArmies(), true);
 		std::cout << "Attacking Player rolled: ";
 		for (auto diceFace : attackingDice)
 			std::cout << diceFace << " ";
@@ -337,7 +337,7 @@ void Player::attack(std::vector<Player*>* players) {
 
 		//Defender Dice Roll
 		std::cout << "Defender rolls " << std::endl;
-		defendingDice = dice->rollDice(defendingCountry->getArmies(), false);
+		defendingDice = gameDice->rollDice(defendingCountry->getArmies(), false);
 		std::cout << "Defending Player rolled: ";
 		for (auto diceFace : defendingDice)
 			std::cout << diceFace << " ";
@@ -359,7 +359,8 @@ void Player::attack(std::vector<Player*>* players) {
 				}
 			}
 		}
-		listOfNeighbours = this->neighbouringEnemyCountries(true);
+
+		printNeighbours(true);
 	}
 	std::cout << "=====================Finished Attack Phase=====================" << std::endl;
 }
@@ -367,85 +368,58 @@ void Player::attack(std::vector<Player*>* players) {
 void Player::fortify() {
 	std::cout << "=====================Starting fortification phase=====================" << std::endl;
 	std::cout << "Moving armies to different countries" << std::endl;
-	bool validateFortify = true;
-	std::vector<std::vector<Country*>> listOfNeighbours = this->neighbouringEnemyCountries(false);
-	Country* removingCountry = NULL;
-	int removingCountryIndex = 0;
-	Country* addingCountry = NULL;
+	printNeighbours(false);
 
 	//Step 1. Select Country having armies removed
-	int countryFrom;
-	while (true)
-	{
-		std::cout << "Please enter the number of the country that you would like to remove armies from: " << std::endl;
-		std::cin >> countryFrom;
-		for (auto country : listOfNeighbours) {
-			if (country[0]->getID() == countryFrom) {
-				removingCountry = country[0];
-				break;
+	Country* transferingCountry = NULL;
+	std::string transferingCountryName;
+	while (playerFortificationDecision()) {
+		while (true)
+		{
+			std::cout << "Please enter the name of the country that you would like to transfer armies from: " << std::endl;
+			std::cin >> transferingCountryName;
+			transferingCountry = getCountryOwned(transferingCountryName);
+
+			if (transferingCountry != NULL) {
+				if (transferingCountry->getArmies() >= 2)
+					break;
+				else
+					std::cout << "Invalid input! " << transferingCountryName << " has less than 2 armies." << std::endl;
 			}
-			removingCountryIndex++;
+			else
+				std::cout << "Invalid choice! You do not own " << transferingCountryName << "." << std::endl;
 		}
 
-		if (removingCountry != NULL) {
-			if (removingCountry->getArmies() >= 2)
+		//Step 2. Select Friendly Neighbour
+		Country* receivingCountry = NULL;
+		std::string receivingCountryName;
+		while (true) {
+			std::cout << "Please enter the name of the country that you would like to receive armies: " << std::endl;
+			std::cin >> receivingCountryName;
+			receivingCountry = getNeighbouringCountry(transferingCountry, receivingCountryName, false);
+
+			if (receivingCountry != NULL)
 				break;
+			else
+				std::cout << "Invalid choice! " << receivingCountryName << " is not a friendly neighbour of " << transferingCountryName << "." << std::endl;
 		}
-		else
-			std::cout << "Invalid choice." << std::endl;
-	}
 
-	//Step 2. Select Friendly Neighbour
-	int countryTo = 0;
-	while (true) {
-		std::cout << "Please enter the number of the country that you want to transfer armies to: " << std::endl;
-		std::cin >> countryTo;
-		for (auto country : listOfNeighbours.at(removingCountryIndex)) {
-			if (country->getID() == countryTo) {
-				addingCountry = country;
+		//Step 3. Move armies to friendly Country
+		int armiesToMobilize = 0;
+		while (true) {
+			std::cout << transferingCountryName << " has " << transferingCountry->getArmies() << " armies." << std::endl;
+			std::cout << "How many armies would you like to move from " << transferingCountryName << " to " << receivingCountryName << "?" << std::endl;
+			std::cin >> armiesToMobilize;
+
+			if (armiesToMobilize <= (transferingCountry->getArmies() - 1) && armiesToMobilize >= 0)
 				break;
-			}
+			else
+				std::cout << "Can't move that many armies! Select the amount of armies in between 1 and " << transferingCountry->getArmies() - 1 << std::endl;
 		}
 
-		if (addingCountry == NULL)
-			std::cout << "Please make sure you entered correct country numbers." << std::endl;
-		else
-			break;
+		transferingCountry->addArmy(-armiesToMobilize);
+		receivingCountry->addArmy(armiesToMobilize);
+		break;
 	}
-
-	//Step 3. Move armies to friendly Country
-	int armiesToMobilize = 0;
-	while (true) {
-		std::cout << removingCountry->getName() << " has " << removingCountry->getArmies() << " armies." << std::endl;
-		std::cout << "How many armies would you like to move from " << removingCountry->getName() <<" to " << addingCountry->getName() << "?" << std::endl;
-		std::cin >> armiesToMobilize;
-
-		if (armiesToMobilize <= (removingCountry->getArmies() - 1) && armiesToMobilize >= 1)
-			break;
-		else
-			std::cout << "Can't move that many armies! Select the amount of armies in between 1 and " << removingCountry->getArmies() - 1 << std::endl;
-	}
-
-	removingCountry->addArmy(-armiesToMobilize);
-	addingCountry->addArmy(armiesToMobilize);
-
-	listOfNeighbours = this->neighbouringEnemyCountries(false);
 	std::cout << "=====================Finished fortification phase=====================" << std::endl;
-}
-
-//Accessors and Mutators
-int Player::getPlayerID() {
-	return *playerID;
-}
-
-std::string Player::getPlayerName() {
-	return *playerName;
-}
-
-int Player::addCardToHand() {
-	return hand->addCard(gameDeck->draw());
-}
-
-int Player::getAmountOfCountriesOwned() {
-	return countriesOwned->size();
 }
