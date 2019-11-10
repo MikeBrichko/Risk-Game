@@ -16,22 +16,22 @@ private:
 	std::string* playerName;
 	std::vector<Country*>* countriesOwned;
 	Hand* hand;
-	Dice* dice;
 	Deck* gameDeck;
 	Map* gameMap;
+	Dice* gameDice;
 
 	void removeCountryOwned(int countryID);
 	void conquerEnemyCountry(Country* ownCountry, Country* enemyCountry, std::vector<Player*>* players);
-	std::vector<std::vector<Country*>> neighbouringEnemyCountries(bool);
 	bool playerAttackDecision();
+	bool playerFortificationDecision();
+	void printNeighbours(bool areEnemies);
+	Country* getNeighbouringCountry(Country* countryOwned, std::string neighbouringCountryName, bool isEnemy);
 
 public:
 	Player(int playerID, std::string playerName);
 	Player(int playerID, std::string playerName, Deck* pointToDeck);
-	Player(int playerID, std::string playerName, Deck* deck, Map* map);
+	Player(int playerID, std::string playerName, Deck* deck, Map* map, Dice* dice);
 	~Player();
-
-	bool validateCountryInput(std::string cInput);
 
 	//PlayerTurn
 	void reinforce();
@@ -41,14 +41,14 @@ public:
 	//PrintStatements
 	void printCountriesOwned();
 	void printCardsInHand();
-	
+	Country* getCountryOwned(std::string countryOwnedName);
+
 	//Mutators&Accessors
 	int getPlayerID();
 	std::string getPlayerName();
 	int addCardToHand();
 	int getAmountOfCountriesOwned();
 	int armiesOnCountriesOwned();
-	void addArmyToCountry(std::string countryName, int numOfArmies);
 	void addCountryOwned(Country* country);
 
 	//Need to add implementation of Concrete Subject
@@ -67,5 +67,4 @@ public:
 	void display();
 private:
 	//something
-
-};
+}

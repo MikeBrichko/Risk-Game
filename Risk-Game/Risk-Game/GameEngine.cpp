@@ -10,6 +10,7 @@
 GameEngine::GameEngine() {
 	map = selectMap();
 	deck = new Deck(map->getNumOfCountries());
+	dice = new Dice();
 	players = selectNumberOfPlayers();
 }
 
@@ -49,7 +50,7 @@ std::vector<Player*>* GameEngine::selectNumberOfPlayers() {
 	for (int i = 0; i < numberOfPlayers; i++) {
 		std::cout << "Enter the name of Player " << i + 1 << ": ";
 		std::cin >> playerName;
-		newPlayers->push_back(new Player(i + 1, playerName, deck, map));
+		newPlayers->push_back(new Player(i + 1, playerName, deck, map, dice));
 	}
 	return newPlayers;
 }
@@ -130,6 +131,44 @@ std::vector<int> GameEngine::totalArmyCountForEachPlayer() {
 	return armiesPerPlayer;
 }
 
+void GameEngine::validateAllCountriesHavePlayers() {
+	std::list<Country*> BFSqueue;
+	int numVisited = 0;
+
+	//Start BFS algorithm by visiting a random country
+	Country* rootCountry = map->getContinents()->at(0)->getCountries()->at(0);
+	BFSqueue.push_back(rootCountry);
+	if (rootCountry->getPlayerID() != 0)
+		numVisited++;
+
+	while (!BFSqueue.empty())
+	{
+		// Dequeue a vertex from BFSqueue and print it 
+		rootCountry = BFSqueue.front();
+		rootCountry->setVisited(true);
+		BFSqueue.pop_front();
+
+		//Visit all unvisited neighbouring countries and add them to the BFSqueue
+		for (auto neighbour : rootCountry->getNeighbours())
+		{
+			if (!neighbour->getVisited())
+			{
+				neighbour->setVisited(true);
+				if (neighbour->getPlayerID() != 0)
+					numVisited++;
+				BFSqueue.push_back(neighbour);
+			}
+		}
+	}
+
+	if (numVisited < map->getNumOfCountries())
+		std::cout << "Some countries do not have a player :(" << std::endl << std::endl;
+	else
+		std::cout << "All countries have players :)" << std::endl << std::endl;
+
+	map->resetVisitedCountries();
+}
+
 void GameEngine::startupPhase() {
 	determinePlayerOrder();
 	assignCountriesToPlayers();
@@ -166,6 +205,7 @@ void GameEngine::startupPhase() {
 
 	std::string countryName;
 	int armiesPlacedCounter = 0;
+	Country* countryToBeAddedArmiesTo = NULL;
 	while (armiesPlacedCounter < totalArmiesToBePlaced) {
 		for (int i = 0; i < players->size(); i++) {
 			if (armiesPerPlayer.at(i) == 0)
@@ -176,12 +216,14 @@ void GameEngine::startupPhase() {
 				std::cout << "Enter a Country that you would like to add armies to: ";
 				std::cin >> countryName;
 
-				if (players->at(i)->validateCountryInput(countryName)) {
-					players->at(i)->addArmyToCountry(countryName, 1);
+				countryToBeAddedArmiesTo = players->at(i)->getCountryOwned(countryName);
+				if (countryToBeAddedArmiesTo != NULL) {
+					countryToBeAddedArmiesTo->addArmy(1);
+					std::cout << std::endl;
 					break;
 				}
 				else {
-					std::cout << "Invalid Country name." << std::endl;
+					std::cout << "Invalid input! You do not own " << countryName << "." << std::endl;
 				}
 			}
 
@@ -204,7 +246,6 @@ void GameEngine::mainGameLoop() {
 			player->reinforce();
 			player->attack(players);
 
-			//giveAllCountriesToOnePlayerBecauseWhyNot(player);
 			if (player->getAmountOfCountriesOwned() == map->getNumOfCountries()) {
 				std::cout << "Player " << player->getPlayerID() << " wins!!!" << std::endl;
 				gameOver = true;
@@ -214,75 +255,4 @@ void GameEngine::mainGameLoop() {
 			player->fortify();
 		}
 	}
-}
-
-void GameEngine::validateAllCountriesHavePlayers() {
-	std::list<Country*> BFSqueue;
-	int numVisited = 0;
-
-	//Start BFS algorithm by visiting a random country
-	Country* rootCountry = map->getContinents()->at(0)->getCountries()->at(0);
-	BFSqueue.push_back(rootCountry);
-	if(rootCountry->getPlayerID() != 0)
-		numVisited++;
-
-	while (!BFSqueue.empty())
-	{
-		// Dequeue a vertex from BFSqueue and print it 
-		rootCountry = BFSqueue.front();
-		rootCountry->setVisited(true);
-		BFSqueue.pop_front();
-
-		//Visit all unvisited neighbouring countries and add them to the BFSqueue
-		for (auto neighbour : rootCountry->getNeighbours())
-		{
-			if (!neighbour->getVisited())
-			{
-				neighbour->setVisited(true);
-				if(neighbour->getPlayerID() != 0)
-					numVisited++;
-				BFSqueue.push_back(neighbour);
-			}
-		}
-	}
-
-	if (numVisited < map->getNumOfCountries())
-		std::cout << "Some countries do not have a player :(" << std::endl << std::endl;
-	else
-		std::cout << "All countries have players :)" << std::endl << std::endl;
-
-	map->resetVisitedCountries();
-}
-
-void GameEngine::giveAllCountriesToOnePlayerBecauseWhyNot(Player* luckyPlayer) {
-	std::list<Country*> BFSqueue;
-
-	//Start BFS algorithm by visiting a random country
-	Country* rootCountry = map->getContinents()->at(0)->getCountries()->at(0);
-	BFSqueue.push_back(rootCountry);
-	int luckyPlayerID = luckyPlayer->getPlayerID();
-	if (rootCountry->getPlayerID() != luckyPlayerID)
-		luckyPlayer->addCountryOwned(rootCountry);
-
-	while (!BFSqueue.empty())
-	{
-		// Dequeue a vertex from BFSqueue and print it 
-		rootCountry = BFSqueue.front();
-		rootCountry->setVisited(true);
-		BFSqueue.pop_front();
-
-		//Visit all unvisited neighbouring countries and add them to the BFSqueue
-		for (auto neighbour : rootCountry->getNeighbours())
-		{
-			if (!neighbour->getVisited())
-			{
-				neighbour->setVisited(true);
-				if (neighbour->getPlayerID() != luckyPlayerID)
-					luckyPlayer->addCountryOwned(rootCountry);
-				BFSqueue.push_back(neighbour);
-			}
-		}
-	}
-
-	map->resetVisitedCountries();
 }

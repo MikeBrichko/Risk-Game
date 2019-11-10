@@ -166,6 +166,8 @@
     <ClCompile Include="PlayerDriver.cpp" />
     <ClCompile Include="PlayerFortifyDriver.cpp" />
     <ClCompile Include="PlayerReinforceDriver.cpp" />
+    <ClCompile Include="PlayerStrategies.cpp" />
+    <ClCompile Include="StrategyPatternDriver.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Cards.h" />
@@ -174,6 +176,7 @@
     <ClInclude Include="Map.h" />
     <ClInclude Include="MapLoader.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="PlayerStrategies.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="brasil.map" />

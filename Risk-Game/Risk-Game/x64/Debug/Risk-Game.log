@@ -13,7 +13,7 @@ C:\Users\wmike\source\repos\Risk-Game\Risk-Game\Risk-Game\Dice.cpp(84,52): warni
   Map.cpp
   MapDriver.cpp
   MapLoader.cpp
-C:\Users\wmike\source\repos\Risk-Game\Risk-Game\Risk-Game\GameEngine.cpp(59,12): warning C4244:  'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+C:\Users\wmike\source\repos\Risk-Game\Risk-Game\Risk-Game\GameEngine.cpp(60,12): warning C4244:  'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
 C:\Users\wmike\source\repos\Risk-Game\Risk-Game\Risk-Game\MapLoader.cpp(197,39): warning C4267:  'argument': conversion from 'size_t' to 'int', possible loss of data
 C:\Users\wmike\source\repos\Risk-Game\Risk-Game\Risk-Game\MapLoader.cpp(231,43): warning C4244:  'argument': conversion from 'double' to 'const unsigned __int64', possible loss of data
 C:\Users\wmike\source\repos\Risk-Game\Risk-Game\Risk-Game\MapLoader.cpp(246,42): warning C4244:  'argument': conversion from 'double' to 'const unsigned __int64', possible loss of data
@@ -21,12 +21,14 @@ C:\Users\wmike\source\repos\Risk-Game\Risk-Game\Risk-Game\MapLoader.cpp(246,42):
 C:\Users\wmike\source\repos\Risk-Game\Risk-Game\Risk-Game\MapLoader.cpp(246,99): warning C4244:  'argument': conversion from 'double' to 'const unsigned __int64', possible loss of data
   Player.cpp
 C:\Users\wmike\source\repos\Risk-Game\Risk-Game\Risk-Game\MapLoaderDriver.cpp(1,10): warning C4067:  unexpected tokens following preprocessor directive - expected a newline
-C:\Users\wmike\source\repos\Risk-Game\Risk-Game\Risk-Game\Player.cpp(211,50): warning C4244:  '+=': conversion from 'double' to 'int', possible loss of data
-C:\Users\wmike\source\repos\Risk-Game\Risk-Game\Risk-Game\Player.cpp(347,112): warning C4267:  'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\wmike\source\repos\Risk-Game\Risk-Game\Risk-Game\Player.cpp(173,31): warning C4267:  'return': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\wmike\source\repos\Risk-Game\Risk-Game\Risk-Game\Player.cpp(222,50): warning C4244:  '+=': conversion from 'double' to 'int', possible loss of data
   PlayerAttackDriver.cpp
   PlayerDriver.cpp
   PlayerFortifyDriver.cpp
   PlayerReinforceDriver.cpp
+  PlayerStrategies.cpp
+  StrategyPatternDriver.cpp
   Generating Code...
-C:\Users\wmike\source\repos\Risk-Game\Risk-Game\Risk-Game\Player.cpp(450,31): warning C4267:  'return': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\wmike\source\repos\Risk-Game\Risk-Game\Risk-Game\Player.cpp(347,112): warning C4267:  'initializing': conversion from 'size_t' to 'int', possible loss of data
   Risk-Game.vcxproj -> C:\Users\wmike\source\repos\Risk-Game\Risk-Game\x64\Debug\Risk-Game.exe
