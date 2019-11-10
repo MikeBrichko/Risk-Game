@@ -6,8 +6,11 @@
 #include "Cards.h"
 #include "Dice.h"
 #include "MapLoader.h"
+#include "GameObservers.h"
 
-class Player {
+//This class is the concrete Subject (concrete Observable)
+class Player : public Subject  
+{
 private:
 	int* playerID;
 	std::string* playerName;
@@ -47,4 +50,22 @@ public:
 	int armiesOnCountriesOwned();
 	void addArmyToCountry(std::string countryName, int numOfArmies);
 	void addCountryOwned(Country* country);
+
+	//Need to add implementation of Concrete Subject
+
+
+};
+
+class DisplayInfo : public Observer //Similar to DigitalClock.h in notes
+{
+	//this is class as the Concrete Observer
+public:
+	DisplayInfo();
+	//DisplayInfo(parameter);
+	~DisplayInfo();
+	void Update();
+	void display();
+private:
+	//something
+
 };
