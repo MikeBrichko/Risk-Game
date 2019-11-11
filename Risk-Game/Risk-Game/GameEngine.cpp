@@ -39,6 +39,26 @@ Map* GameEngine::selectMap() {
 	}
 }
 
+Strategy* GameEngine::selectPlayerStrategy() {
+	int playerStrategy = 0;
+	while (true) {
+		std::cout << "Enter:" << std::endl;
+		std::cout << "\t1 if you to play as a Human" << std::endl;
+		std::cout << "\t2 if you want to play as an Aggressive Computer" << std::endl;
+		std::cout << "\t3 if you want to play as a Bnevolent Computer" << std::endl;
+		std::cin >> playerStrategy;
+
+		if (playerStrategy == 1)
+			return new HumanPlayer();
+		else if (playerStrategy == 2)
+			return new AggressiveComputer();
+		else if (playerStrategy == 3)
+			return new BenevolentComputer();
+		else
+			std::cout << "Invalid input! That is not a valid player strategy." << std::endl;
+	}
+}
+
 std::vector<Player*>* GameEngine::selectNumberOfPlayers() {
 	int numberOfPlayers = 0;
 	std::cout << "Enter the amount of players that will play this game: ";
@@ -50,7 +70,7 @@ std::vector<Player*>* GameEngine::selectNumberOfPlayers() {
 	for (int i = 0; i < numberOfPlayers; i++) {
 		std::cout << "Enter the name of Player " << i + 1 << ": ";
 		std::cin >> playerName;
-		newPlayers->push_back(new Player(i + 1, playerName, deck, map, dice));
+		newPlayers->push_back(new Player(i + 1, playerName,deck, map, dice, selectPlayerStrategy()));
 	}
 	return newPlayers;
 }
@@ -174,7 +194,7 @@ void GameEngine::startupPhase() {
 	assignCountriesToPlayers();
 	validateAllCountriesHavePlayers();
 
-	int givenArmies = 40;
+	int givenArmies = 14;
 	switch (players->size()) {
 		case 2:
 			givenArmies = 40;

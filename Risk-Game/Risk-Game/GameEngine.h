@@ -15,6 +15,7 @@ private:
 	void assignCountriesToPlayers();
 	std::vector<int> totalArmyCountForEachPlayer();
 	void validateAllCountriesHavePlayers();
+	Strategy* selectPlayerStrategy();
 
 public:
 	GameEngine();
