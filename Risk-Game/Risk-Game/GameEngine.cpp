@@ -177,7 +177,7 @@ void GameEngine::startupPhase() {
 	int givenArmies = 40;
 	switch (players->size()) {
 		case 2:
-			givenArmies = 40;
+			givenArmies = 5;
 			break;
 		case 3:
 			givenArmies = 35;
@@ -242,7 +242,7 @@ void GameEngine::mainGameLoop() {
 		for (auto player : *players) {
 			if (player->getAmountOfCountriesOwned() == 0)
 				continue;
-
+			getCurrentStatus(player,REINFORCE);
 			player->reinforce();
 			player->attack(players);
 
@@ -254,5 +254,45 @@ void GameEngine::mainGameLoop() {
 
 			player->fortify();
 		}
+	}
+}
+
+void GameEngine::getCurrentStatus(Player* player, Phase phase) {
+	this->currentPlayer = player;
+	this->currentPhase = &phase;
+	notify();
+}
+
+GamePhase::GamePhase(GameEngine* game) {
+	this->game = game;
+	game->attach(this);
+}
+
+GamePhase::~GamePhase() {
+	game->detach(this);
+}
+
+void GamePhase::update() {
+	if (*(this->game->currentPhase) == GAME_OVER) {
+		//displayVictory(player, data);
+
+	}
+	else {
+		std::string phase;
+		switch (*(this->game->currentPhase)) {
+		case Phase::ATTACK:
+			phase = "ATTACK PHASE";
+			break;
+		case Phase::REINFORCE:
+			phase = "REINFORCEMENT PHASE";
+			break;
+		case Phase::FORTIFY:
+			phase = "FORTIFY PHASE";
+			break;
+		default:
+			phase = "UNDEFINED PHASE";
+		}
+
+		std::cout << "********** " << this->game->currentPlayer->getPlayerID() << " : " << phase << " **********(FROM OBSERVER)" << std::endl;
 	}
 }

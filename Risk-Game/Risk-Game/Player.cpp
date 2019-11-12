@@ -216,7 +216,6 @@ Country* Player::getCountryOwned(std::string countryOwnedName) {
 }
 
 void Player::reinforce() {
-	notify(Phase::REINFORCE);
 	int armiesToAdd = 0;
 	std::cout << "Adding armies based on COUNTRIES that " << *playerName << " owns." << std::endl;
 	armiesToAdd += floor(countriesOwned->size() / 3);
@@ -283,7 +282,6 @@ void Player::reinforce() {
 }
 
 void Player::attack(std::vector<Player*>* players) {
-	notify(Phase::ATTACK);
 	std::cout << "For " << *playerName << std::endl;
 	printNeighbours(true);
 
@@ -366,7 +364,6 @@ void Player::attack(std::vector<Player*>* players) {
 }
 
 void Player::fortify() {
-	notify(Phase::FORTIFY);
 	std::cout << "Moving armies to different countries" << std::endl;
 	printNeighbours(false);
 

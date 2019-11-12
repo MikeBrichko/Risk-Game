@@ -9,7 +9,7 @@
 #include "GameObservers.h"
 
 //This class is the concrete Subject (concrete Observable)
-class Player : public Subject  
+class Player
 {
 private:
 	int* playerID;

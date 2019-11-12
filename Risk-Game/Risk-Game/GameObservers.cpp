@@ -1,5 +1,6 @@
 #include "GameObservers.h"
 #include <list>
+#include <iostream>
 
 using namespace std;
 
@@ -11,73 +12,40 @@ Observer::Observer(){
 Observer::~Observer(){
 };
 
-
+void Observer::update() {
+	std::cout << "Empty";
+}
 
 //Subject class implementation
 Subject::Subject()
 {
-	_observers = new list<Observer*>;
+	observers = new list<Observer*>;
 }
 
 Subject::~Subject()
 {
-	delete _observers;
+	delete observers;
 }
 
 void Subject::attach(Observer* o)
 {
-	_observers->push_back(o);
+	observers->push_back(o);
 };
 
 void Subject::detach(Observer* o)
 {
-	_observers->remove(o);
+	observers->remove(o);
 };
 
-void Subject::notify(Phase data)
+void Subject::notify()
 {
-	list<Observer*>::iterator i = _observers->begin();
-	for (; i != _observers->end(); i++)
+	list<Observer*>::iterator i = observers->begin();
+	for (; i != observers->end(); i++)
 	{
-		(*i)->Update(data);
+		(*i)->update();
 	}
 }
 
-GamePhase::GamePhase(Player* player) {
-	this->player = player;
-	player->attach(this);
-}
-
-GamePhase::~GamePhase() {
-	player->detach(this); 
-}
-
-void GamePhase::Update(Phase data) {
-	if (data == GAME_OVER)
-		displayVictory(data);
-	else
-		displayStats(data);
-}
-
-void GamePhase::displayStats(Phase data) {
-	string phase;
-	switch (data) {
-	case Phase::ATTACK:
-		phase = "ATTACK PHASE";
-		break;
-	case Phase::REINFORCE:
-		phase = "REINFORCEMENT PHASE";
-		break;
-	case Phase::FORTIFY:
-		phase = "FORTIFY PHASE";
-		break;
-	default:
-		phase = "UNDEFINED PHASE";
-	}
-
-	cout << "********** " << this->player->getPlayerID() << " : " << phase << " **********" << endl;
-}
-
-void GamePhase::displayVictory(Phase data) {
-
-}
+std::list<Observer*>* Subject::getObservers() {
+	return observers;
+};

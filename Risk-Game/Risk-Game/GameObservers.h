@@ -1,6 +1,5 @@
 #pragma once
 #include <list>
-#include "Player.h"
 
 typedef enum : int {
 	ATTACK,
@@ -14,7 +13,7 @@ class Observer
 {
 public:
 	~Observer();
-	virtual void Update(Phase data) = 0;
+	virtual void update();
 protected:
 	Observer();
 };
@@ -25,23 +24,23 @@ class Subject
 public:
 	virtual void attach(Observer* o);
 	virtual void detach(Observer* o);
-	virtual void notify(Phase data);
+	virtual void notify();
+	std::list<Observer*>* getObservers();
 	Subject();
 	~Subject();
 private:
-	std::list<Observer*> *_observers;
+	std::list<Observer*> *observers;
 
 };
-
-class GamePhase : public Observer//Similar to DigitalClock.h in notes
-{
-	//this is class as the Concrete Observer
-private:
-	Player* player;
-	void displayVictory(Phase current_phase);
-	void displayStats(Phase current_phase);
-public:
-	GamePhase(Player* player);
-	~GamePhase();
-	void Update(Phase data);
-};
+//
+//class ConcreteObserver : public Observer//Similar to DigitalClock.h in notes
+//{
+//	//this is class as the Concrete Observer
+//private:
+//	virtual void displayVictory(Phase current_phase);
+//	virtual void displayStats(Phase current_phase);
+//public:
+//	//GamePhase(Player* player);
+//	//~GamePhase();
+//	virtual void update(Phase data);
+//};
