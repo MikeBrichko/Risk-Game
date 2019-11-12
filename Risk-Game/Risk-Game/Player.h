@@ -55,16 +55,3 @@ public:
 
 
 };
-
-class DisplayInfo : public Observer //Similar to DigitalClock.h in notes
-{
-	//this is class as the Concrete Observer
-public:
-	DisplayInfo();
-	//DisplayInfo(parameter);
-	~DisplayInfo();
-	void Update();
-	void display();
-private:
-	//something
-}
