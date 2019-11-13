@@ -6,43 +6,46 @@ typedef enum : int {
 	ATTACK,
 	REINFORCE,
 	FORTIFY,
-	GAME_OVER
+	GAME_OVER,
+	DEFEATED
 } Phase;
 
-//Abstract Observer class
-class Observer   
-{
-public:
-	~Observer();
-	//virtual void update() = 0;
-	virtual void update(std::string name, Phase phase) = 0;
-
-protected:
-	Observer();
-};
-
+class Observer;
 //Subject class (Observable class)
-class Subject 
+class Subject
 {
 public:
-	virtual void attachObserver(Observer* o) = 0;
-	virtual void detachObserver(Observer* o) = 0;
-	virtual void notifyObservers() = 0;
+	void attach(Observer* o);
+	void detach(Observer* o);
+	void notify();
 	Subject();
 	~Subject();
 protected:
 	std::list<Observer*>* observers; // In order to see from the parents
 
 };
-//
-//class ConcreteObserver : public Observer//Similar to DigitalClock.h in notes
-//{
-//	//this is class as the Concrete Observer
-//private:
-//	virtual void displayVictory(Phase current_phase);
-//	virtual void displayStats(Phase current_phase);
-//public:
-//	//GamePhase(Player* player);
-//	//~GamePhase();
-//	virtual void update(Phase data);
-//};
+//Abstract Observer class
+class Observer   
+{
+public:
+	Observer(Subject* model);
+	~Observer();
+	virtual void update() = 0;
+
+};
+
+class ConcreteSubject : public Subject {
+public:
+	virtual Phase getPhase() = 0;
+	virtual std::string getCurrentPlayerName() = 0;
+};
+
+class ConcreteObserver : public Observer {
+public:
+	ConcreteObserver(ConcreteSubject* player, void (*display_callback)(ConcreteSubject*));
+	~ConcreteObserver();
+	void update() override;
+	void (*callback)(ConcreteSubject*);
+private:
+	ConcreteSubject* player;
+};

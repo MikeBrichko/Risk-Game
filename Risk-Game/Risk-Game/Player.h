@@ -9,7 +9,7 @@
 #include "GameObservers.h"
 
 //This class is the concrete Subject (concrete Observable)
-class Player
+class Player : public ConcreteSubject
 {
 private:
 	int* playerID;
@@ -26,6 +26,10 @@ private:
 	bool playerFortificationDecision();
 	void printNeighbours(bool areEnemies);
 	Country* getNeighbouringCountry(Country* countryOwned, std::string neighbouringCountryName, bool isEnemy);
+	
+	// Used for Observer
+	Phase* currentPhase;
+	std::string* currentPlayerName;
 
 public:
 	Player(int playerID, std::string playerName);
@@ -52,6 +56,7 @@ public:
 	void addCountryOwned(Country* country);
 
 	//Need to add implementation of Concrete Subject
-
+	Phase getPhase() override;
+	std::string getCurrentPlayerName() override;
 
 };

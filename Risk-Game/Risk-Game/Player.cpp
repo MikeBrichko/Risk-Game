@@ -11,6 +11,8 @@ Player::Player(int playerID, std::string playerName) {
 	gameDeck = NULL;
 	gameMap = NULL;
 	gameDice = NULL;
+	currentPhase = new Phase();
+	currentPlayerName = new std::string();
 }
 
 Player::Player(int playerID, std::string playerName, Deck* deck) {
@@ -21,6 +23,8 @@ Player::Player(int playerID, std::string playerName, Deck* deck) {
 	gameDeck = deck;
 	gameMap = NULL;
 	gameDice = NULL;
+	currentPhase = new Phase();
+	currentPlayerName = new std::string();
 }
 
 Player::Player(int playerID, std::string playerName, Deck* deck, Map* map, Dice* dice) {
@@ -31,6 +35,8 @@ Player::Player(int playerID, std::string playerName, Deck* deck, Map* map, Dice*
 	gameDeck = deck;
 	gameMap = map;
 	gameDice = dice;
+	currentPhase = new Phase();
+	currentPlayerName = new std::string();
 }
 
 Player::~Player() {
@@ -38,6 +44,8 @@ Player::~Player() {
 	delete playerName;
 	delete countriesOwned;
 	delete hand;
+	delete currentPhase;
+	delete currentPlayerName;
 	gameDeck = NULL;
 	gameMap = NULL;
 	gameDice = NULL;
@@ -216,6 +224,8 @@ Country* Player::getCountryOwned(std::string countryOwnedName) {
 }
 
 void Player::reinforce() {
+	*currentPhase = REINFORCE;
+	notify();
 	int armiesToAdd = 0;
 	std::cout << "Adding armies based on COUNTRIES that " << *playerName << " owns." << std::endl;
 	armiesToAdd += floor(countriesOwned->size() / 3);
@@ -282,6 +292,8 @@ void Player::reinforce() {
 }
 
 void Player::attack(std::vector<Player*>* players) {
+	*currentPhase = ATTACK;
+	notify();
 	std::cout << "For " << *playerName << std::endl;
 	printNeighbours(true);
 
@@ -364,6 +376,8 @@ void Player::attack(std::vector<Player*>* players) {
 }
 
 void Player::fortify() {
+	*currentPhase = FORTIFY;
+	notify();
 	std::cout << "Moving armies to different countries" << std::endl;
 	printNeighbours(false);
 
@@ -419,4 +433,17 @@ void Player::fortify() {
 		break;
 	}
 	std::cout << "=====================Finished fortification phase=====================" << std::endl;
+}
+
+Phase Player::getPhase() {
+	return *currentPhase;
+}
+
+std::string Player::getCurrentPlayerName() {
+	if (*currentPhase == DEFEATED) {
+		return *currentPlayerName;
+	}
+	else {
+		return *playerName;
+	}
 }

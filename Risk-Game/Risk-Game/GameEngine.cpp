@@ -6,32 +6,64 @@
 #include <vector>
 #include <list>
 #include <time.h>
+#include <sstream>
+
+
+void callback(ConcreteSubject* player) {
+	switch (player->getPhase()) {
+	case Phase::ATTACK:
+		std::cout << "********** " << player->getCurrentPlayerName() << " : ATTACK PHASE  **********(From Observer)" << std::endl;
+		break;
+	case Phase::REINFORCE:
+		std::cout << "********** " << player->getCurrentPlayerName() << " : REINFORCE PHASE  **********(From Observer)" << std::endl;
+		break;
+	case Phase::FORTIFY:
+		std::cout << "********** " << player->getCurrentPlayerName() << " : FORTIFY PHASE  **********(From Observer)" << std::endl;
+		break;
+	case Phase::GAME_OVER:
+		std::cout << "********** " << player->getCurrentPlayerName() << " WINS! GAME OVER! **********(From Observer)" << std::endl;
+		break;
+	case Phase::DEFEATED:
+		std::cout << "********** " << player->getCurrentPlayerName() << " LOSES and cannot play anymore,  **********(From Observer)" << std::endl;
+		break;
+	default:
+		std::cout << "********** " << player->getCurrentPlayerName() << " : UNDEFINED PHASE  **********(From Observer)" << std::endl;
+	}
+}
 
 GameEngine::GameEngine() {
 	map = selectMap();
 	deck = new Deck(map->getNumOfCountries());
 	dice = new Dice();
 	players = selectNumberOfPlayers();
+	player_observers = new std::vector<ConcreteObserver*>();
 }
 
 GameEngine::GameEngine(bool automate) {
 	if (automate) {
-		std::cout << "hello" << std::endl;
+		player_observers = new std::vector<ConcreteObserver*>();
 
 		map = MapLoader("sample.map").exportToMap();
-		std::cout << "didi" << std::endl;
 
 		deck = new Deck(map->getNumOfCountries());
 		dice = new Dice();
 		players = new std::vector<Player*>();
-		players->push_back(new Player(1, "Player 1 - Ted", deck, map, dice));
-		players->push_back(new Player(2, "Player 2 - Maria", deck, map, dice));
+		Player * p1 = new Player(1, "Player 1 - Ted", deck, map, dice);
+		Player* p2 = new Player(2, "Player 2 - Maria", deck, map, dice);
+		players->push_back(p1);
+		players->push_back(p2);
+		ConcreteObserver* observer1 = new ConcreteObserver(p1, &callback);
+		ConcreteObserver* observer2 = new ConcreteObserver(p2, &callback);
+
+		player_observers->emplace_back(observer1);
+		player_observers->emplace_back(observer2);
 
 		determinePlayerOrder();
 		assignCountriesToPlayers();
 		validateAllCountriesHavePlayers();
 	}
 	else {
+		player_observers = new std::vector<ConcreteObserver*>();
 		map = selectMap();
 		deck = new Deck(map->getNumOfCountries());
 		dice = new Dice();
@@ -75,7 +107,12 @@ std::vector<Player*>* GameEngine::selectNumberOfPlayers() {
 	for (int i = 0; i < numberOfPlayers; i++) {
 		std::cout << "Enter the name of Player " << i + 1 << ": ";
 		std::cin >> playerName;
-		newPlayers->push_back(new Player(i + 1, playerName, deck, map, dice));
+		Player* player = new Player(i + 1, playerName, deck, map, dice);
+		newPlayers->push_back(player);
+		ConcreteObserver* observer = new ConcreteObserver(player, &callback);
+		player_observers->emplace_back(observer);
+		delete player;
+		delete observer;
 	}
 	return newPlayers;
 }
@@ -267,84 +304,15 @@ void GameEngine::mainGameLoop() {
 		for (auto player : *players) {
 			if (player->getAmountOfCountriesOwned() == 0)
 				continue;
-			notify(player->getPlayerName(),REINFORCE);
 			player->reinforce();
-			notify(player->getPlayerName(), ATTACK);
 			player->attack(players);
 
 			if (player->getAmountOfCountriesOwned() == map->getNumOfCountries()) {
-				notify(player->getPlayerName(), GAME_OVER);
+				notify();
 				gameOver = true;
 				break;
 			}
-			notify(player->getPlayerName(), FORTIFY);
 			player->fortify();
 		}
 	}
-}
-
-void GameEngine::attachObserver(Observer* observer) {
-	observers->push_back(observer);
-}
-
-void GameEngine::detachObserver(Observer* observer) {
-
-	auto iterator = std::find(observers->begin(), observers->end(), observer);
-
-	if (iterator != observers->end()) {
-		observers->erase(iterator);
-	}
-}
-
-void GameEngine::notifyObservers() {
-	std::list<Observer*>::iterator i = observers->begin();
-	for (; i != observers->end(); i++)
-	{
-		(*i)->update(*currentPlayerName, *currentPhase);
-	}
-}
-
-void GameEngine::notify(std::string name, Phase phase) {
-	this->currentPlayerName = &name;
-	this->currentPhase = &phase;
-
-	std::cout << std::endl;
-	notifyObservers();
-}
-
-void DisplayInfo::update(std::string name, Phase phase) {
-	if (phase == GAME_OVER) {
-		displayVictory(name, phase);
-	}
-	else {
-		displayStats(name, phase);
-	}
-
-}
-
-void DisplayInfo::displayStats(std::string name, Phase phase) {
-	std::string phaseName;
-	switch (phase) {
-	case Phase::ATTACK:
-		phaseName = "ATTACK PHASE";
-		break;
-	case Phase::REINFORCE:
-		phaseName = "REINFORCEMENT PHASE";
-		break;
-	case Phase::FORTIFY:
-		phaseName = "FORTIFY PHASE";
-		break;
-	default:
-		phaseName = "UNDEFINED PHASE";
-	}
-
-	std::cout << "********** " << name << " : " << phaseName << " **********(From Observer)" << std::endl;
-}
-void DisplayInfo::displayVictory(std::string name, Phase phase) {
-	std::cout << "********** " << name << " has conquered all countries and wins!<Game Over!! **********(From Observer)" << std::endl;
-
-}
-DisplayInfo::DisplayInfo(int id)
-{
-	this->id = id;
 }
