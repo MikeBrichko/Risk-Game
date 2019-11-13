@@ -16,30 +16,40 @@ private:
 	void assignCountriesToPlayers();
 	std::vector<int> totalArmyCountForEachPlayer();
 	void validateAllCountriesHavePlayers();
-	
-	// Used for Observer
-	//void notify();
-	void getCurrentStatus(Player *, Phase);
+
 public:
 	GameEngine();
+	GameEngine(bool);
 	~GameEngine();
 	void startupPhase();
 	void mainGameLoop();
 	bool allCountriesHavePlayers();
 
 	// Used for Observer
-	Player* currentPlayer;
+	std::string* currentPlayerName;
 	Phase* currentPhase;
+	void attachObserver(Observer* observer);
 
+	void detachObserver(Observer* observer);
+
+	void notifyObservers();
+
+	void notify(std::string name, Phase phase);
 };
-
-class GamePhase : public Observer {
-private:
-	GameEngine* game;
-	void displayVictory(Player* player, Phase current_phase);
-	void displayStats(Player* player, Phase current_phase);
+class DisplayInfo : public Observer //Similar to DigitalClock.h in notes
+{
+	//this is class as the Concrete Observer
 public:
-	GamePhase(GameEngine* player);
-	~GamePhase();
-	void update() override;
+
+	//DisplayInfo();
+	//~DisplayInfo();
+	DisplayInfo(int id);
+	void displayStats(std::string name, Phase phase);
+	void displayVictory(std::string name, Phase phase);
+	//void Update();
+	//void display();
+private:
+	//something
+	virtual void update(std::string name, Phase phase) override;
+	int id;
 };

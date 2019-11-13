@@ -14,6 +14,31 @@ GameEngine::GameEngine() {
 	players = selectNumberOfPlayers();
 }
 
+GameEngine::GameEngine(bool automate) {
+	if (automate) {
+		std::cout << "hello" << std::endl;
+
+		map = MapLoader("sample.map").exportToMap();
+		std::cout << "didi" << std::endl;
+
+		deck = new Deck(map->getNumOfCountries());
+		dice = new Dice();
+		players = new std::vector<Player*>();
+		players->push_back(new Player(1, "Player 1 - Ted", deck, map, dice));
+		players->push_back(new Player(2, "Player 2 - Maria", deck, map, dice));
+
+		determinePlayerOrder();
+		assignCountriesToPlayers();
+		validateAllCountriesHavePlayers();
+	}
+	else {
+		map = selectMap();
+		deck = new Deck(map->getNumOfCountries());
+		dice = new Dice();
+		players = selectNumberOfPlayers();
+
+	}
+}
 GameEngine::~GameEngine() {
 	delete map;
 	for (auto player : *players)
@@ -177,7 +202,7 @@ void GameEngine::startupPhase() {
 	int givenArmies = 40;
 	switch (players->size()) {
 		case 2:
-			givenArmies = 5;
+			givenArmies = 40;
 			break;
 		case 3:
 			givenArmies = 35;
@@ -242,57 +267,84 @@ void GameEngine::mainGameLoop() {
 		for (auto player : *players) {
 			if (player->getAmountOfCountriesOwned() == 0)
 				continue;
-			getCurrentStatus(player,REINFORCE);
+			notify(player->getPlayerName(),REINFORCE);
 			player->reinforce();
+			notify(player->getPlayerName(), ATTACK);
 			player->attack(players);
 
 			if (player->getAmountOfCountriesOwned() == map->getNumOfCountries()) {
-				std::cout << "Player " << player->getPlayerID() << " wins!!!" << std::endl;
+				notify(player->getPlayerName(), GAME_OVER);
 				gameOver = true;
 				break;
 			}
-
+			notify(player->getPlayerName(), FORTIFY);
 			player->fortify();
 		}
 	}
 }
 
-void GameEngine::getCurrentStatus(Player* player, Phase phase) {
-	this->currentPlayer = player;
+void GameEngine::attachObserver(Observer* observer) {
+	observers->push_back(observer);
+}
+
+void GameEngine::detachObserver(Observer* observer) {
+
+	auto iterator = std::find(observers->begin(), observers->end(), observer);
+
+	if (iterator != observers->end()) {
+		observers->erase(iterator);
+	}
+}
+
+void GameEngine::notifyObservers() {
+	std::list<Observer*>::iterator i = observers->begin();
+	for (; i != observers->end(); i++)
+	{
+		(*i)->update(*currentPlayerName, *currentPhase);
+	}
+}
+
+void GameEngine::notify(std::string name, Phase phase) {
+	this->currentPlayerName = &name;
 	this->currentPhase = &phase;
-	notify();
+
+	std::cout << std::endl;
+	notifyObservers();
 }
 
-GamePhase::GamePhase(GameEngine* game) {
-	this->game = game;
-	game->attach(this);
-}
-
-GamePhase::~GamePhase() {
-	game->detach(this);
-}
-
-void GamePhase::update() {
-	if (*(this->game->currentPhase) == GAME_OVER) {
-		//displayVictory(player, data);
-
+void DisplayInfo::update(std::string name, Phase phase) {
+	if (phase == GAME_OVER) {
+		displayVictory(name, phase);
 	}
 	else {
-		std::string phase;
-		switch (*(this->game->currentPhase)) {
-		case Phase::ATTACK:
-			phase = "ATTACK PHASE";
-			break;
-		case Phase::REINFORCE:
-			phase = "REINFORCEMENT PHASE";
-			break;
-		case Phase::FORTIFY:
-			phase = "FORTIFY PHASE";
-			break;
-		default:
-			phase = "UNDEFINED PHASE";
-		}
-
-		std::cout << "********** " << this->game->currentPlayer->getPlayerID() << " : " << phase << " **********(FROM OBSERVER)" << std::endl;
+		displayStats(name, phase);
 	}
+
+}
+
+void DisplayInfo::displayStats(std::string name, Phase phase) {
+	std::string phaseName;
+	switch (phase) {
+	case Phase::ATTACK:
+		phaseName = "ATTACK PHASE";
+		break;
+	case Phase::REINFORCE:
+		phaseName = "REINFORCEMENT PHASE";
+		break;
+	case Phase::FORTIFY:
+		phaseName = "FORTIFY PHASE";
+		break;
+	default:
+		phaseName = "UNDEFINED PHASE";
+	}
+
+	std::cout << "********** " << name << " : " << phaseName << " **********(From Observer)" << std::endl;
+}
+void DisplayInfo::displayVictory(std::string name, Phase phase) {
+	std::cout << "********** " << name << " has conquered all countries and wins!<Game Over!! **********(From Observer)" << std::endl;
+
+}
+DisplayInfo::DisplayInfo(int id)
+{
+	this->id = id;
 }

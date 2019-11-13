@@ -1,5 +1,6 @@
 #pragma once
 #include <list>
+#include <iostream>
 
 typedef enum : int {
 	ATTACK,
@@ -13,7 +14,9 @@ class Observer
 {
 public:
 	~Observer();
-	virtual void update();
+	//virtual void update() = 0;
+	virtual void update(std::string name, Phase phase) = 0;
+
 protected:
 	Observer();
 };
@@ -22,14 +25,13 @@ protected:
 class Subject 
 {
 public:
-	virtual void attach(Observer* o);
-	virtual void detach(Observer* o);
-	virtual void notify();
-	std::list<Observer*>* getObservers();
+	virtual void attachObserver(Observer* o) = 0;
+	virtual void detachObserver(Observer* o) = 0;
+	virtual void notifyObservers() = 0;
 	Subject();
 	~Subject();
-private:
-	std::list<Observer*> *observers;
+protected:
+	std::list<Observer*>* observers; // In order to see from the parents
 
 };
 //
