@@ -1,13 +1,15 @@
 #pragma once
 #include <list>
 #include <iostream>
+#include "Map.h"
 
 typedef enum : int {
 	ATTACK,
 	REINFORCE,
 	FORTIFY,
 	GAME_OVER,
-	DEFEATED
+	DEFEATED,
+	LOSE_COUNTRY
 } Phase;
 
 class Observer;
@@ -38,6 +40,8 @@ class ConcreteSubject : public Subject {
 public:
 	virtual Phase getPhase() = 0;
 	virtual std::string getCurrentPlayerName() = 0;
+	virtual std::string getDefeatedCountryName() = 0;
+	virtual std::vector<std::string*> getStats() = 0;
 };
 
 class ConcreteObserver : public Observer {

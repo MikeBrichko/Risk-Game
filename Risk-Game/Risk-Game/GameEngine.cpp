@@ -23,9 +23,15 @@ void callback(ConcreteSubject* player) {
 	case Phase::GAME_OVER:
 		std::cout << "********** " << player->getCurrentPlayerName() << " WINS! GAME OVER! **********(From Observer)" << std::endl;
 		break;
+	case Phase::LOSE_COUNTRY:
+		std::cout << "********** " << player->getCurrentPlayerName() << " LOSES "<< player->getDefeatedCountryName() << " country **********(From Observer)" << std::endl;
+		std::cout << "********** STATS FOR THE GAME IS **********" << std::endl;
+		for (auto text : player->getStats()) {
+			std::cout << *text << std::endl;
+		}
+		break;
 	case Phase::DEFEATED:
 		std::cout << "********** " << player->getCurrentPlayerName() << " LOSES and cannot play anymore,  **********(From Observer)" << std::endl;
-		break;
 	default:
 		std::cout << "********** " << player->getCurrentPlayerName() << " : UNDEFINED PHASE  **********(From Observer)" << std::endl;
 	}
@@ -302,13 +308,13 @@ void GameEngine::mainGameLoop() {
 	bool gameOver = false;
 	while (!gameOver) {
 		for (auto player : *players) {
-			if (player->getAmountOfCountriesOwned() == 0)
+			if (player->getAmountOfCountriesOwned() == 0) {
 				continue;
+			}
 			player->reinforce();
 			player->attack(players);
 
 			if (player->getAmountOfCountriesOwned() == map->getNumOfCountries()) {
-				notify();
 				gameOver = true;
 				break;
 			}

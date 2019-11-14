@@ -13,6 +13,8 @@ Player::Player(int playerID, std::string playerName) {
 	gameDice = NULL;
 	currentPhase = new Phase();
 	currentPlayerName = new std::string();
+	currentDefeatedCountry = new std::string();
+	currentStats = new std::vector<std::string*>();
 }
 
 Player::Player(int playerID, std::string playerName, Deck* deck) {
@@ -25,6 +27,8 @@ Player::Player(int playerID, std::string playerName, Deck* deck) {
 	gameDice = NULL;
 	currentPhase = new Phase();
 	currentPlayerName = new std::string();
+	currentDefeatedCountry = new std::string();
+	currentStats = new std::vector<std::string*>();
 }
 
 Player::Player(int playerID, std::string playerName, Deck* deck, Map* map, Dice* dice) {
@@ -37,6 +41,8 @@ Player::Player(int playerID, std::string playerName, Deck* deck, Map* map, Dice*
 	gameDice = dice;
 	currentPhase = new Phase();
 	currentPlayerName = new std::string();
+	currentDefeatedCountry = new std::string();
+	currentStats = new std::vector<std::string*>();
 }
 
 Player::~Player() {
@@ -46,6 +52,7 @@ Player::~Player() {
 	delete hand;
 	delete currentPhase;
 	delete currentPlayerName;
+	delete currentDefeatedCountry;
 	gameDeck = NULL;
 	gameMap = NULL;
 	gameDice = NULL;
@@ -86,17 +93,44 @@ void Player::removeCountryOwned(int countryID) {
 }
 
 void Player::conquerEnemyCountry(Country* ownCountry, Country* enemyCountry, std::vector<Player*>* players) {
-	std::cout << "You have defeated " << enemyCountry->getName() << std::endl;
-
+	//std::cout << "You have defeated " << enemyCountry->getName() << std::endl;
 	//Step 1. Remove Country from Enemy Player
 	for (auto player : *players) {
 		if (enemyCountry->getPlayerID() == player->getPlayerID())
 			player->removeCountryOwned(enemyCountry->getID());
+			*currentPlayerName = player->getPlayerName();
 	}
 
 	//Step 2. Add Country to countriesOwned
 	addCountryOwned(enemyCountry);
 
+	*currentPhase = LOSE_COUNTRY;
+	
+	for (auto player : *players) {
+		std::string percent = std::to_string(double(player->getAmountOfCountriesOwned()) / double(gameMap->getNumOfCountries()) * 100);
+		currentStats->push_back(new std::string(player->getPlayerName() + " owned " + percent +"\%\n"));
+	}
+	*currentDefeatedCountry = enemyCountry->getName();
+	notify();
+	for (auto text : *currentStats) {
+		delete text;
+		text = NULL;
+	}
+	delete currentStats;
+	currentStats = new std::vector<std::string*>();
+	std::vector<Player*>::iterator i = players->begin();
+	while (i != players->end()) {
+		if ((*i)->getAmountOfCountriesOwned() == 0) {
+			std::cout << (*i)->getPlayerName() << std::endl;
+			*currentPhase = DEFEATED;
+			notify();
+			players->erase(i);
+		}
+		else {
+			++i;
+		}
+
+	}
 	//Step 3. Mobilize armies to newly aquired country
 	int armiesToMobilize = 0;
 	while (true) {
@@ -369,8 +403,13 @@ void Player::attack(std::vector<Player*>* players) {
 				}
 			}
 		}
-
-		printNeighbours(true);
+		if (getAmountOfCountriesOwned() == gameMap->getNumOfCountries()) {
+			*currentPhase = GAME_OVER;
+			notify();
+		}
+		else {
+			printNeighbours(true);
+		}
 	}
 	std::cout << "=====================Finished Attack Phase=====================" << std::endl;
 }
@@ -440,10 +479,18 @@ Phase Player::getPhase() {
 }
 
 std::string Player::getCurrentPlayerName() {
-	if (*currentPhase == DEFEATED) {
+	if (*currentPhase == DEFEATED || *currentPhase == LOSE_COUNTRY) {
 		return *currentPlayerName;
 	}
 	else {
 		return *playerName;
 	}
+}
+
+std::string Player::getDefeatedCountryName() {
+	return *currentDefeatedCountry;
+}
+
+std::vector<std::string*> Player::getStats() {
+	return *currentStats;
 }
