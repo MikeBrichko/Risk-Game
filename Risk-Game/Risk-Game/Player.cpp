@@ -3,6 +3,7 @@
 #include <string>
 #include <algorithm>
 
+
 Player::Player(int playerID, std::string playerName) {
 	this->playerID = new int(playerID);
 	this->playerName = new std::string(playerName);
@@ -92,6 +93,8 @@ void Player::removeCountryOwned(int countryID) {
 	}
 }
 
+
+
 void Player::conquerEnemyCountry(Country* ownCountry, Country* enemyCountry, std::vector<Player*>* players) {
 	//std::cout << "You have defeated " << enemyCountry->getName() << std::endl;
 	//Step 1. Remove Country from Enemy Player
@@ -105,10 +108,12 @@ void Player::conquerEnemyCountry(Country* ownCountry, Country* enemyCountry, std
 	addCountryOwned(enemyCountry);
 
 	*currentPhase = LOSE_COUNTRY;
-	
+
 	for (auto player : *players) {
-		std::string percent = std::to_string(double(player->getAmountOfCountriesOwned()) / double(gameMap->getNumOfCountries()) * 100);
-		currentStats->push_back(new std::string(player->getPlayerName() + " owned " + percent +"\%\n"));
+		double percentNumber = (double(player->getAmountOfCountriesOwned()) / double(gameMap->getNumOfCountries()) * 100);
+		std::string percent = std::to_string(percentNumber);
+		currentStats->push_back(new std::string(player->getPlayerName() + " controls " + percent +"\% of world map\n"));
+		
 	}
 	*currentDefeatedCountry = enemyCountry->getName();
 	notify();

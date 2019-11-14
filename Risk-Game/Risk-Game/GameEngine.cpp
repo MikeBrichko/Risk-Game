@@ -7,6 +7,8 @@
 #include <list>
 #include <time.h>
 #include <sstream>
+#include <iostream>
+
 
 
 void callback(ConcreteSubject* player) {
@@ -25,9 +27,9 @@ void callback(ConcreteSubject* player) {
 		break;
 	case Phase::LOSE_COUNTRY:
 		std::cout << "********** " << player->getCurrentPlayerName() << " LOSES "<< player->getDefeatedCountryName() << " country **********(From Observer)" << std::endl;
-		std::cout << "********** STATS FOR THE GAME IS **********" << std::endl;
+		std::cout << "\n********** PLAYERS WORLD DOMINATION VIEW **********" << std::endl;
 		for (auto text : player->getStats()) {
-			std::cout << *text << std::endl;
+			std::cout <<*text << std::endl;
 		}
 		break;
 	case Phase::DEFEATED:
