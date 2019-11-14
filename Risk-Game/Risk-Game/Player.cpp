@@ -121,10 +121,12 @@ void Player::conquerEnemyCountry(Country* ownCountry, Country* enemyCountry, std
 	std::vector<Player*>::iterator i = players->begin();
 	while (i != players->end()) {
 		if ((*i)->getAmountOfCountriesOwned() == 0) {
-			std::cout << (*i)->getPlayerName() << std::endl;
 			*currentPhase = DEFEATED;
 			notify();
-			players->erase(i);
+
+			players->erase(i--);
+			delete (*i);
+			break;
 		}
 		else {
 			++i;
@@ -339,6 +341,8 @@ void Player::attack(std::vector<Player*>* players) {
 	Country* defendingCountry = NULL;
 	std::vector<int> defendingDice;
 
+	bool isGameDone = false;
+
 	while (playerAttackDecision())
 	{
 		//Step 1: Select the attacking country
@@ -404,14 +408,18 @@ void Player::attack(std::vector<Player*>* players) {
 			}
 		}
 		if (getAmountOfCountriesOwned() == gameMap->getNumOfCountries()) {
-			*currentPhase = GAME_OVER;
-			notify();
+			isGameDone = true;
+			break;
 		}
 		else {
 			printNeighbours(true);
 		}
 	}
 	std::cout << "=====================Finished Attack Phase=====================" << std::endl;
+	if (isGameDone) {
+		*currentPhase = GAME_OVER;
+		notify();
+	}
 }
 
 void Player::fortify() {

@@ -32,6 +32,7 @@ void callback(ConcreteSubject* player) {
 		break;
 	case Phase::DEFEATED:
 		std::cout << "********** " << player->getCurrentPlayerName() << " LOSES and cannot play anymore,  **********(From Observer)" << std::endl;
+		break;
 	default:
 		std::cout << "********** " << player->getCurrentPlayerName() << " : UNDEFINED PHASE  **********(From Observer)" << std::endl;
 	}
