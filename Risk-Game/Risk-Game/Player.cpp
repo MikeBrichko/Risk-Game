@@ -112,7 +112,8 @@ void Player::conquerEnemyCountry(Country* ownCountry, Country* enemyCountry, std
 	for (auto player : *players) {
 		double percentNumber = (double(player->getAmountOfCountriesOwned()) / double(gameMap->getNumOfCountries()) * 100);
 		std::string percent = std::to_string(percentNumber);
-		currentStats->push_back(new std::string(player->getPlayerName() + " controls " + percent +"\% of world map\n"));
+		std::string truncatedPercent = percent.substr(0, 5);
+		currentStats->push_back(new std::string(player->getPlayerName() + " controls " + truncatedPercent +"\% of world map\n"));
 		
 	}
 	*currentDefeatedCountry = enemyCountry->getName();
