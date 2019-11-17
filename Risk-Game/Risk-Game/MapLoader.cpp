@@ -194,7 +194,7 @@ Map* MapLoader::exportToMap(){
 
 	} 
 
-	Map* map = new Map(countries->size());
+	Map* map = new Map(static_cast<int>(countries->size()));
 	for (auto continent : *continents) {
 		map->addContinent(continent);
 	}
@@ -228,7 +228,7 @@ Country* MapLoader::createCountry(std::string line, std::vector<Continent*>* con
 	}
 	ss.clear();
 	Country* createdCountry = new Country(stoi(words.at(0)), words.at(1), stoi(words.at(2)), 0);
-	continents->at((double)stoi(words.at(2)) - 1)->addCountry(createdCountry);
+	continents->at(static_cast<unsigned __int64>(stoi(words.at(2)) - 1.0))->addCountry(createdCountry);
 	return createdCountry;
 }
 
@@ -243,5 +243,5 @@ void MapLoader::createBorders(std::string line, std::vector<Country*>* countries
 	ss.clear();
 
 	for (int i = 1; i < words.size(); i++)
-		countries->at((double)stoi(words.at(0))-1)->addNeighbour(countries->at((double)stoi(words.at(i))-1));
+		countries->at(static_cast<unsigned __int64>(stoi(words.at(0))-1.0))->addNeighbour(countries->at(static_cast<unsigned __int64>(stoi(words.at(i))-1.0)));
 }

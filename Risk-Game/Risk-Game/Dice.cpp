@@ -5,7 +5,6 @@
 #include <algorithm>
 
 	Dice::Dice(){
-		srand(time(NULL));
 		diceFaceRolledCounter = new std::vector<int>(6);
 		rollCounter = new int(0);
 	};
@@ -78,10 +77,11 @@
 		std::vector<int> diceRolled = std::vector<int>();
 		
 		int diceFaceRolled = 0;
+		srand((unsigned int)time(NULL));
 		for (int i = 0; i < diceToBeRolled; i++) {
 			diceFaceRolled = rand() % 6 + 1;
 			diceRolled.push_back(diceFaceRolled);
-			diceFaceRolledCounter->at((double)diceFaceRolled-1) += 1;
+			diceFaceRolledCounter->at(static_cast<unsigned __int64>(diceFaceRolled-1.0)) += 1;
 			*rollCounter += 1;
 		}
 

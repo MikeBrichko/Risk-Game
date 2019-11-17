@@ -182,11 +182,11 @@ int Player::addCardToHand() {
 }
 
 int Player::getAmountOfCountriesOwned() {
-	return countriesOwned->size();
+	return static_cast<int>(countriesOwned->size());
 }
 
 int Player::getCountriesOwnedSize() {
-	return countriesOwned->size();
+	return static_cast<int> (countriesOwned->size());
 }
 
 std::vector<Country*>* Player::getCountriesOwned() {

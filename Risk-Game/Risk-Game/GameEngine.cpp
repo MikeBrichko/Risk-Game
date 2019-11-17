@@ -77,7 +77,7 @@ std::vector<Player*>* GameEngine::selectNumberOfPlayers() {
 
 void GameEngine::determinePlayerOrder() {
 	int i = 0;
-	srand(time(0));
+	srand((unsigned int)time(NULL));
 	while (i <= 10) {
 		int randomPosition = rand() % players->size();
 		Player* player = players->at(randomPosition);

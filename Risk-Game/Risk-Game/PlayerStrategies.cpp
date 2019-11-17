@@ -10,7 +10,7 @@ void HumanPlayer::reinforce(Player* player) {
 	std::cout << "=====================Starting reinforcement phase=====================" << std::endl;
 	int armiesToAdd = 0;
 	std::cout << "Adding armies based on COUNTRIES that " << player->getPlayerName() << " owns." << std::endl;
-	armiesToAdd += floor(player->getCountriesOwned()->size() / 3);
+	armiesToAdd += static_cast<int>(floor(player->getCountriesOwned()->size() / 3));
 
 	std::cout << "Adding armies based on CONTINENTS that " << player->getPlayerName() << " owns." << std::endl;
 	std::vector<Country* > tempCountriesVector = std::vector<Country*>();
@@ -135,7 +135,7 @@ void HumanPlayer::attack(Player* player, std::vector<Player*>* players) {
 		std::cout << std::endl;
 
 		//Dice Roll Outcome
-		int minimumSize = (attackingDice.size() < defendingDice.size() ? attackingDice.size() : defendingDice.size());
+		int minimumSize = static_cast<int>(attackingDice.size() < defendingDice.size() ? attackingDice.size() : defendingDice.size());
 		for (int i = 0; i < minimumSize; i++) {
 			if (attackingDice[i] <= defendingDice[i]) {
 				attackingCountry->addArmy(-1);
@@ -235,7 +235,7 @@ void AggressiveComputer::reinforce(Player* player) {
 	std::cout << "=====================Starting reinforcement phase=====================" << std::endl;
 	int armiesToAdd = 0;
 	std::cout << "Adding armies based on COUNTRIES that " << player->getPlayerName() << " owns." << std::endl;
-	armiesToAdd += floor(player->getCountriesOwned()->size() / 3);
+	armiesToAdd += static_cast<int>(floor(player->getCountriesOwned()->size() / 3));
 
 	std::cout << "Adding armies based on CONTINENTS that " << player->getPlayerName() << " owns." << std::endl;
 	std::vector<Country* > tempCountriesVector = std::vector<Country*>();
@@ -289,7 +289,7 @@ void AggressiveComputer::attack(Player* player, std::vector<Player*>* players) {
 			attackingDice = player->getGameDice()->rollDice(strongestCountry->getArmies(), true);
 			defendingDice = player->getGameDice()->rollDice(neighbourCountry->getArmies(), false);
 
-			int minimumSize = (attackingDice.size() < defendingDice.size() ? attackingDice.size() : defendingDice.size());
+			int minimumSize = static_cast<int>(attackingDice.size() < defendingDice.size() ? attackingDice.size() : defendingDice.size());
 			for (int i = 0; i < minimumSize; i++) {
 				if (attackingDice[i] <= defendingDice[i]) {
 					strongestCountry->addArmy(-1);
@@ -363,7 +363,7 @@ void BenevolentComputer::reinforce(Player* player) {
 	std::cout << "=====================Starting reinforcement phase=====================" << std::endl;
 	int armiesToAdd = 0;
 	std::cout << "Adding armies based on COUNTRIES that " << player->getPlayerName() << " owns." << std::endl;
-	armiesToAdd += floor(player->getCountriesOwned()->size() / 3);
+	armiesToAdd += static_cast<int>(floor(player->getCountriesOwned()->size() / 3));
 
 	std::cout << "Adding armies based on CONTINENTS that " << player->getPlayerName() << " owns." << std::endl;
 	std::vector<Country* > tempCountriesVector = std::vector<Country*>();

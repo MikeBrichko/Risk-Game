@@ -10,7 +10,7 @@
 
 class Strategy;
 
-class Player {
+class Player{
 private:
 	int* playerID;
 	std::string* playerName;
