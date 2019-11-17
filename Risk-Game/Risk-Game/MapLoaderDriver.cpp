@@ -7,9 +7,9 @@
 	
 	//Case 1: Valid map
 	
-	MapLoader* mapLoader = new MapLoader("eupe.map");
-    mapLoader->validateMap();
-	Map* map = mapLoader->exportToMap();
+	DominationMapLoader* mapLoader = new DominationMapLoader("eupe.map");
+    mapLoader->dominationValidateMap();
+	Map* map = mapLoader->dominationExportToMap();
 	map->checkConnectedGraph();
 	map->checkConnectedSubgraph();
 	
@@ -17,8 +17,8 @@
 
 	//Case 2: Invalid map
 	
-	MapLoader* mapLoaderFail = new MapLoader("europe_fail.map");
-	mapLoaderFail->validateMap();
+	DominationMapLoader* mapLoaderFail = new DominationMapLoader("europe_fail.map");
+	mapLoaderFail->dominationValidateMap();
 
     return 0;
 }**/

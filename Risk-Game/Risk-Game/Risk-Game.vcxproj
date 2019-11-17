@@ -151,6 +151,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AdapterDriver.cpp" />
     <ClCompile Include="Cards.cpp" />
     <ClCompile Include="CardsDriver.cpp" />
     <ClCompile Include="Dice.cpp" />
@@ -182,6 +183,7 @@
     <ClInclude Include="PlayerStrategies.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Alberta.map" />
     <None Include="brasil.map" />
     <None Include="estonia.map" />
     <None Include="europe.map" />

@@ -40,7 +40,7 @@ GameEngine::GameEngine(bool automate) {
 	if (automate) {
 		player_observers = new std::vector<ConcreteObserver*>();
 
-		map = MapLoader("sample.map").exportToMap();
+		map = DominationMapLoader("sample.map").dominationExportToMap();
 
 		deck = new Deck(map->getNumOfCountries());
 		dice = new Dice();
@@ -95,8 +95,8 @@ Map* GameEngine::selectMap() {
 		std::string selectedMap;
 		std::cin >> selectedMap;
 
-		if (MapLoader(selectedMap).validateMap()) {
-			return MapLoader(selectedMap).exportToMap();
+		if (DominationMapLoader(selectedMap).dominationValidateMap()) {
+			return DominationMapLoader(selectedMap).dominationExportToMap();
 		}
 	}
 }

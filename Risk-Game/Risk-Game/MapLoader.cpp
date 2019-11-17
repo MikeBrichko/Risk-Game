@@ -5,23 +5,27 @@
 #include <sstream>
 #include <vector>
 
-MapLoader::MapLoader(std::string fileName) {
-	this->fileName = new std::string(fileName);
+DominationMapLoader::DominationMapLoader() {
+	this->dominationFileName = NULL;
 }
 
-MapLoader::~MapLoader() {
-	delete fileName;
+DominationMapLoader::DominationMapLoader(std::string dominationFileName) {
+	this->dominationFileName = new std::string(dominationFileName);
 }
 
-bool MapLoader::validateMap() {
+DominationMapLoader::~DominationMapLoader() {
+	delete dominationFileName;
+}
+
+bool DominationMapLoader::dominationValidateMap() {
 	std::string line = "";
-	std::cout << "Validating file with name -> " << *fileName << std::endl;
+	std::cout << "Validating file with name -> " << *dominationFileName << std::endl;
 	int* componentCounter = new int();
 	std::ifstream inFile;
-	inFile.open(*fileName);
+	inFile.open(*dominationFileName);
 
 	if (!inFile) {
-		std::cerr << "Unable to open file " + *fileName;
+		std::cerr << "Unable to open file " + *dominationFileName;
 		return false;
 	}
 
@@ -82,7 +86,7 @@ bool MapLoader::validateMap() {
 	}
 }
 
-bool MapLoader::validateContinents(std::string lineToValidate) {
+bool DominationMapLoader::validateContinents(std::string lineToValidate) {
 	std::string word;
 	std::vector<std::string> words = std::vector<std::string>();
 	std::stringstream ss(lineToValidate); 
@@ -100,7 +104,7 @@ bool MapLoader::validateContinents(std::string lineToValidate) {
 	return true;
 }
 
-bool MapLoader::validateCountries(std::string lineToValidate) {
+bool DominationMapLoader::validateCountries(std::string lineToValidate) {
 	std::string word;
 	std::vector<std::string> words = std::vector<std::string>();
 	std::stringstream ss(lineToValidate);
@@ -118,7 +122,7 @@ bool MapLoader::validateCountries(std::string lineToValidate) {
 	return true;
 }
 
-bool MapLoader::validateBorders(std::string lineToValidate) {
+bool DominationMapLoader::validateBorders(std::string lineToValidate) {
 	std::string word;
 	std::vector<std::string> words = std::vector<std::string>();
 	std::stringstream ss(lineToValidate);
@@ -136,14 +140,14 @@ bool MapLoader::validateBorders(std::string lineToValidate) {
 	return true;
 }
 
-Map* MapLoader::exportToMap(){
+Map* DominationMapLoader::dominationExportToMap(){
 	std::cout << "Creating game map" << std::endl;
 
 	std::ifstream inFile;
-	inFile.open(*fileName);
+	inFile.open(*dominationFileName);
 
 	if (!inFile) {
-		std::cerr << "Unable to open file " + *fileName;
+		std::cerr << "Unable to open file " + *dominationFileName;
 		exit(1);
 	}
     
@@ -205,7 +209,7 @@ Map* MapLoader::exportToMap(){
 	return map;
 }
 
-Continent* MapLoader::createContinent(std::string line, int continentID) {
+Continent* DominationMapLoader::createContinent(std::string line, int continentID) {
 	std::string word;
 	std::vector<std::string> words = std::vector<std::string>();
 	std::stringstream ss(line);
@@ -218,7 +222,7 @@ Continent* MapLoader::createContinent(std::string line, int continentID) {
 	return new Continent(continentID, words.at(0), stoi(words.at(1)));
 }
 
-Country* MapLoader::createCountry(std::string line, std::vector<Continent*>* continents) {
+Country* DominationMapLoader::createCountry(std::string line, std::vector<Continent*>* continents) {
 	std::string word;
 	std::vector<std::string> words = std::vector<std::string>();
 	std::stringstream ss(line);
@@ -232,7 +236,7 @@ Country* MapLoader::createCountry(std::string line, std::vector<Continent*>* con
 	return createdCountry;
 }
 
-void MapLoader::createBorders(std::string line, std::vector<Country*>* countries) {
+void DominationMapLoader::createBorders(std::string line, std::vector<Country*>* countries) {
 	std::string word;
 	std::vector<std::string> words = std::vector<std::string>();
 	std::stringstream ss(line);
@@ -244,4 +248,290 @@ void MapLoader::createBorders(std::string line, std::vector<Country*>* countries
 
 	for (int i = 1; i < words.size(); i++)
 		countries->at(static_cast<unsigned __int64>(stoi(words.at(0))-1.0))->addNeighbour(countries->at(static_cast<unsigned __int64>(stoi(words.at(i))-1.0)));
+}
+
+ConquestMapLoader::ConquestMapLoader() {
+	this->conquestFileName = NULL;
+}
+
+ConquestMapLoader::ConquestMapLoader(std::string dominationFileName) {
+	this->conquestFileName = new std::string(dominationFileName);
+}
+
+ConquestMapLoader::~ConquestMapLoader() {
+	delete conquestFileName;
+}
+
+bool ConquestMapLoader::conquestValidateMap() {
+	std::string line = "";
+	std::cout << "Validating conquest map file with name -> " << *conquestFileName << std::endl;
+	std::ifstream inFile;
+	inFile.open(*conquestFileName);
+
+	//check if the file exists
+	if (!inFile) {
+		std::cerr << "Unable to open file " + *conquestFileName;
+		return false;
+	}
+
+	//go in the file and check if its a valid map file
+	while (getline(inFile, line)) {
+		if (line.find("[Continents]") == 0) {
+			std::cout << "[continents] found" << std::endl;
+			while (line.find("[Territories]") != 0) {
+				getline(inFile, line);
+				if (conquestValidateContinents(line)) {
+					getline(inFile, line);
+				}
+				else {
+					std::cout << "CONTINENT is not valid" << std::endl;
+					return false;
+				}
+			}
+		}
+		if (line.find("[Territories]") == 0) {
+			std::cout << "[territories] found" << std::endl;
+			while (!line.empty()) {
+				getline(inFile, line);
+				if (conquestValidateCountries(line) && conquestValidateBorders(line)) {
+					getline(inFile, line);
+				}
+				else {
+					std::cout << "invalid territories" << std::endl;
+					return false;
+				}
+			}
+		}
+	}
+
+	std::cout << " \n" << *conquestFileName << " is a valid map!" << std::endl;
+	inFile.close();
+	return true;
+}
+
+bool ConquestMapLoader::conquestValidateContinents(std::string lineToValidate) {
+	bool equalsFound = false;
+
+	if (lineToValidate.empty()) {
+		return true;
+	}
+	for (int i = 0; i < lineToValidate.size(); i++) {
+		if (lineToValidate[i] == '=') {
+			equalsFound = true;
+			break;
+		}
+	}
+	//if the last character is a digit, it is good
+	if (isdigit(lineToValidate.at(lineToValidate.size() - 1)) && equalsFound) {
+		return true;
+	}
+	return false;
+}
+
+bool ConquestMapLoader::checkIfNumber(std::string num) {
+	for (int i = 0; i < num.size(); i++) {
+		if (!isdigit(num.at(i))) {
+			std::cout << num << "is not a number" << std::endl;
+			return false;
+		}
+	}
+	return true;
+}
+
+bool ConquestMapLoader::conquestValidateCountries(std::string lineToValidate) {
+	std::vector<std::string> words = std::vector<std::string>();
+	std::stringstream ss(lineToValidate);
+	std::string word;
+
+	while (ss.good()) {
+		getline(ss, word, ',');
+		words.push_back(word);
+	}
+
+	for (int i = 1; i < 3; i++) {
+		if (!checkIfNumber(words[1])) {
+			return false;
+		}
+	}
+
+	//std::cout << words[0] << " is a country!" << std::endl;
+	return true;
+}
+
+bool ConquestMapLoader::conquestValidateBorders(std::string lineToValidate) {
+	std::vector<std::string> words = std::vector<std::string>();
+	std::stringstream ss(lineToValidate);
+	std::string word;
+
+	while (ss.good()) {
+		getline(ss, word, ',');
+		words.push_back(word);
+	}
+
+	if (words.size() < 5) {
+		return false;
+	}
+	//std::cout << words[0] << " has valid borders!" << std::endl;
+	return true;
+
+}
+
+Map* ConquestMapLoader::conquestExportToMap() {
+	std::string line = "";
+	int continentID = 1;
+	int countryID = 1;
+	std::vector<Continent*>* continents = new std::vector<Continent*>();
+	std::vector<Country*>* countries = new std::vector<Country*>();
+	std::ifstream inFile;
+
+	inFile.open(*conquestFileName);
+
+	std::cout << "map creation start\n" << std::endl;
+
+	//first loop to store /  create the continents and the countries
+	while (getline(inFile, line)) {
+		if (line.find("[Continents]") == 0) {
+			getline(inFile, line);
+			std::cout << "===============Creating Continent Objects===================" << std::endl;
+			while (line.find("[Territories]") != 0) {
+				if (line == "")
+					break;
+				continents->push_back(conquestCreateContinent(line, continentID));
+				continentID++;
+				getline(inFile, line);
+			}std::cout << "continent Objects Created" << std::endl;
+		}
+
+		if (line.find("[Territories]") == 0) {
+			getline(inFile, line);
+			std::cout << "=================Creating country=====================" << std::endl;
+			while (!line.empty()) {
+				countries->push_back(conquestCreateCountry(countryID, line, continents));
+				countryID++;
+				getline(inFile, line);
+			}
+			std::cout << "country Objects Created" << std::endl;
+		}
+	}
+
+	inFile.close();
+
+	//another loop to create borders from the countries created in the previous loop
+	inFile.open(*conquestFileName);
+	while (getline(inFile, line)) {
+		if (line.find("[Territories]") == 0) {
+			getline(inFile, line);
+			std::cout << "====================creating borders===================" << std::endl;
+			while (!line.empty()) {
+				conquestCreateBorders(line, countries);
+				getline(inFile, line);
+			}
+		}
+	}
+	std::cout << "border Objects Created" << std::endl;
+	inFile.close();
+
+
+	Map* map = new Map(static_cast<int>(countries->size()));
+
+	for (auto continent : *continents) {
+		map->addContinent(continent);
+	}
+
+	return map;
+}
+
+Continent* ConquestMapLoader::conquestCreateContinent(std::string line, int continentID) {
+	std::string continentName = line.substr(0, line.find("="));
+	int armyValue = line[line.size() - 1];
+
+	//std::cout << continentName <<" " << armyValue<< std::endl;
+	return new Continent(continentID, continentName, armyValue);
+}
+
+Country* ConquestMapLoader::conquestCreateCountry(int countryID, std::string line, std::vector<Continent*>* continents) {
+	std::vector<std::string> words = std::vector<std::string>();
+	std::stringstream ss(line);
+	std::string word;
+	int continentID = 0;
+	std::string continentName;
+	//random num in place of armyvalue????
+	int num = rand() % 15;
+	//======================
+
+	while (ss.good()) {
+		getline(ss, word, ',');
+		words.push_back(word);
+	}
+	ss.clear();
+
+	for (auto continent : *continents) {
+		if (continent->getName() == words[3]) {
+			continentID = continent->getID();
+		}
+	}
+
+	//BIG MISTAKE HERE: ARMY VALUE FOR COUNTRY NOT DEFINED IN THE CONQUEST MAP?????
+	//std::cout << "country "<< countryID <<": "<< words[0] << " " << continentID << " " << num << std::endl;
+	Country* createdCountry = new Country(countryID, words[0], continentID, num);
+	continents->at(static_cast<__int64>(continentID - 1.0))->addCountry(createdCountry);
+	return createdCountry;
+}
+
+void ConquestMapLoader::conquestCreateBorders(std::string line, std::vector<Country*>* countries) {
+	std::vector<std::string> words = std::vector<std::string>();
+	std::stringstream ss(line);
+	std::string word;
+	Country* currentCountry = NULL;
+
+	while (ss.good()) {
+		getline(ss, word, ',');
+		words.push_back(word);
+	}
+	ss.clear();
+
+	//assign the country for which you want to add neighbours
+
+	for (auto country : *countries) {
+		if (country->getName() == words[0]) {
+			currentCountry = country;
+			//std::cout << "current Country " << currentCountry->getName()<<" has neighbours: "  << std::endl;
+		}
+	}
+
+	//neighbours being added
+	for (int i = 4; i < words.size(); i++) {
+		for (auto country : *countries) {
+			if (country->getName() == words[i]) {
+				currentCountry->addNeighbour(country);
+				//std::cout << country->getName() << std::endl;
+			}
+		}
+	}
+}
+
+TwoWayMapAdapter::TwoWayMapAdapter(DominationMapLoader* newMapLoader) {
+	dominationMapLoader = newMapLoader;
+	conquestMapLoader = NULL;
+}
+
+TwoWayMapAdapter::TwoWayMapAdapter(ConquestMapLoader* newConquestMapLoader) {
+	dominationMapLoader = NULL;
+	conquestMapLoader = newConquestMapLoader;
+}
+
+bool TwoWayMapAdapter::conquestValidateMap() {
+	return dominationMapLoader->dominationValidateMap();
+}
+
+Map* TwoWayMapAdapter::conquestExportToMap() {
+	return dominationMapLoader->dominationExportToMap();
+}
+
+bool TwoWayMapAdapter::dominationValidateMap() {
+	return conquestMapLoader->conquestValidateMap();
+}
+
+Map* TwoWayMapAdapter::dominationExportToMap() {
+	return conquestMapLoader->conquestExportToMap();
 }
