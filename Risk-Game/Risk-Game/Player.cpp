@@ -12,6 +12,10 @@ Player::Player(int playerID, std::string playerName) {
 	gameDeck = NULL;
 	gameMap = NULL;
 	gameDice = NULL;
+	currentPhase = new Phase();
+	currentPlayerName = new std::string();
+	currentDefeatedCountry = new std::string();
+	currentStats = new std::vector<std::string*>();
 }
 
 Player::Player(int playerID, std::string playerName, Deck* deck) {
@@ -23,6 +27,10 @@ Player::Player(int playerID, std::string playerName, Deck* deck) {
 	gameDeck = deck;
 	gameMap = NULL;
 	gameDice = NULL;
+	currentPhase = new Phase();
+	currentPlayerName = new std::string();
+	currentDefeatedCountry = new std::string();
+	currentStats = new std::vector<std::string*>();
 }
 
 Player::Player(int playerID, std::string playerName, Deck* deck, Map* map, Dice* dice) {
@@ -34,6 +42,10 @@ Player::Player(int playerID, std::string playerName, Deck* deck, Map* map, Dice*
 	gameDeck = deck;
 	gameMap = map;
 	gameDice = dice;
+	currentPhase = new Phase();
+	currentPlayerName = new std::string();
+	currentDefeatedCountry = new std::string();
+	currentStats = new std::vector<std::string*>();
 }
 
 Player::Player(int playerID, std::string playerName, Deck* deck, Map* map, Dice* dice, Strategy* newStrategy) {
@@ -45,6 +57,10 @@ Player::Player(int playerID, std::string playerName, Deck* deck, Map* map, Dice*
 	gameDeck = deck;
 	gameMap = map;
 	gameDice = dice;
+	currentPhase = new Phase();
+	currentPlayerName = new std::string();
+	currentDefeatedCountry = new std::string();
+	currentStats = new std::vector<std::string*>();
 }
 
 Player::~Player() {
@@ -55,6 +71,12 @@ Player::~Player() {
 	gameDeck = NULL;
 	gameMap = NULL;
 	gameDice = NULL;
+	delete currentPhase;
+	delete currentPlayerName;
+	delete currentDefeatedCountry;
+	for (auto stats : *currentStats)
+		delete stats;
+	delete currentStats;
 }
 
 int Player::armiesGivenToReinforce() {
@@ -126,10 +148,43 @@ void Player::conquerEnemyCountry(Country* ownCountry, Country* enemyCountry, std
 	for (auto player : *players) {
 		if (enemyCountry->getPlayerID() == player->getPlayerID())
 			player->removeCountryOwned(enemyCountry->getID());
+		*currentPlayerName = player->getPlayerName();
 	}
 
 	//Step 2. Add Country to countriesOwned
 	addCountryOwned(enemyCountry);
+	*currentPhase = LOSE_COUNTRY;
+
+	for (auto player : *players) {
+		double percentNumber = (double(player->getAmountOfCountriesOwned()) / double(gameMap->getNumOfCountries()) * 100);
+		std::string percent = std::to_string(percentNumber);
+		std::string truncatedPercent = percent.substr(0, 5);
+		currentStats->push_back(new std::string(player->getPlayerName() + " controls " + truncatedPercent + "% of world map\n"));
+
+	}
+
+	*currentDefeatedCountry = enemyCountry->getName();
+	notify();
+	for (auto text : *currentStats) {
+		delete text;
+		text = NULL;
+	}
+	delete currentStats;
+	currentStats = new std::vector<std::string*>();
+	std::vector<Player*>::iterator i = players->begin();
+	while (i != players->end()) {
+		if ((*i)->getAmountOfCountriesOwned() == 0) {
+			*currentPhase = DEFEATED;
+			notify();
+
+			players->erase(i--);
+			delete (*i);
+			break;
+		}
+		else {
+			++i;
+		}
+	}
 
 	//Step 3. Mobilize armies to newly aquired country
 	int armiesToMobilize = 0;
@@ -279,17 +334,48 @@ void Player::setPlayerStrategy(Strategy* newStrategy) {
 }
 
 void Player::reinforce() {
+	*currentPhase = REINFORCE;
+	notify();
 	printCountriesOwned();
 	playerStrategy->reinforce(this, armiesGivenToReinforce());
 	printCountriesOwned();
 }
 
 void Player::attack(std::vector<Player*>* players) {
+	*currentPhase = ATTACK;
+	notify();
 	playerStrategy->attack(this, players);
 }
 
 void Player::fortify() {
-	printCountriesOwned();
+	*currentPhase = FORTIFY;
+	notify();
+	printNeighbours(false);
 	playerStrategy->fortify(this);
-	printCountriesOwned();
+	printNeighbours(false);
+}
+
+Phase Player::getPhase() {
+	return *currentPhase;
+}
+
+std::string Player::getCurrentPlayerName() {
+	if (*currentPhase == DEFEATED || *currentPhase == LOSE_COUNTRY) {
+		return *currentPlayerName;
+	}
+	else {
+		return *playerName;
+	}
+}
+
+std::string Player::getDefeatedCountryName() {
+	return *currentDefeatedCountry;
+}
+
+std::vector<std::string*> Player::getStats() {
+	return *currentStats;
+}
+
+void Player::setCurrentPhase(Phase newPhase) {
+	*currentPhase = newPhase;
 }

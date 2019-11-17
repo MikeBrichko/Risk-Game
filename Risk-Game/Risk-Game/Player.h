@@ -7,10 +7,11 @@
 #include "Dice.h"
 #include "MapLoader.h"
 #include "PlayerStrategies.h"
+#include "GameObservers.h"
 
 class Strategy;
 
-class Player{
+class Player : public ConcreteSubject{
 private:
 	int* playerID;
 	std::string* playerName;
@@ -20,6 +21,11 @@ private:
 	Map* gameMap;
 	Dice* gameDice;
 	Strategy* playerStrategy;
+
+	Phase* currentPhase;
+	std::string* currentPlayerName;
+	std::string* currentDefeatedCountry;
+	std::vector<std::string*>* currentStats;
 
 	void removeCountryOwned(int countryID);
 	int armiesGivenToReinforce();
@@ -59,4 +65,10 @@ public:
 	Map* getGameMap();
 	Dice* getGameDice();
 	void setPlayerStrategy(Strategy* newStrategy);
+	void setCurrentPhase(Phase newPhase);
+
+	Phase getPhase() override;
+	std::string getCurrentPlayerName() override;
+	std::vector<std::string*> getStats() override;
+	std::string getDefeatedCountryName() override;
 };

@@ -78,6 +78,12 @@
     <ClCompile Include="PlayerStrategies.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="GameObserversDriver.cpp">
+      <Filter>Source Files\AssignmentThreeDrivers</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObservers.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Map.h">
@@ -101,6 +107,9 @@
     <ClInclude Include="PlayerStrategies.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="GameObservers.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="europe.map">
@@ -119,6 +128,9 @@
       <Filter>Source Files\Maps</Filter>
     </None>
     <None Include="solar.map">
+      <Filter>Source Files\Maps</Filter>
+    </None>
+    <None Include="sample.map">
       <Filter>Source Files\Maps</Filter>
     </None>
   </ItemGroup>

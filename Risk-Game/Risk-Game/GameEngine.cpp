@@ -7,6 +7,68 @@
 #include <list>
 #include <time.h>
 
+void callback(ConcreteSubject* player) {
+	switch (player->getPhase()) {
+	case Phase::ATTACK:
+		std::cout << "********** " << player->getCurrentPlayerName() << " : ATTACK PHASE  **********(From Observer)" << std::endl;
+		break;
+	case Phase::REINFORCE:
+		std::cout << "********** " << player->getCurrentPlayerName() << " : REINFORCE PHASE  **********(From Observer)" << std::endl;
+		break;
+	case Phase::FORTIFY:
+		std::cout << "********** " << player->getCurrentPlayerName() << " : FORTIFY PHASE  **********(From Observer)" << std::endl;
+		break;
+	case Phase::GAME_OVER:
+		std::cout << "********** " << player->getCurrentPlayerName() << " WINS! GAME OVER! **********(From Observer)" << std::endl;
+		break;
+	case Phase::LOSE_COUNTRY:
+		std::cout << "********** " << player->getCurrentPlayerName() << " LOSES " << player->getDefeatedCountryName() << " country **********(From Observer)" << std::endl;
+		std::cout << "\n********** PLAYERS WORLD DOMINATION VIEW **********" << std::endl;
+		for (auto text : player->getStats()) {
+			std::cout << *text << std::endl;
+		}
+		break;
+	case Phase::DEFEATED:
+		std::cout << "********** " << player->getCurrentPlayerName() << " LOSES and cannot play anymore,  **********(From Observer)" << std::endl;
+		break;
+	default:
+		std::cout << "********** " << player->getCurrentPlayerName() << " : UNDEFINED PHASE  **********(From Observer)" << std::endl;
+	}
+}
+
+GameEngine::GameEngine(bool automate) {
+	if (automate) {
+		player_observers = new std::vector<ConcreteObserver*>();
+
+		map = MapLoader("sample.map").exportToMap();
+
+		deck = new Deck(map->getNumOfCountries());
+		dice = new Dice();
+		players = new std::vector<Player*>();
+		Player* p1 = new Player(1, "Player 1 - Ted", deck, map, dice);
+		Player* p2 = new Player(2, "Player 2 - Maria", deck, map, dice);
+		players->push_back(p1);
+		players->push_back(p2);
+		ConcreteObserver* observer1 = new ConcreteObserver(p1, &callback);
+		ConcreteObserver* observer2 = new ConcreteObserver(p2, &callback);
+
+		player_observers->emplace_back(observer1);
+		player_observers->emplace_back(observer2);
+
+		determinePlayerOrder();
+		assignCountriesToPlayers();
+		validateAllCountriesHavePlayers();
+	}
+	else {
+		player_observers = new std::vector<ConcreteObserver*>();
+		map = selectMap();
+		deck = new Deck(map->getNumOfCountries());
+		dice = new Dice();
+		players = selectNumberOfPlayers();
+
+	}
+}
+
 GameEngine::GameEngine() {
 	map = selectMap();
 	deck = new Deck(map->getNumOfCountries());

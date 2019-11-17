@@ -53,6 +53,7 @@ void HumanPlayer::attack(Player* player, std::vector<Player*>* players) {
 	Country* defendingCountry = NULL;
 	std::vector<int> defendingDice;
 
+	bool isGameDone = false;
 	while (player->playerAttackDecision())
 	{
 		//Step 1: Select the attacking country
@@ -117,7 +118,18 @@ void HumanPlayer::attack(Player* player, std::vector<Player*>* players) {
 				}
 			}
 		}
-		player->printNeighbours(true);
+		if (player->getAmountOfCountriesOwned() == player->getGameMap()->getNumOfCountries()) {	
+			isGameDone = true;
+			break;
+		}
+		else {
+			player->printNeighbours(true);
+		}
+	}
+
+	if (isGameDone) {
+		player->setCurrentPhase(GAME_OVER);
+		player->notify();
 	}
 }
 
@@ -201,6 +213,7 @@ void AggressiveComputer::attack(Player* player, std::vector<Player*>* players) {
 	//Step 2. Select the defending country
 	std::vector<int> attackingDice;
 	std::vector<int> defendingDice;
+	bool isGameDone = false;
 	while (true) {
 		if (strongestCountry->getArmies() == 1)
 			break;
@@ -228,6 +241,18 @@ void AggressiveComputer::attack(Player* player, std::vector<Player*>* players) {
 				}
 			}
 		}
+		if (player->getAmountOfCountriesOwned() == player->getGameMap()->getNumOfCountries()) {
+			isGameDone = true;
+			break;
+		}
+		else {
+			player->printNeighbours(true);
+		}
+	}
+
+	if (isGameDone) {
+		player->setCurrentPhase(GAME_OVER);
+		player->notify();
 	}
 }
 

@@ -157,6 +157,8 @@
     <ClCompile Include="DiceDriver.cpp" />
     <ClCompile Include="GameEngine.cpp" />
     <ClCompile Include="GameEngineDriver.cpp" />
+    <ClCompile Include="GameObservers.cpp" />
+    <ClCompile Include="GameObserversDriver.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="MapDriver.cpp" />
     <ClCompile Include="MapLoader.cpp" />
@@ -173,6 +175,7 @@
     <ClInclude Include="Cards.h" />
     <ClInclude Include="Dice.h" />
     <ClInclude Include="GameEngine.h" />
+    <ClInclude Include="GameObservers.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="MapLoader.h" />
     <ClInclude Include="Player.h" />
@@ -184,6 +187,7 @@
     <None Include="europe.map" />
     <None Include="europe_fail.map" />
     <None Include="germany.map" />
+    <None Include="sample.map" />
     <None Include="solar.map" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
