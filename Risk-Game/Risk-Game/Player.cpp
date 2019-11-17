@@ -71,7 +71,7 @@ void Player::printCountriesOwned()
 	}
 }
 
-void Player::printCardsInHand(){
+void Player::printCardsInHand() {
 	std::cout << "These are the cards " << *playerName << " owns: ";
 	hand->printCardsInHand();
 }
@@ -121,14 +121,14 @@ void Player::conquerEnemyCountry(Country* ownCountry, Country* enemyCountry, std
 bool Player::playerAttackDecision()
 {
 	bool ableToAttack = false;
-	for (auto country : *countriesOwned){
-		if (country->getArmies() >= 2){
+	for (auto country : *countriesOwned) {
+		if (country->getArmies() >= 2) {
 			ableToAttack = true;
 			break;
 		}
 	}
 
-	if (ableToAttack == false){
+	if (ableToAttack == false) {
 		std::cout << "You do not have sufficient resources to perform an attack." << std::endl;
 		return false;
 	}
@@ -138,15 +138,16 @@ bool Player::playerAttackDecision()
 	while (ableToAttack) {
 		std::cout << "Would you like to attack a country? (yes/no)" << std::endl;
 		std::cin >> decision;
-		if ((decision == "yes") || (decision == "y")){
+		if ((decision == "yes") || (decision == "y")) {
 			attack = true;
 			break;
 		}
-		else if ((decision == "no") || (decision == "n")){
+		else if ((decision == "no") || (decision == "n")) {
 			attack = false;
 			std::cout << "You chose not to attack" << std::endl;
 			break;
-		}else{
+		}
+		else {
 			std::cout << "Please enter valid option" << std::endl;
 		}
 	}
