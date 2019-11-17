@@ -6,35 +6,7 @@ Strategy::Strategy() {}
 
 HumanPlayer::HumanPlayer(){}
 
-void HumanPlayer::reinforce(Player* player) {
-	std::cout << "=====================Starting reinforcement phase=====================" << std::endl;
-	int armiesToAdd = 0;
-	std::cout << "Adding armies based on COUNTRIES that " << player->getPlayerName() << " owns." << std::endl;
-	armiesToAdd += static_cast<int>(floor(player->getCountriesOwned()->size() / 3));
-
-	std::cout << "Adding armies based on CONTINENTS that " << player->getPlayerName() << " owns." << std::endl;
-	std::vector<Country* > tempCountriesVector = std::vector<Country*>();
-	int comparedID;
-	for (auto continent : *player->getGameMap()->getContinents()) {
-		for (auto country : *continent->getCountries()) {
-			comparedID = country->getID();
-			for (auto countryOwned : *player->getCountriesOwned()) {
-				if (comparedID == countryOwned->getID()) {
-					tempCountriesVector.push_back(countryOwned);
-				}
-			}
-		}
-		if (tempCountriesVector.size() == player->getGameMap()->getContinents()->size()) {
-			armiesToAdd += continent->getArmyValue();
-		}
-		tempCountriesVector.clear();
-	}
-
-	std::cout << "Adding armies based on CARDS that " << player->getPlayerName() << " owns." << std::endl;
-	armiesToAdd += player->addCardToHand();
-
-	player->printCountriesOwned();
-
+void HumanPlayer::reinforce(Player* player, int armiesToAdd) {
 	std::string countryOwnedName;
 	int armyInput;
 	int armiesLeftToAdd = armiesToAdd;
@@ -69,15 +41,10 @@ void HumanPlayer::reinforce(Player* player) {
 		armiesLeftToAdd -= armyInput;
 		i += (armyInput - 1);
 	}
-	player->printCountriesOwned();
-	std::cout << "=====================Finished reinforcement phase=========================" << std::endl;
 }
 
 void HumanPlayer::attack(Player* player, std::vector<Player*>* players) {
-	std::cout << "=====================Starting Attack Phase=====================" << std::endl;
-	std::cout << "For " << player->getPlayerName() << std::endl;
 	player->printNeighbours(true);
-
 	std::string attackingCountryName;
 	Country* attackingCountry = NULL;
 	std::vector<int> attackingDice;
@@ -150,17 +117,11 @@ void HumanPlayer::attack(Player* player, std::vector<Player*>* players) {
 				}
 			}
 		}
-
 		player->printNeighbours(true);
 	}
-	std::cout << "=====================Finished Attack Phase=====================" << std::endl;
 }
 
 void HumanPlayer::fortify(Player* player) {
-	std::cout << "=====================Starting fortification phase=====================" << std::endl;
-	std::cout << "Moving armies to different countries" << std::endl;
-	player->printNeighbours(false);
-
 	//Step 1. Select Country having armies removed
 	Country* transferingCountry = NULL;
 	std::string transferingCountryName;
@@ -212,9 +173,6 @@ void HumanPlayer::fortify(Player* player) {
 		receivingCountry->addArmy(armiesToMobilize);
 		break;
 	}
-
-	player->printNeighbours(false);
-	std::cout << "=====================Finished fortification phase=====================" << std::endl;
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------------------
@@ -231,47 +189,12 @@ Country* AggressiveComputer::getStrongestCountry(std::vector<Country*>* countrie
 	return strongestCountry;
 }
 
-void AggressiveComputer::reinforce(Player* player) {
-	std::cout << "=====================Starting reinforcement phase=====================" << std::endl;
-	int armiesToAdd = 0;
-	std::cout << "Adding armies based on COUNTRIES that " << player->getPlayerName() << " owns." << std::endl;
-	armiesToAdd += static_cast<int>(floor(player->getCountriesOwned()->size() / 3));
-
-	std::cout << "Adding armies based on CONTINENTS that " << player->getPlayerName() << " owns." << std::endl;
-	std::vector<Country* > tempCountriesVector = std::vector<Country*>();
-	int comparedID;
-	for (auto continent : *player->getGameMap()->getContinents()) {
-		for (auto country : *continent->getCountries()) {
-			comparedID = country->getID();
-			for (auto countryOwned : *player->getCountriesOwned()) {
-				if (comparedID == countryOwned->getID()) {
-					tempCountriesVector.push_back(countryOwned);
-				}
-			}
-		}
-		if (tempCountriesVector.size() == player->getGameMap()->getContinents()->size()) {
-			armiesToAdd += continent->getArmyValue();
-		}
-		tempCountriesVector.clear();
-	}
-
-	std::cout << "Adding armies based on CARDS that " << player->getPlayerName() << " owns." << std::endl;
-	armiesToAdd += player->addCardToHand();
-
-	player->printCountriesOwned();
-
+void AggressiveComputer::reinforce(Player* player, int armiesToAdd) {
 	Country* strongestCountry = getStrongestCountry(player->getCountriesOwned());
 	strongestCountry->addArmy(armiesToAdd);
-
-	player->printCountriesOwned();
-	std::cout << "=====================Finished reinforcement phase=========================" << std::endl;
 }
 
 void AggressiveComputer::attack(Player* player, std::vector<Player*>* players) {
-	std::cout << "=====================Starting Attack Phase=====================" << std::endl;
-	std::cout << "For " << player->getPlayerName() << std::endl;
-	player->printNeighbours(true);
-
 	//Step 1. Select the attacking country
 	Country* strongestCountry = getStrongestCountry(player->getCountriesOwned());
 
@@ -306,17 +229,9 @@ void AggressiveComputer::attack(Player* player, std::vector<Player*>* players) {
 			}
 		}
 	}
-
-	player->printNeighbours(true);
-	
-	std::cout << "=====================Finished Attack Phase=====================" << std::endl;
 }
 
 void AggressiveComputer::fortify(Player* player) {
-	std::cout << "=====================Starting fortification phase=====================" << std::endl;
-	std::cout << "Moving armies to different countries" << std::endl;
-	player->printNeighbours(false);
-
 	if (player->armiesOnCountriesOwned() == player->getCountriesOwned()->size()) {
 
 		//Step 1. Select Country having armies removed and Friendly Neighbour
@@ -341,8 +256,6 @@ void AggressiveComputer::fortify(Player* player) {
 		transferingCountry->addArmy(-armiesToMobilize);
 		receivingCountry->addArmy(armiesToMobilize);
 	}
-	player->printNeighbours(false);
-	std::cout << "=====================Finished fortification phase=====================" << std::endl;
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------------------
@@ -359,52 +272,14 @@ Country* BenevolentComputer::getWeakestCountry(std::vector<Country*>* countries)
 	return weakestCountry;
 }
 
-void BenevolentComputer::reinforce(Player* player) {
-	std::cout << "=====================Starting reinforcement phase=====================" << std::endl;
-	int armiesToAdd = 0;
-	std::cout << "Adding armies based on COUNTRIES that " << player->getPlayerName() << " owns." << std::endl;
-	armiesToAdd += static_cast<int>(floor(player->getCountriesOwned()->size() / 3));
-
-	std::cout << "Adding armies based on CONTINENTS that " << player->getPlayerName() << " owns." << std::endl;
-	std::vector<Country* > tempCountriesVector = std::vector<Country*>();
-	int comparedID;
-	for (auto continent : *player->getGameMap()->getContinents()) {
-		for (auto country : *continent->getCountries()) {
-			comparedID = country->getID();
-			for (auto countryOwned : *player->getCountriesOwned()) {
-				if (comparedID == countryOwned->getID()) {
-					tempCountriesVector.push_back(countryOwned);
-				}
-			}
-		}
-		if (tempCountriesVector.size() == player->getGameMap()->getContinents()->size()) {
-			armiesToAdd += continent->getArmyValue();
-		}
-		tempCountriesVector.clear();
-	}
-
-	std::cout << "Adding armies based on CARDS that " << player->getPlayerName() << " owns." << std::endl;
-	armiesToAdd += player->addCardToHand();
-
-	player->printCountriesOwned();
-
-	//Add armies
+void BenevolentComputer::reinforce(Player* player, int armiesToAdd) {
 	for (int i = 0; i < armiesToAdd; i++) {
 		getWeakestCountry(player->getCountriesOwned())->addArmy(1);
 	}
-
-	player->printCountriesOwned();
-
-	std::cout << "=====================Finished reinforcement phase=========================" << std::endl;
 }
 
 void BenevolentComputer::fortify(Player* player) {
-	std::cout << "=====================Starting fortification phase=====================" << std::endl;
-	std::cout << "Moving armies to different countries" << std::endl;
-	player->printNeighbours(false);
-
 	if (player->armiesOnCountriesOwned() == player->getCountriesOwned()->size()) {
-
 		//Step 1. Select Country having armies removed and Friendly Neighbour
 		Country* transferingCountry = NULL;
 		Country* receivingCountry = NULL;
@@ -428,7 +303,4 @@ void BenevolentComputer::fortify(Player* player) {
 		transferingCountry->addArmy(-armiesToMobilize);
 		receivingCountry->addArmy(armiesToMobilize);
 	}
-
-	player->printNeighbours(false);
-	std::cout << "=====================Finished fortification phase=====================" << std::endl;
 }

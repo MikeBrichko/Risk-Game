@@ -22,6 +22,7 @@ private:
 	Strategy* playerStrategy;
 
 	void removeCountryOwned(int countryID);
+	int armiesGivenToReinforce();
 
 public:
 	Player(int playerID, std::string playerName);

@@ -195,7 +195,7 @@ void GameEngine::startupPhase() {
 	validateAllCountriesHavePlayers();
 
 	int givenArmies = 14;
-	switch (players->size()) {
+	/*switch (players->size()) {
 		case 2:
 			givenArmies = 40;
 			break;
@@ -213,7 +213,7 @@ void GameEngine::startupPhase() {
 			break;
 		default:
 			break;
-	}
+	}*/
 
 	std::cout << "Armies on the field before players add armies:" << std::endl;
 	std::vector<int> armiesPerPlayer = totalArmyCountForEachPlayer();

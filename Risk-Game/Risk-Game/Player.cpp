@@ -4,6 +4,7 @@
 #include <algorithm>
 
 Player::Player(int playerID, std::string playerName) {
+	playerStrategy = new HumanPlayer();
 	this->playerID = new int(playerID);
 	this->playerName = new std::string(playerName);
 	countriesOwned = new std::vector<Country*>();
@@ -14,6 +15,7 @@ Player::Player(int playerID, std::string playerName) {
 }
 
 Player::Player(int playerID, std::string playerName, Deck* deck) {
+	playerStrategy = new HumanPlayer();
 	this->playerID = new int(playerID);
 	this->playerName = new std::string(playerName);
 	countriesOwned = new std::vector<Country*>();
@@ -53,6 +55,34 @@ Player::~Player() {
 	gameDeck = NULL;
 	gameMap = NULL;
 	gameDice = NULL;
+}
+
+int Player::armiesGivenToReinforce() {
+	int armiesToAdd = 0;
+	//Adding armies based on COUNTRIES that the player owns
+	armiesToAdd += static_cast<int>(floor(getCountriesOwned()->size() / 3));
+
+	//Adding armies based on CONTINENTS that the player owns
+	std::vector<Country* > tempCountriesVector = std::vector<Country*>();
+	int comparedID;
+	for (auto continent : *gameMap->getContinents()) {
+		for (auto country : *continent->getCountries()) {
+			comparedID = country->getID();
+			for (auto countryOwned : *getCountriesOwned()) {
+				if (comparedID == countryOwned->getID()) {
+					tempCountriesVector.push_back(countryOwned);
+				}
+			}
+		}
+		if (tempCountriesVector.size() == gameMap->getContinents()->size()) {
+			armiesToAdd += continent->getArmyValue();
+		}
+		tempCountriesVector.clear();
+	}
+
+	//Adding armies based on the cards that player owns
+	armiesToAdd += this->addCardToHand();
+	return armiesToAdd;
 }
 
 int Player::armiesOnCountriesOwned() {
@@ -249,7 +279,9 @@ void Player::setPlayerStrategy(Strategy* newStrategy) {
 }
 
 void Player::reinforce() {
-	playerStrategy->reinforce(this);
+	printCountriesOwned();
+	playerStrategy->reinforce(this, armiesGivenToReinforce());
+	printCountriesOwned();
 }
 
 void Player::attack(std::vector<Player*>* players) {
@@ -257,5 +289,7 @@ void Player::attack(std::vector<Player*>* players) {
 }
 
 void Player::fortify() {
+	printCountriesOwned();
 	playerStrategy->fortify(this);
+	printCountriesOwned();
 }
