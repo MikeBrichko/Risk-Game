@@ -334,25 +334,31 @@ void Player::setPlayerStrategy(Strategy* newStrategy) {
 }
 
 void Player::reinforce() {
+	std::cout << "=====================Starting reinforcement phase=====================" << std::endl;
 	*currentPhase = REINFORCE;
 	notify();
 	printCountriesOwned();
 	playerStrategy->reinforce(this, armiesGivenToReinforce());
 	printCountriesOwned();
+	std::cout << "=====================Ending reinforcement phase=====================" << std::endl;
 }
 
 void Player::attack(std::vector<Player*>* players) {
+	std::cout << "=====================Starting attack phase=====================" << std::endl;
 	*currentPhase = ATTACK;
 	notify();
 	playerStrategy->attack(this, players);
+	std::cout << "=====================Ending attack phase=====================" << std::endl;
 }
 
 void Player::fortify() {
+	std::cout << "=====================Starting fortification phase=====================" << std::endl;
 	*currentPhase = FORTIFY;
 	notify();
 	printNeighbours(false);
 	playerStrategy->fortify(this);
 	printNeighbours(false);
+	std::cout << "=====================Ending fortification phase=====================" << std::endl;
 }
 
 Phase Player::getPhase() {

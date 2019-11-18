@@ -14,11 +14,18 @@
 		delete rollCounter;
 	}
 
-	int Dice::diceToBeRolledByAttacker(int armiesOnCountry) {
+	int Dice::diceToBeRolledByAttacker(int armiesOnCountry, bool isComputer) {
 
 		if (armiesOnCountry == 1) {
 			std::cout << "Since number of armies is 1, the user can only roll one time" <<std::endl;
 			return armiesOnCountry;
+		}
+
+		if (isComputer) {
+			if (armiesOnCountry == 2)
+				return armiesOnCountry;
+			else
+				return 3;
 		}
 
 		int diceToBeRolled = 0;
@@ -46,11 +53,15 @@
 		return diceToBeRolled;
 	}
 
-	int Dice::diceToBeRolledByDefender(int armiesOnCountry) {
+	int Dice::diceToBeRolledByDefender(int armiesOnCountry, bool isComputer) {
 
 		if (armiesOnCountry == 1) {
 			std::cout << "Since number of armies is 1, the user can only roll one time" << std::endl;
 			return armiesOnCountry;
+		}
+
+		if (isComputer) {
+			return 2;
 		}
 
 		int diceToBeRolled = 0;
@@ -68,12 +79,12 @@
 		return diceToBeRolled;
 	}
 
-	std::vector<int> Dice::rollDice(int armiesOnCountry, bool isAttacking) {
+	std::vector<int> Dice::rollDice(int armiesOnCountry, bool isAttacking, bool isComputer) {
 		int diceToBeRolled = 0;
 		if(isAttacking)
-			diceToBeRolled = Dice::diceToBeRolledByAttacker(armiesOnCountry);
+			diceToBeRolled = Dice::diceToBeRolledByAttacker(armiesOnCountry, isComputer);
 		else
-			diceToBeRolled = Dice::diceToBeRolledByDefender(armiesOnCountry);
+			diceToBeRolled = Dice::diceToBeRolledByDefender(armiesOnCountry, isComputer);
 		std::vector<int> diceRolled = std::vector<int>();
 		
 		int diceFaceRolled = 0;

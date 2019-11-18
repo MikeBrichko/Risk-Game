@@ -88,7 +88,7 @@ void HumanPlayer::attack(Player* player, std::vector<Player*>* players) {
 		//Step 3. Roll Dices
 		//Attacker Dice Roll
 		std::cout << "Attacker rolls" << std::endl;
-		attackingDice = player->getGameDice()->rollDice(attackingCountry->getArmies(), true);
+		attackingDice = player->getGameDice()->rollDice(attackingCountry->getArmies(), true, false);
 		std::cout << "Attacking Player rolled: ";
 		for (auto diceFace : attackingDice)
 			std::cout << diceFace << " ";
@@ -96,7 +96,7 @@ void HumanPlayer::attack(Player* player, std::vector<Player*>* players) {
 
 		//Defender Dice Roll
 		std::cout << "Defender rolls " << std::endl;
-		defendingDice = player->getGameDice()->rollDice(defendingCountry->getArmies(), false);
+		defendingDice = player->getGameDice()->rollDice(defendingCountry->getArmies(), false, false);
 		std::cout << "Defending Player rolled: ";
 		for (auto diceFace : defendingDice)
 			std::cout << diceFace << " ";
@@ -195,8 +195,10 @@ Country* AggressiveComputer::getStrongestCountry(std::vector<Country*>* countrie
 	Country* strongestCountry = NULL;
 	int maxArmies = 0;
 	for (auto country : *countriesOwned) {
-		if (country->getArmies() > maxArmies)
+		if (country->getArmies() > maxArmies) {
 			strongestCountry = country;
+			maxArmies = country->getArmies();
+		}
 	}
 	return strongestCountry;
 }
@@ -219,11 +221,11 @@ void AggressiveComputer::attack(Player* player, std::vector<Player*>* players) {
 			break;
 
 		for (auto neighbourCountry : strongestCountry->getNeighbours()) {
-			if (neighbourCountry->getPlayerID() != player->getPlayerID())
+			if (neighbourCountry->getPlayerID() == player->getPlayerID())
 				continue;
 
-			attackingDice = player->getGameDice()->rollDice(strongestCountry->getArmies(), true);
-			defendingDice = player->getGameDice()->rollDice(neighbourCountry->getArmies(), false);
+			attackingDice = player->getGameDice()->rollDice(strongestCountry->getArmies(), true, true);
+			defendingDice = player->getGameDice()->rollDice(neighbourCountry->getArmies(), false, true);
 
 			int minimumSize = static_cast<int>(attackingDice.size() < defendingDice.size() ? attackingDice.size() : defendingDice.size());
 			for (int i = 0; i < minimumSize; i++) {
@@ -240,7 +242,11 @@ void AggressiveComputer::attack(Player* player, std::vector<Player*>* players) {
 					}
 				}
 			}
+
+			if (strongestCountry->getArmies() == 1)
+				break;
 		}
+
 		if (player->getAmountOfCountriesOwned() == player->getGameMap()->getNumOfCountries()) {
 			isGameDone = true;
 			break;
@@ -277,9 +283,11 @@ void AggressiveComputer::fortify(Player* player) {
 		}
 
 		//Step 2. Move armies to friendly Country
-		int armiesToMobilize = transferingCountry->getArmies() - 1;
-		transferingCountry->addArmy(-armiesToMobilize);
-		receivingCountry->addArmy(armiesToMobilize);
+		if (transferingCountry != NULL) {
+			int armiesToMobilize = transferingCountry->getArmies() - 1;
+			transferingCountry->addArmy(-armiesToMobilize);
+			receivingCountry->addArmy(armiesToMobilize);
+		}
 	}
 }
 
@@ -291,8 +299,13 @@ Country* BenevolentComputer::getWeakestCountry(std::vector<Country*>* countries)
 	Country* weakestCountry = NULL;
 	int minArmies = 1000;
 	for (auto country : *countries) {
-		if (country->getArmies() < minArmies)
+		if (country->getArmies() < minArmies) {
 			weakestCountry = country;
+			minArmies = country->getArmies();
+		}
+
+		if (minArmies == 1)
+			break;
 	}
 	return weakestCountry;
 }

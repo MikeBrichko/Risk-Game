@@ -1,22 +1,4 @@
 ﻿  AdapterDriver.cpp
-  Cards.cpp
-  CardsDriver.cpp
-  Dice.cpp
-  DiceDriver.cpp
-  GameEngine.cpp
-  GameEngineDriver.cpp
-  GameObservers.cpp
   GameObserversDriver.cpp
-  Map.cpp
-  MapDriver.cpp
-  MapLoader.cpp
-  MapLoaderDriver.cpp
-  Player.cpp
-  PlayerAttackDriver.cpp
-  PlayerDriver.cpp
-  PlayerFortifyDriver.cpp
-  PlayerReinforceDriver.cpp
-  PlayerStrategies.cpp
-  StrategyPatternDriver.cpp
   Generating Code...
   Risk-Game.vcxproj -> C:\Users\wmike\source\repos\Risk-Game\Risk-Game\x64\Debug\Risk-Game.exe

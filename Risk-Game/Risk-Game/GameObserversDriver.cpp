@@ -1,6 +1,6 @@
 #include "GameEngine.h"
 
-/*int main() {
+int main() {
 	GameEngine game = GameEngine(true);
 
 	//DisplayInfo one(1);
@@ -9,4 +9,4 @@
 
 	game.mainGameLoop();
 	return 0;
-}*/
+}

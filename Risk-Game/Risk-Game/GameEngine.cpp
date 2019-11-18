@@ -256,7 +256,7 @@ void GameEngine::startupPhase() {
 	assignCountriesToPlayers();
 	validateAllCountriesHavePlayers();
 
-	int givenArmies = 14;
+	int givenArmies = 9;
 	/*switch (players->size()) {
 		case 2:
 			givenArmies = 40;

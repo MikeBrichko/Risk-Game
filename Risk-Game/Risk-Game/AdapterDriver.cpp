@@ -2,7 +2,7 @@
 #include <iostream>
 #include <string>
 
-int main()
+/*int main()
 {
 	ConquestMapLoader* maploaderC = new ConquestMapLoader("Alberta.map");
 	maploaderC->conquestValidateMap();
@@ -31,4 +31,4 @@ int main()
 	validatedDominationMap->checkConnectedSubgraph();
 
 	return 0;
-}
+}*/
