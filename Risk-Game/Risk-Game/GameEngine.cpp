@@ -373,7 +373,7 @@ void GameEngine::askingUserInput() {
 		std::cout << "number of players? [2,4] " << std::endl;
 		std::cin >> numplayers;
 		while (numplayers != 2 || numplayers != 3 || numplayers != 4) {
-			std::cout << "input any integer [1,5]" << std::endl;
+			std::cout << "input any integer [2,4]" << std::endl;
 			std::cin >> numplayers;;
 		}
 
