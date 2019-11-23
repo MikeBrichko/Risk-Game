@@ -355,8 +355,10 @@ void Player::fortify() {
 	std::cout << "=====================Starting fortification phase=====================" << std::endl;
 	*currentPhase = FORTIFY;
 	notify();
+	std::cout << "=====================BEFORE=====================" << std::endl;
 	printNeighbours(false);
 	playerStrategy->fortify(this);
+	std::cout << "=====================AFTER=====================" << std::endl;
 	printNeighbours(false);
 	std::cout << "=====================Ending fortification phase=====================" << std::endl;
 }
