@@ -338,3 +338,62 @@ void GameEngine::mainGameLoop() {
 		}
 	}
 }
+
+void GameEngine::askingUserInput() {
+	int gameType;
+	int mapNum;
+	int numplayers;
+	int numGames;
+	int numTurns;
+
+	//single player or tournament
+	std::cout << "Which mode to play? Enter '1' for single player or '2' for Tournament Mode" << std::endl;
+	std::cin >> gameType;
+	while (gameType != 1 || gameType != 2)
+	{
+		std::cout << "input 1 or 2" << std:: endl;
+		std::cin >> gameType;
+	}
+
+	if (gameType == 2) {
+		//map selection 
+		std::cout << "choose your map (enter number): \n" << std::endl;
+		std::cout << "1. Alberta" << std::endl;
+		std::cout << "2. " << std::endl;
+		std::cout << "3. " << std::endl;
+		std::cout << "4. " << std::endl;
+		std::cout << "5. " << std::endl;
+
+		while (mapNum != 1 || mapNum != 2 || mapNum != 3 || mapNum != 4 || mapNum != 5) {
+			std::cout << "input any integer [1,5]" << std::endl;
+			std::cin >> mapNum;
+		}
+
+		//number of players
+		std::cout << "number of players? [2,4] " << std::endl;
+		std::cin >> numplayers;
+		while (numplayers != 2 || numplayers != 3 || numplayers != 4) {
+			std::cout << "input any integer [1,5]" << std::endl;
+			std::cin >> numplayers;;
+		}
+
+		//number of games on each map
+		std::cout << "number of games on each map? [1,5] " << std::endl;
+		while (numGames != 1 || numGames != 2 || numGames != 3 || numGames != 4 || numGames != 5) {
+			std::cout << "input any integer [1,5]" << std::endl;
+			std::cin >> numGames;
+		}
+
+		//num of turns for it to be considered a draw
+		std::cout << "number of turns (integer) to be considered a draw [3,50]? (result will be the remainder of a division by 50)";
+		std::cin >> numTurns;
+
+		while (std::cin.fail()) {
+			std::cout << "INTEGER" << std::endl;
+			std::cin >> numTurns;
+		}
+
+		std::cout << "number used will be " << numTurns << std::endl;
+	}
+
+}
