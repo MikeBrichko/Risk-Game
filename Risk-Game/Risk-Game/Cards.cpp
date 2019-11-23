@@ -72,7 +72,7 @@ Card* Deck::draw() {
 
 void Deck::shuffle() {
 	int i = 0;
-	srand(time(0));
+	srand((unsigned int)time(NULL));
 	while (i <= 1000) {
 		int randomPosition = rand() % deck->size();
 		Card* card = deck->at(randomPosition);
@@ -83,7 +83,7 @@ void Deck::shuffle() {
 }
 
 int Deck::getDeckSize() {
-	return deck->size();
+	return static_cast<int>(deck->size());
 }
 
 //----------------------------------------------------------------------------------------
@@ -185,7 +185,7 @@ int Hand::exchangeDecision(std::string similarCardTypes, std::string differentCa
 void Hand::removeCardsInHand(std::string cardsInHand) {
 	std::cout << "Before" << std::endl;
 	printCardsInHand();
-	int indexModifier = 0;
+	double indexModifier = 0;
 	std::sort(cardsInHand.begin(), cardsInHand.end());
 	for (int i = 0; i < cardsInHand.length(); i++) {
 		if (i == 0) {
@@ -193,8 +193,8 @@ void Hand::removeCardsInHand(std::string cardsInHand) {
 			hand->erase(hand->begin() + (int)cardsInHand.at(i));
 		}
 		else {
-			delete hand->at(static_cast<double>(cardsInHand.at(i)) - indexModifier);
-			hand->erase(hand->begin() + (static_cast<double>(cardsInHand.at(i)) - indexModifier));
+			delete hand->at(static_cast<unsigned __int64>(cardsInHand.at(i) - indexModifier));
+			hand->erase(hand->begin() + (static_cast<__int64>(cardsInHand.at(i) - indexModifier)));
 		}
 		indexModifier += 1;
 	}

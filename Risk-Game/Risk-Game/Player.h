@@ -6,8 +6,12 @@
 #include "Cards.h"
 #include "Dice.h"
 #include "MapLoader.h"
+#include "PlayerStrategies.h"
+#include "GameObservers.h"
 
-class Player {
+class Strategy;
+
+class Player : public ConcreteSubject{
 private:
 	int* playerID;
 	std::string* playerName;
@@ -16,19 +20,26 @@ private:
 	Deck* gameDeck;
 	Map* gameMap;
 	Dice* gameDice;
+	Strategy* playerStrategy;
+
+	Phase* currentPhase;
+	std::string* currentPlayerName;
+	std::string* currentDefeatedCountry;
+	std::vector<std::string*>* currentStats;
 
 	void removeCountryOwned(int countryID);
-	void conquerEnemyCountry(Country* ownCountry, Country* enemyCountry, std::vector<Player*>* players);
-	bool playerAttackDecision();
-	bool playerFortificationDecision();
-	void printNeighbours(bool areEnemies);
-	Country* getNeighbouringCountry(Country* countryOwned, std::string neighbouringCountryName, bool isEnemy);
+	int armiesGivenToReinforce();
 
 public:
 	Player(int playerID, std::string playerName);
 	Player(int playerID, std::string playerName, Deck* pointToDeck);
 	Player(int playerID, std::string playerName, Deck* deck, Map* map, Dice* dice);
+	Player(int playerID, std::string playerName, Deck* deck, Map* map, Dice* dice, Strategy* newStrategy);
 	~Player();
+
+	void conquerEnemyCountry(Country* ownCountry, Country* enemyCountry, std::vector<Player*>* players);
+	bool playerAttackDecision();
+	bool playerFortificationDecision();
 
 	//PlayerTurn
 	void reinforce();
@@ -38,7 +49,9 @@ public:
 	//PrintStatements
 	void printCountriesOwned();
 	void printCardsInHand();
+	void printNeighbours(bool areEnemies);
 	Country* getCountryOwned(std::string countryOwnedName);
+	Country* getNeighbouringCountry(Country* countryOwned, std::string neighbouringCountryName, bool isEnemy);
 	
 	//Mutators&Accessors
 	int getPlayerID();
@@ -47,4 +60,15 @@ public:
 	int getAmountOfCountriesOwned();
 	int armiesOnCountriesOwned();
 	void addCountryOwned(Country* country);
+	int getCountriesOwnedSize();
+	std::vector<Country*>* getCountriesOwned();
+	Map* getGameMap();
+	Dice* getGameDice();
+	void setPlayerStrategy(Strategy* newStrategy);
+	void setCurrentPhase(Phase newPhase);
+
+	Phase getPhase() override;
+	std::string getCurrentPlayerName() override;
+	std::vector<std::string*> getStats() override;
+	std::string getDefeatedCountryName() override;
 };

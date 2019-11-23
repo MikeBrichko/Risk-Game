@@ -7,6 +7,68 @@
 #include <list>
 #include <time.h>
 
+void callback(ConcreteSubject* player) {
+	switch (player->getPhase()) {
+	case Phase::ATTACK:
+		std::cout << "********** " << player->getCurrentPlayerName() << " : ATTACK PHASE  **********(From Observer)" << std::endl;
+		break;
+	case Phase::REINFORCE:
+		std::cout << "********** " << player->getCurrentPlayerName() << " : REINFORCE PHASE  **********(From Observer)" << std::endl;
+		break;
+	case Phase::FORTIFY:
+		std::cout << "********** " << player->getCurrentPlayerName() << " : FORTIFY PHASE  **********(From Observer)" << std::endl;
+		break;
+	case Phase::GAME_OVER:
+		std::cout << "********** " << player->getCurrentPlayerName() << " WINS! GAME OVER! **********(From Observer)" << std::endl;
+		break;
+	case Phase::LOSE_COUNTRY:
+		std::cout << "********** " << player->getCurrentPlayerName() << " LOSES " << player->getDefeatedCountryName() << " country **********(From Observer)" << std::endl;
+		std::cout << "\n********** PLAYERS WORLD DOMINATION VIEW **********" << std::endl;
+		for (auto text : player->getStats()) {
+			std::cout << *text << std::endl;
+		}
+		break;
+	case Phase::DEFEATED:
+		std::cout << "********** " << player->getCurrentPlayerName() << " LOSES and cannot play anymore,  **********(From Observer)" << std::endl;
+		break;
+	default:
+		std::cout << "********** " << player->getCurrentPlayerName() << " : UNDEFINED PHASE  **********(From Observer)" << std::endl;
+	}
+}
+
+GameEngine::GameEngine(bool automate) {
+	if (automate) {
+		player_observers = new std::vector<ConcreteObserver*>();
+
+		map = DominationMapLoader("sample.map").dominationExportToMap();
+
+		deck = new Deck(map->getNumOfCountries());
+		dice = new Dice();
+		players = new std::vector<Player*>();
+		Player* p1 = new Player(1, "Player 1 - Ted", deck, map, dice);
+		Player* p2 = new Player(2, "Player 2 - Maria", deck, map, dice);
+		players->push_back(p1);
+		players->push_back(p2);
+		ConcreteObserver* observer1 = new ConcreteObserver(p1, &callback);
+		ConcreteObserver* observer2 = new ConcreteObserver(p2, &callback);
+
+		player_observers->emplace_back(observer1);
+		player_observers->emplace_back(observer2);
+
+		determinePlayerOrder();
+		assignCountriesToPlayers();
+		validateAllCountriesHavePlayers();
+	}
+	else {
+		player_observers = new std::vector<ConcreteObserver*>();
+		map = selectMap();
+		deck = new Deck(map->getNumOfCountries());
+		dice = new Dice();
+		players = selectNumberOfPlayers();
+
+	}
+}
+
 GameEngine::GameEngine() {
 	map = selectMap();
 	deck = new Deck(map->getNumOfCountries());
@@ -33,9 +95,29 @@ Map* GameEngine::selectMap() {
 		std::string selectedMap;
 		std::cin >> selectedMap;
 
-		if (MapLoader(selectedMap).validateMap()) {
-			return MapLoader(selectedMap).exportToMap();
+		if (DominationMapLoader(selectedMap).dominationValidateMap()) {
+			return DominationMapLoader(selectedMap).dominationExportToMap();
 		}
+	}
+}
+
+Strategy* GameEngine::selectPlayerStrategy() {
+	int playerStrategy = 0;
+	while (true) {
+		std::cout << "Enter:" << std::endl;
+		std::cout << "\t1 if you to play as a Human" << std::endl;
+		std::cout << "\t2 if you want to play as an Aggressive Computer" << std::endl;
+		std::cout << "\t3 if you want to play as a Bnevolent Computer" << std::endl;
+		std::cin >> playerStrategy;
+
+		if (playerStrategy == 1)
+			return new HumanPlayer();
+		else if (playerStrategy == 2)
+			return new AggressiveComputer();
+		else if (playerStrategy == 3)
+			return new BenevolentComputer();
+		else
+			std::cout << "Invalid input! That is not a valid player strategy." << std::endl;
 	}
 }
 
@@ -50,14 +132,14 @@ std::vector<Player*>* GameEngine::selectNumberOfPlayers() {
 	for (int i = 0; i < numberOfPlayers; i++) {
 		std::cout << "Enter the name of Player " << i + 1 << ": ";
 		std::cin >> playerName;
-		newPlayers->push_back(new Player(i + 1, playerName, deck, map, dice));
+		newPlayers->push_back(new Player(i + 1, playerName,deck, map, dice, selectPlayerStrategy()));
 	}
 	return newPlayers;
 }
 
 void GameEngine::determinePlayerOrder() {
 	int i = 0;
-	srand(time(0));
+	srand((unsigned int)time(NULL));
 	while (i <= 10) {
 		int randomPosition = rand() % players->size();
 		Player* player = players->at(randomPosition);
@@ -174,8 +256,8 @@ void GameEngine::startupPhase() {
 	assignCountriesToPlayers();
 	validateAllCountriesHavePlayers();
 
-	int givenArmies = 40;
-	switch (players->size()) {
+	int givenArmies = 9;
+	/*switch (players->size()) {
 		case 2:
 			givenArmies = 40;
 			break;
@@ -193,7 +275,7 @@ void GameEngine::startupPhase() {
 			break;
 		default:
 			break;
-	}
+	}*/
 
 	std::cout << "Armies on the field before players add armies:" << std::endl;
 	std::vector<int> armiesPerPlayer = totalArmyCountForEachPlayer();
