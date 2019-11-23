@@ -26,4 +26,5 @@ public:
 	void mainGameLoop();
 	bool allCountriesHavePlayers();
 	std::vector<ConcreteObserver*>* player_observers;
+	void askingUserInput();
 };
