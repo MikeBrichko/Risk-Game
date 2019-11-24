@@ -7,6 +7,7 @@
 #include <list>
 #include <time.h>
 
+
 void callback(ConcreteSubject* player) {
 	switch (player->getPhase()) {
 	case Phase::ATTACK:
@@ -377,7 +378,8 @@ void GameEngine::mainGameLoop() {
 void GameEngine::tournamentProcess() {
 	int gameType;
 	int mapNum;
-	int mapList[6];
+	//int mapList[6];
+	std::vector<int> mapList;
 	int numplayers;
 	int numGames;
 	int numTurns;
@@ -398,6 +400,68 @@ void GameEngine::tournamentProcess() {
 		std::cout << "choose how many maps you want to have in tournament [1,5] integer: \n" << std::endl;
 		std::cin >> mapNum; 
 
+		//Create a vector to display names of all the maps
+		std::vector<std::string> vec{ "1. Alberta", "2. estonia", "3. europe", "4. germany", "5. solar" };
+
+		int goodMapCounter = 0;
+		int chosen = 10;
+
+		//create temporary vector to store chosen map numbers
+		std::vector<int> chosenVec;
+		
+		while (mapNum != goodMapCounter)
+		{
+			int tempMapNum;
+			std::cout << "choose your map from list below (enter number): \n" << std::endl;
+			for (int i = 0; i < vec.size(); i++)
+			{
+				//if map has been chosen we don't display it
+				if (i == chosen) 
+				{ 
+					vec.at(i) = " ";
+					continue;
+				}
+				std::cout << vec.at(i);    
+				std::cout << std::endl;
+			}
+			//receive input from user
+			std::cin >> tempMapNum;
+
+			//check if input is between 1 and 5
+			if (tempMapNum > 5 || tempMapNum < 1) {
+				std::cout << "invalid input, please input an integer from the list of countries" << std::endl;
+			}
+			//check if input was already chosen before
+			else if (std::find(chosenVec.begin(), chosenVec.end(), (tempMapNum - 1)) != chosenVec.end())
+			{
+				std::cout << "\nYou have already chosen this map number, please input an integer from list of countries" <<std::endl;
+				continue;
+			}
+			//if reach here then the map number is good
+			else {
+				mapList.push_back(tempMapNum);		//add map number to official map list
+				goodMapCounter++;					//increment goodMapCounter
+				chosen = tempMapNum - 1;			//initialize chosen to new map number
+				chosenVec.push_back(chosen);		//add map number to list of chosen map numbers
+			}
+		}
+
+		
+		
+		//Show contents of mapList Array for debugging/testing purposes
+		/*
+		std::cout << "\nContents of mapList Array" << std::endl;
+		for (int i = 0; i < mapList.size(); i++)
+		{
+			std::cout << mapList.at(i) << std:: endl;
+		}
+		std::cout << std::endl;
+		*/
+
+
+
+
+		/*
 		for (int i = 0; i < mapNum; i++) {
 			int tempMapNum;
 			std::cout << "choose your map (enter number): \n" << std::endl;
@@ -413,6 +477,7 @@ void GameEngine::tournamentProcess() {
 			}
 			mapList[i] = tempMapNum;
 		}
+		*/
 
 
 		//number of players
