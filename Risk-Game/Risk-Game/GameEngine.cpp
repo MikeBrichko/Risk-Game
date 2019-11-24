@@ -363,7 +363,7 @@ void GameEngine::askingUserInput() {
 		std::cout << "3. " << std::endl;
 		std::cout << "4. " << std::endl;
 		std::cout << "5. " << std::endl;
-
+		std::cin >> mapNum;
 		while (mapNum != 1 || mapNum != 2 || mapNum != 3 || mapNum != 4 || mapNum != 5) {
 			std::cout << "input any integer [1,5]" << std::endl;
 			std::cin >> mapNum;
@@ -379,6 +379,7 @@ void GameEngine::askingUserInput() {
 
 		//number of games on each map
 		std::cout << "number of games on each map? [1,5] " << std::endl;
+		std::cin >> numGames;
 		while (numGames != 1 || numGames != 2 || numGames != 3 || numGames != 4 || numGames != 5) {
 			std::cout << "input any integer [1,5]" << std::endl;
 			std::cin >> numGames;
