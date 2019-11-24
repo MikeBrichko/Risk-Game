@@ -2,8 +2,6 @@
 #include "GameEngine.h"
 
 int main() {
-	GameEngine game = GameEngine();
-	game.startupPhase();
-	game.mainGameLoop();
+	GameEngine game = GameEngine(std::string("tournament"));
 	return 0;
 }

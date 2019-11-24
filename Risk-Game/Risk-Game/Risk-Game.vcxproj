@@ -171,6 +171,7 @@
     <ClCompile Include="PlayerReinforceDriver.cpp" />
     <ClCompile Include="PlayerStrategies.cpp" />
     <ClCompile Include="StrategyPatternDriver.cpp" />
+    <ClCompile Include="TournamentDriver.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Cards.h" />

@@ -17,14 +17,17 @@ private:
 	std::vector<int> totalArmyCountForEachPlayer();
 	void validateAllCountriesHavePlayers();
 	Strategy* selectPlayerStrategy();
+	Strategy* selectComputerPlayerStrategy();
+
 
 public:
 	GameEngine();
 	GameEngine(bool);
+	GameEngine(std::string tournament);
 	~GameEngine();
 	void startupPhase();
 	void mainGameLoop();
 	bool allCountriesHavePlayers();
 	std::vector<ConcreteObserver*>* player_observers;
-	void askingUserInput();
+	void tournamentProcess();
 };

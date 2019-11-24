@@ -87,6 +87,9 @@
     <ClCompile Include="AdapterDriver.cpp">
       <Filter>Source Files\AssignmentThreeDrivers</Filter>
     </ClCompile>
+    <ClCompile Include="TournamentDriver.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Map.h">

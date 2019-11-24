@@ -68,6 +68,17 @@ GameEngine::GameEngine(bool automate) {
 
 	}
 }
+GameEngine::GameEngine(std::string tournament) {
+	if (tournament == "tournament") {
+		tournamentProcess();
+	}
+	else {
+		map = selectMap();
+		deck = new Deck(map->getNumOfCountries());
+		dice = new Dice();
+		players = selectNumberOfPlayers();
+	}
+};
 
 GameEngine::GameEngine() {
 	map = selectMap();
@@ -116,6 +127,30 @@ Strategy* GameEngine::selectPlayerStrategy() {
 			return new AggressiveComputer();
 		else if (playerStrategy == 3)
 			return new BenevolentComputer();
+		else
+			std::cout << "Invalid input! That is not a valid player strategy." << std::endl;
+	}
+}
+
+Strategy* GameEngine::selectComputerPlayerStrategy() {
+	int playerStrategy = 0;
+	while (true) {
+		std::cout << "Enter:" << std::endl;
+		std::cout << "\t1 if you want to play as an Aggressive Computer" << std::endl;
+		std::cout << "\t2 if you want to play as a Bnevolent Computer" << std::endl;
+		std::cout << "\t3 if you want to play as a Random Computer" << std::endl;
+		std::cout << "\t4 if you want to play as a Cheater Computer" << std::endl;
+
+		std::cin >> playerStrategy;
+
+		if (playerStrategy == 1)
+			return new AggressiveComputer();
+		else if (playerStrategy == 2)
+			return new BenevolentComputer();
+		else if (playerStrategy == 3)
+			return new AggressiveComputer(); // Change this later with Mike's implementation
+		else if (playerStrategy == 4)
+			return new BenevolentComputer(); // Change this later with Mike's implementation
 		else
 			std::cout << "Invalid input! That is not a valid player strategy." << std::endl;
 	}
@@ -339,9 +374,10 @@ void GameEngine::mainGameLoop() {
 	}
 }
 
-void GameEngine::askingUserInput() {
+void GameEngine::tournamentProcess() {
 	int gameType;
 	int mapNum;
+	int mapList[6];
 	int numplayers;
 	int numGames;
 	int numTurns;
@@ -349,52 +385,80 @@ void GameEngine::askingUserInput() {
 	//single player or tournament
 	std::cout << "Which mode to play? Enter '1' for single player or '2' for Tournament Mode" << std::endl;
 	std::cin >> gameType;
-	while (gameType != 1 || gameType != 2)
+	while (std::cin.fail() || (gameType <1 ||  gameType >2))
 	{
+		std::cin.clear();
+		std::cin.ignore(1);
 		std::cout << "input 1 or 2" << std:: endl;
 		std::cin >> gameType;
 	}
 
 	if (gameType == 2) {
 		//map selection 
-		std::cout << "choose your map (enter number): \n" << std::endl;
-		std::cout << "1. Alberta" << std::endl;
-		std::cout << "2. " << std::endl;
-		std::cout << "3. " << std::endl;
-		std::cout << "4. " << std::endl;
-		std::cout << "5. " << std::endl;
-		std::cin >> mapNum;
-		while (mapNum != 1 || mapNum != 2 || mapNum != 3 || mapNum != 4 || mapNum != 5) {
-			std::cout << "input any integer [1,5]" << std::endl;
-			std::cin >> mapNum;
+		std::cout << "choose how many maps you want to have in tournament [1,5] integer: \n" << std::endl;
+		std::cin >> mapNum; 
+
+		for (int i = 0; i < mapNum; i++) {
+			int tempMapNum;
+			std::cout << "choose your map (enter number): \n" << std::endl;
+			std::cout << "1. Alberta" << std::endl;
+			std::cout << "2. " << std::endl;
+			std::cout << "3. " << std::endl;
+			std::cout << "4. " << std::endl;
+			std::cout << "5. " << std::endl;
+			std::cin >> tempMapNum;
+			while (tempMapNum > 5 || tempMapNum < 1) {
+				std::cout << "input any integer [1,5]" << std::endl;
+				std::cin >> mapNum;
+			}
+			mapList[i] = tempMapNum;
 		}
+
 
 		//number of players
 		std::cout << "number of players? [2,4] " << std::endl;
 		std::cin >> numplayers;
-		while (numplayers != 2 || numplayers != 3 || numplayers != 4) {
+		while (numplayers < 2 || numplayers > 4) {
 			std::cout << "input any integer [2,4]" << std::endl;
 			std::cin >> numplayers;;
 		}
-
+		std::string playerName = "";
+		std::vector<Player*>* players = new std::vector<Player*>();
+		for (int i = 0; i < numplayers; i++) {
+			std::cout << "Enter the name of Player " << i + 1 << ": ";
+			std::cin >> playerName;
+			players->push_back(new Player(i + 1, playerName, deck, map, dice, selectComputerPlayerStrategy()));
+		}
 		//number of games on each map
 		std::cout << "number of games on each map? [1,5] " << std::endl;
 		std::cin >> numGames;
-		while (numGames != 1 || numGames != 2 || numGames != 3 || numGames != 4 || numGames != 5) {
+		while (numGames < 1 &&  numGames > 5) {
 			std::cout << "input any integer [1,5]" << std::endl;
 			std::cin >> numGames;
 		}
 
 		//num of turns for it to be considered a draw
-		std::cout << "number of turns (integer) to be considered a draw [3,50]? (result will be the remainder of a division by 50)";
+		std::cout << "number of turns (integer) to be considered a draw [3,50]?";
 		std::cin >> numTurns;
 
-		while (std::cin.fail()) {
+		while (numTurns < 3 && numTurns>50) {
 			std::cout << "INTEGER" << std::endl;
 			std::cin >> numTurns;
 		}
 
 		std::cout << "number used will be " << numTurns << std::endl;
+		for (int i = 0; i < mapNum; i++) {
+			//Assign a map logic here, when next for loop is done, new map should be assigned 
+			for (int j = 0; j < numGames; j++) {
+				// Game operation here
+			}
+		}
+	}
+	else {
+		map = selectMap();
+		deck = new Deck(map->getNumOfCountries());
+		dice = new Dice();
+		players = selectNumberOfPlayers();
 	}
 
 }
