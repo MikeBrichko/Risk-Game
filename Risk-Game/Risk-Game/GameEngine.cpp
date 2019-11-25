@@ -513,28 +513,30 @@ void GameEngine::tournamentProcess() {
 		}
 
 		std::cout << "number used will be " << numTurns << std::endl;
+		std::vector<std::string> result = std::vector<std::string>();
 		for (int i = 0; i < mapNum; i++) {
 			switch (mapList.at(i)) {
 			case 1:
 				map = ConquestMapLoader("Alberta.map").conquestExportToMap();
+				result.push_back("Alberta.map");
 				break;
 			case 2:
 				map = DominationMapLoader("estonia.map").dominationExportToMap();
+				result.push_back("estonia.map");
 				break;
 			case 3:
 				map = DominationMapLoader("europe.map").dominationExportToMap();
+				result.push_back("europe.map");
 				break;
 			case 4:
 				map = DominationMapLoader("germany.map").dominationExportToMap();
+				result.push_back("germany.map");
 				break;
 			case 5:
 				map = DominationMapLoader("solar.map").dominationExportToMap();
+				result.push_back("solar.map");
 				break;
 			}
-			//map->checkConnectedGraph();
-			//for (auto cont : *map->getContinents()) {
-			//	std::cout << cont->getName();
-			//}
 
 			deck = new Deck(map->getNumOfCountries());
 			dice = new Dice();
@@ -543,13 +545,14 @@ void GameEngine::tournamentProcess() {
 				player->setDice(dice);
 				player->setDeck(deck);
 			}
+			bool gameOver = false;
 			//Assign a map logic here, when next for loop is done, new map should be assigned 
 			for (int j = 0; j < numGames; j++) {
 				determinePlayerOrder();
 				assignCountriesToPlayers();
 				validateAllCountriesHavePlayers();
 				// Game operation here
-				bool gameOver = false;
+				gameOver = false;
 				for (int k =0; k <numTurns; k++) {
 					for (auto player : *players) {
 						if (player->getAmountOfCountriesOwned() == 0)
@@ -561,6 +564,7 @@ void GameEngine::tournamentProcess() {
 						if (player->getAmountOfCountriesOwned() == map->getNumOfCountries()) {
 							std::cout << "Player " << player->getPlayerID() << " wins!!!" << std::endl;
 							gameOver = true;
+							result.at(i) += "\t" + player->getPlayerName();
 							break;
 						}
 
@@ -571,7 +575,16 @@ void GameEngine::tournamentProcess() {
 					}
 				}
 			}
+			if (!gameOver) {
+				result.at(i) += "\tDraw";
+			}
 		}
+
+		for (auto resultString : result) {
+			std::cout << resultString << std::endl;
+		}
+		std::string breakpoint;
+		std::cin >> breakpoint;
 	}
 	else {
 		map = selectMap();
