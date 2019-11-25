@@ -401,7 +401,7 @@ void GameEngine::tournamentProcess() {
 		std::cin >> mapNum; 
 
 		//Create a vector to display names of all the maps
-		std::vector<std::string> vec{ "1. Alberta", "2. estonia", "3. europe", "4. germany", "5. solar" };
+		std::vector<std::string> vec{ "1. Alberta", "2. Estonia", "3. Europe", "4. Germany", "5. Solar" };
 
 		int goodMapCounter = 0;
 		int chosen = 10;
@@ -513,6 +513,26 @@ void GameEngine::tournamentProcess() {
 
 		std::cout << "number used will be " << numTurns << std::endl;
 		for (int i = 0; i < mapNum; i++) {
+			switch (mapList.at(i)) {
+			case 1:
+				map = ConquestMapLoader("Alberta.map").conquestExportToMap();
+				break;
+			case 2:
+				map = DominationMapLoader("estonia.map").dominationExportToMap();
+				break;
+			case 3:
+				map = DominationMapLoader("europe.map").dominationExportToMap();
+				break;
+			case 4:
+				map = DominationMapLoader("germany.map").dominationExportToMap();
+				break;
+			case 5:
+				map = DominationMapLoader("solar.map").dominationExportToMap();
+				break;
+			}
+
+			deck = new Deck(map->getNumOfCountries());
+			dice = new Dice();
 			//Assign a map logic here, when next for loop is done, new map should be assigned 
 			for (int j = 0; j < numGames; j++) {
 				// Game operation here
