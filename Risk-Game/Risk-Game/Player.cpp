@@ -385,3 +385,13 @@ std::vector<std::string*> Player::getStats() {
 void Player::setCurrentPhase(Phase newPhase) {
 	*currentPhase = newPhase;
 }
+
+void Player::setDeck(Deck * deck) {
+	gameDeck = deck;
+};
+void Player::setMap(Map* map) {
+	gameMap = map;
+};
+void Player::setDice(Dice* dice) {
+	gameDice = dice;
+};

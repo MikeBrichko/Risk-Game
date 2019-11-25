@@ -494,6 +494,7 @@ void GameEngine::tournamentProcess() {
 			std::cin >> playerName;
 			players->push_back(new Player(i + 1, playerName, deck, map, dice, selectComputerPlayerStrategy()));
 		}
+
 		//number of games on each map
 		std::cout << "number of games on each map? [1,5] " << std::endl;
 		std::cin >> numGames;
@@ -537,6 +538,11 @@ void GameEngine::tournamentProcess() {
 
 			deck = new Deck(map->getNumOfCountries());
 			dice = new Dice();
+			for (auto player : *players) {
+				player->setMap(map);
+				player->setDice(dice);
+				player->setDeck(deck);
+			}
 			//Assign a map logic here, when next for loop is done, new map should be assigned 
 			for (int j = 0; j < numGames; j++) {
 				determinePlayerOrder();

@@ -71,4 +71,9 @@ public:
 	std::string getCurrentPlayerName() override;
 	std::vector<std::string*> getStats() override;
 	std::string getDefeatedCountryName() override;
+
+	//mutator
+	void setDeck(Deck*);
+	void setMap(Map*);
+	void setDice(Dice*);
 };
