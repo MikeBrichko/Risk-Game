@@ -71,6 +71,7 @@ GameEngine::GameEngine(bool automate) {
 }
 GameEngine::GameEngine(std::string tournament) {
 	if (tournament == "tournament") {
+		players =new std::vector<Player*>();
 		tournamentProcess();
 	}
 	else {
@@ -488,7 +489,6 @@ void GameEngine::tournamentProcess() {
 			std::cin >> numplayers;;
 		}
 		std::string playerName = "";
-		std::vector<Player*>* players = new std::vector<Player*>();
 		for (int i = 0; i < numplayers; i++) {
 			std::cout << "Enter the name of Player " << i + 1 << ": ";
 			std::cin >> playerName;
@@ -530,12 +530,40 @@ void GameEngine::tournamentProcess() {
 				map = DominationMapLoader("solar.map").dominationExportToMap();
 				break;
 			}
+			//map->checkConnectedGraph();
+			//for (auto cont : *map->getContinents()) {
+			//	std::cout << cont->getName();
+			//}
 
 			deck = new Deck(map->getNumOfCountries());
 			dice = new Dice();
 			//Assign a map logic here, when next for loop is done, new map should be assigned 
 			for (int j = 0; j < numGames; j++) {
+				determinePlayerOrder();
+				assignCountriesToPlayers();
+				validateAllCountriesHavePlayers();
 				// Game operation here
+				bool gameOver = false;
+				for (int k =0; k <numTurns; k++) {
+					for (auto player : *players) {
+						if (player->getAmountOfCountriesOwned() == 0)
+							continue;
+
+						player->reinforce();
+						player->attack(players);
+
+						if (player->getAmountOfCountriesOwned() == map->getNumOfCountries()) {
+							std::cout << "Player " << player->getPlayerID() << " wins!!!" << std::endl;
+							gameOver = true;
+							break;
+						}
+
+						player->fortify();
+					}
+					if (gameOver) {
+						break;
+					}
+				}
 			}
 		}
 	}
