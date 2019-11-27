@@ -114,7 +114,7 @@ void HumanPlayer::attack(Player* player, std::vector<Player*>* players) {
 			else {
 				defendingCountry->addArmy(-1);
 				if (defendingCountry->getArmies() == 0) {
-					player->conquerEnemyCountry(attackingCountry, defendingCountry, players);
+					player->conquerEnemyCountry(attackingCountry, defendingCountry, players, false);
 				}
 			}
 		}
@@ -238,7 +238,7 @@ void AggressiveComputer::attack(Player* player, std::vector<Player*>* players) {
 				else {
 					neighbourCountry->addArmy(-1);
 					if (neighbourCountry->getArmies() == 0) {
-						player->conquerEnemyCountry(strongestCountry, neighbourCountry, players);
+						player->conquerEnemyCountry(strongestCountry, neighbourCountry, players, true);
 					}
 				}
 			}
@@ -249,6 +249,9 @@ void AggressiveComputer::attack(Player* player, std::vector<Player*>* players) {
 
 		if (player->getAmountOfCountriesOwned() == player->getGameMap()->getNumOfCountries()) {
 			isGameDone = true;
+			break;
+		}
+		if (strongestCountry->getNeighbours().empty()) {
 			break;
 		}
 		else {
