@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include <algorithm>
+#include <cstdlib>
 
 Player::Player(int playerID, std::string playerName) {
 	playerStrategy = new HumanPlayer();
@@ -141,7 +142,7 @@ void Player::removeCountryOwned(int countryID) {
 	}
 }
 
-void Player::conquerEnemyCountry(Country* ownCountry, Country* enemyCountry, std::vector<Player*>* players) {
+void Player::conquerEnemyCountry(Country* ownCountry, Country* enemyCountry, std::vector<Player*>* players, bool isAutomated) {
 	std::cout << "You have defeated " << enemyCountry->getName() << std::endl;
 
 	//Step 1. Remove Country from Enemy Player
@@ -191,12 +192,21 @@ void Player::conquerEnemyCountry(Country* ownCountry, Country* enemyCountry, std
 	while (true) {
 		std::cout << ownCountry->getName() << " has " << ownCountry->getArmies() << " armies." << std::endl;
 		std::cout << "How many armies would you like to move from the attacking country to the defeated country?" << std::endl;
-		std::cin >> armiesToMobilize;
 
-		if (armiesToMobilize <= (ownCountry->getArmies() - 1) && armiesToMobilize >= 1)
+		if (isAutomated == false) {
+			std::cin >> armiesToMobilize;
+
+			if (armiesToMobilize <= (ownCountry->getArmies() - 1) && armiesToMobilize >= 1)
+				break;
+			else
+				std::cout << "Can't move that many armies! Select the amount of armies in between 1 and " << ownCountry->getArmies() - 1 << std::endl;
+		}
+		else {
+			//generate a random number between 0 and max number of armies
+			int rand();
+			armiesToMobilize = rand() % (ownCountry->getArmies() - 1);
 			break;
-		else
-			std::cout << "Can't move that many armies! Select the amount of armies in between 1 and " << ownCountry->getArmies() - 1 << std::endl;
+		}
 	}
 
 	ownCountry->addArmy(-armiesToMobilize);

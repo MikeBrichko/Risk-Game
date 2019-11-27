@@ -37,7 +37,7 @@ public:
 	Player(int playerID, std::string playerName, Deck* deck, Map* map, Dice* dice, Strategy* newStrategy);
 	~Player();
 
-	void conquerEnemyCountry(Country* ownCountry, Country* enemyCountry, std::vector<Player*>* players);
+	void conquerEnemyCountry(Country* ownCountry, Country* enemyCountry, std::vector<Player*>* players,  bool);
 	bool playerAttackDecision();
 	bool playerFortificationDecision();
 
