@@ -590,6 +590,8 @@ void GameEngine::tournamentProcess() {
 		deck = new Deck(map->getNumOfCountries());
 		dice = new Dice();
 		players = selectNumberOfPlayers();
+		startupPhase();
+		mainGameLoop();
 	}
 
 }
