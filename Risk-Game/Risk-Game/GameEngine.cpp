@@ -498,7 +498,7 @@ void GameEngine::tournamentProcess() {
 		//number of games on each map
 		std::cout << "number of games on each map? [1,5] " << std::endl;
 		std::cin >> numGames;
-		while (numGames < 1 &&  numGames > 5) {
+		while (numGames < 1 ||  numGames > 5) {
 			std::cout << "input any integer [1,5]" << std::endl;
 			std::cin >> numGames;
 		}
@@ -507,7 +507,7 @@ void GameEngine::tournamentProcess() {
 		std::cout << "number of turns (integer) to be considered a draw [3,50]?";
 		std::cin >> numTurns;
 
-		while (numTurns < 3 && numTurns>50) {
+		while (numTurns < 3 || numTurns>50) {
 			std::cout << "INTEGER" << std::endl;
 			std::cin >> numTurns;
 		}
@@ -574,12 +574,11 @@ void GameEngine::tournamentProcess() {
 						break;
 					}
 				}
-			}
-			if (!gameOver) {
-				result.at(i) += "\tDraw";
+				if (!gameOver) {
+					result.at(i) += "\tDraw";
+				}
 			}
 		}
-
 		for (auto resultString : result) {
 			std::cout << resultString << std::endl;
 		}

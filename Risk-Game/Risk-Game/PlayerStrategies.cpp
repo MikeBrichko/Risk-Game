@@ -219,10 +219,13 @@ void AggressiveComputer::attack(Player* player, std::vector<Player*>* players) {
 	while (true) {
 		if (strongestCountry->getArmies() == 1)
 			break;
+		int counquestCounter = 0;
 
 		for (auto neighbourCountry : strongestCountry->getNeighbours()) {
-			if (neighbourCountry->getPlayerID() == player->getPlayerID())
+			if (neighbourCountry->getPlayerID() == player->getPlayerID()) {
+				counquestCounter++;
 				continue;
+			}
 
 			attackingDice = player->getGameDice()->rollDice(strongestCountry->getArmies(), true, true);
 			defendingDice = player->getGameDice()->rollDice(neighbourCountry->getArmies(), false, true);
@@ -245,17 +248,19 @@ void AggressiveComputer::attack(Player* player, std::vector<Player*>* players) {
 
 			if (strongestCountry->getArmies() == 1)
 				break;
+
 		}
 
 		if (player->getAmountOfCountriesOwned() == player->getGameMap()->getNumOfCountries()) {
 			isGameDone = true;
 			break;
 		}
-		if (strongestCountry->getNeighbours().empty()) {
+		else if (counquestCounter >= strongestCountry->getNeighbours().size()) {
 			break;
 		}
 		else {
-			player->printNeighbours(true);
+			// if it's not human player, we can skip this
+			//player->printNeighbours(true);
 		}
 	}
 

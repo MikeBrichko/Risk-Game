@@ -157,22 +157,29 @@ int Hand::exchangeDecision(std::string similarCardTypes, std::string differentCa
 	while (true) {
 		std::cout << std::endl;
 		std::cout << *playerName << std::endl;
-
-		if (hand->size() != 5)
+		std::vector<int> choices = std::vector<int>();
+		if (hand->size() != 5) {
 			std::cout << "Input 0 to not trade cards for armies" << std::endl;
+			choices.push_back(1);
+		}
 
-		if (similarCardTypes.size() == 3)
+		if (similarCardTypes.size() == 3) {
 			std::cout << "Input 1 to trade all similar cards" << std::endl;
+			choices.push_back(2);
+		}
 
-		if (differentCardTypes.size() == 3) 
+		if (differentCardTypes.size() == 3) {
 			std::cout << "Input 2 to trade all different cards" << std::endl;
+			choices.push_back(3);
+		}
 
-		std::cin >> choice;
-		std::cout << std::endl;
-
-		if (hand->size()==5 && choice != 1 && choice != 2) {
+		//std::cin >> choice;
+		//std::cout << std::endl;
+		choice = choices[rand() % choices.size()];
+		if (hand->size()==5 && choice == 0) {
 			std::cout << *playerName << std::endl;
 			std::cout << "You have 5 cards in hand. You need to trade your cards for armies. Game rules are fun :)" << std::endl;
+			return choices[1];
 			std::cin.clear();
 			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 		}
