@@ -1,2 +1,16 @@
 ﻿  GameEngine.cpp
-  Risk-Game.vcxproj -> C:\dev\Risk-Game\Risk-Game\x64\Debug\Risk-Game.exe
+  GameEngineDriver.cpp
+  GameObserversDriver.cpp
+  Player.cpp
+  PlayerAttackDriver.cpp
+  PlayerDriver.cpp
+  PlayerFortifyDriver.cpp
+  PlayerReinforceDriver.cpp
+  PlayerStrategies.cpp
+C:\dev\Risk-Game\Risk-Game\Risk-Game\PlayerStrategies.cpp(419,89): error C2660: 'Player::conquerEnemyCountry': function does not take 3 arguments
+C:\dev\Risk-Game\Risk-Game\Risk-Game\Player.h(40,7): message : see declaration of 'Player::conquerEnemyCountry'
+C:\dev\Risk-Game\Risk-Game\Risk-Game\PlayerStrategies.cpp(476,65): error C2660: 'Player::conquerEnemyCountry': function does not take 3 arguments
+  StrategyPatternDriver.cpp
+  TournamentDriver.cpp
+  Generating Code...
+C:\dev\Risk-Game\Risk-Game\Risk-Game\Player.h(40,7): message : see declaration of 'Player::conquerEnemyCountry'

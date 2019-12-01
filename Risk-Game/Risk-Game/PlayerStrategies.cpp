@@ -416,7 +416,7 @@ void RandomComputer::attack(Player* player, std::vector<Player*>* players) {
 			else {
 				randomDefendingCountry->addArmy(-1);
 				if (randomDefendingCountry->getArmies() == 0) {
-					player->conquerEnemyCountry(randomAttackingCountry, randomDefendingCountry, players);
+					player->conquerEnemyCountry(randomAttackingCountry, randomDefendingCountry, players, true);
 				}
 			}
 		}
@@ -473,7 +473,7 @@ void CheaterComputer::attack(Player* player, std::vector<Player*>* players) {
 	for (auto countryOwned : *player->getCountriesOwned()) {
 		for (auto neighbour : countryOwned->getNeighbours()) {
 			if (neighbour->getPlayerID() != player->getPlayerID()) {
-				player->conquerEnemyCountry(countryOwned, neighbour, players);
+				player->conquerEnemyCountry(countryOwned, neighbour, players, true);
 			}
 		}
 	}
