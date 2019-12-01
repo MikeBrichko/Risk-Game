@@ -38,6 +38,7 @@ public:
 	~Player();
 
 	void conquerEnemyCountry(Country* ownCountry, Country* enemyCountry, std::vector<Player*>* players,  bool);
+	void conquerEnemyCountryByCheater();
 	bool playerAttackDecision();
 	bool playerFortificationDecision();
 

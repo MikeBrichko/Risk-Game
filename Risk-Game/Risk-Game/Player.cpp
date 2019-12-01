@@ -204,7 +204,9 @@ void Player::conquerEnemyCountry(Country* ownCountry, Country* enemyCountry, std
 		else {
 			//generate a random number between 0 and max number of armies
 			int rand();
-			armiesToMobilize = rand() % (ownCountry->getArmies() - 1);
+			if (ownCountry->getArmies() > 1) {
+				armiesToMobilize = rand() % (ownCountry->getArmies() - 1);
+			}
 			break;
 		}
 	}
@@ -213,6 +215,16 @@ void Player::conquerEnemyCountry(Country* ownCountry, Country* enemyCountry, std
 	enemyCountry->addArmy(armiesToMobilize);
 }
 
+void Player::conquerEnemyCountryByCheater() {
+	for (auto continent : *gameMap->getContinents()) {
+		for (auto country : *continent->getCountries()) {
+			if (country->getPlayerID() != this->getPlayerID()) {
+				country->setPlayerID(this->getPlayerID());
+				addCountryOwned(country);
+			}
+		}
+	}
+}
 bool Player::playerAttackDecision()
 {
 	bool ableToAttack = false;

@@ -471,17 +471,27 @@ void CheaterComputer::reinforce(Player* player, int armiesToAdd) {
 
 void CheaterComputer::attack(Player* player, std::vector<Player*>* players) {
 	// We can't use foreach loop here since getCountriesOwned is updating dynamically
-	while (player->getAmountOfCountriesOwned() < player->getGameMap()->getNumOfCountries()) {
-		std::vector<Country*> staticCountries = *player->getCountriesOwned();
-		for (auto countryOwned : staticCountries) {
-			std::vector<Country*> staticNeighbours = countryOwned->getNeighbours();
-			for (auto neighbour : staticNeighbours) {
-				if (neighbour->getPlayerID() != player->getPlayerID()) {
-					player->conquerEnemyCountry(countryOwned, neighbour, players, true);
-				}
-			}
-		}
-	}
+	player->conquerEnemyCountryByCheater();
+	std::cout << player->getAmountOfCountriesOwned() << "\t" << player->getGameMap()->getNumOfCountries() << std::endl;
+	//while (player->getAmountOfCountriesOwned() < player->getGameMap()->getNumOfCountries()) {
+	//	std::vector<Country*> staticCountries = *player->getCountriesOwned();
+	//	for (auto countryOwned : staticCountries) {
+	//		std::vector<Country*> staticNeighbours = countryOwned->getNeighbours();
+	//		int size = staticNeighbours.size();
+	//		for (int i = 0; i < size; ++i) {
+	//			if (staticNeighbours.at(i)->getPlayerID() != player->getPlayerID()) {
+	//				player->conquerEnemyCountry(countryOwned, staticNeighbours.at(i), players, true);
+	//			}
+	//		}
+	//		//for (auto neighbour : staticNeighbours) {
+	//		//	if (neighbour != nullptr) {
+	//		//		if (neighbour->getPlayerID() != player->getPlayerID()) {
+	//		//		}
+	//		//	}
+	//		//	
+	//		//}
+	//	}
+	//}
 
 }
 
