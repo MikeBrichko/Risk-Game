@@ -470,12 +470,18 @@ void CheaterComputer::reinforce(Player* player, int armiesToAdd) {
 }
 
 void CheaterComputer::attack(Player* player, std::vector<Player*>* players) {
-	for (auto countryOwned : *player->getCountriesOwned()) {
+	// We can't use foreach loop here since getCountriesOwned is updating dynamically
+	int size = player->getCountriesOwned()->size();
+	for (int i = 0; i < size; ++i) {
+		Country* countryOwned = player->getCountriesOwned()->at(i);
 		for (auto neighbour : countryOwned->getNeighbours()) {
 			if (neighbour->getPlayerID() != player->getPlayerID()) {
 				player->conquerEnemyCountry(countryOwned, neighbour, players, true);
 			}
 		}
+	}
+	for (auto countryOwned : *player->getCountriesOwned()) {
+
 	}
 }
 
