@@ -350,3 +350,142 @@ void BenevolentComputer::fortify(Player* player) {
 		receivingCountry->addArmy(armiesToMobilize);
 	}
 }
+
+//-----------------------------------------------------------------------------------------------------------------------------
+
+RandomComputer::RandomComputer() {}
+
+bool RandomComputer::hasEnemyNeighbours(Country* attackingCountry) {
+	for (auto neighbour : attackingCountry->getNeighbours()) {
+		if (neighbour->getPlayerID() != attackingCountry->getPlayerID())
+			return true;
+	}
+	return false;
+};
+
+bool RandomComputer::hasFriendlyNeighboursThatCanGiveArmies(Country* receivingCountry) {
+	for (auto transferingCountry : receivingCountry->getNeighbours()) {
+		if (transferingCountry->getPlayerID() == receivingCountry->getPlayerID() && transferingCountry->getArmies() > 1)
+			return true;
+	}
+	return false;
+}
+
+void RandomComputer::reinforce(Player* player, int armiesToAdd) {
+	for (int i = 0; i < armiesToAdd; i++) {
+		player->getCountriesOwned()->at(rand() % (player->getCountriesOwnedSize()))->addArmy(1);
+	}
+}
+
+void RandomComputer::attack(Player* player, std::vector<Player*>* players) {
+	std::vector<int> attackingDice;
+	std::vector<int> defendingDice;
+	bool isGameDone = false;
+	Country* randomAttackingCountry;
+	Country* randomDefendingCountry;
+	int random;
+	while (rand() % 1) {
+		//select random attacking country
+		while (true) {
+			randomAttackingCountry = player->getCountriesOwned()->at(rand() % (player->getCountriesOwnedSize()));
+			if (hasEnemyNeighbours(randomAttackingCountry))
+				break;
+		}
+
+		//select random defending country
+		while (true) {
+			random = rand() % (randomAttackingCountry->getNeighbours().size());
+			if (randomAttackingCountry->getNeighbours().at(random)->getPlayerID() != player->getPlayerID()) {
+				randomDefendingCountry = randomAttackingCountry->getNeighbours().at(random);
+				break;
+			}
+		}
+
+		//roll dice
+		attackingDice = player->getGameDice()->rollDice(randomAttackingCountry->getArmies(), true, true);
+		defendingDice = player->getGameDice()->rollDice(randomDefendingCountry->getArmies(), false, true);
+
+		int minimumSize = static_cast<int>(attackingDice.size() < defendingDice.size() ? attackingDice.size() : defendingDice.size());
+		for (int i = 0; i < minimumSize; i++) {
+			if (attackingDice[i] <= defendingDice[i]) {
+				randomAttackingCountry->addArmy(-1);
+
+				if (randomAttackingCountry->getArmies() == 1)
+					break;
+			}
+			else {
+				randomDefendingCountry->addArmy(-1);
+				if (randomDefendingCountry->getArmies() == 0) {
+					player->conquerEnemyCountry(randomAttackingCountry, randomDefendingCountry, players);
+				}
+			}
+		}
+
+		if (player->getAmountOfCountriesOwned() == player->getGameMap()->getNumOfCountries()) {
+			player->setCurrentPhase(GAME_OVER);
+			player->notify();
+		}
+		else {
+			player->printNeighbours(true);
+		}
+	}
+}
+
+void RandomComputer::fortify(Player* player) {
+	if (player->armiesOnCountriesOwned() != player->getCountriesOwned()->size()) {
+		//Step 1. Select Country having armies removed and Friendly Neighbour
+		Country* transferingCountry = NULL;
+		Country* receivingCountry = NULL;
+		while (rand() % 1) {
+			while (true) {
+				receivingCountry = player->getCountriesOwned()->at(rand() % (player->getCountriesOwnedSize()));
+				if (hasFriendlyNeighboursThatCanGiveArmies(receivingCountry)) {
+					break;
+				}
+			}
+
+			while (true) {
+				transferingCountry = receivingCountry->getNeighbours().at(rand() % (receivingCountry->getNeighbours().size()));
+				if (transferingCountry->getArmies() > 1)
+					break;
+			}
+
+			int armiesToMobilize = rand() % (transferingCountry->getArmies());
+			transferingCountry->addArmy(-armiesToMobilize);
+			receivingCountry->addArmy(armiesToMobilize);
+
+			break;
+		}
+	}
+}
+
+//-----------------------------------------------------------------------------------------------------------------------------
+
+CheaterComputer::CheaterComputer() {}
+
+void CheaterComputer::reinforce(Player* player, int armiesToAdd) {
+	for (auto countryOwned : *player->getCountriesOwned()) {
+		countryOwned->addArmy(countryOwned->getArmies());
+	}
+}
+
+void CheaterComputer::attack(Player* player, std::vector<Player*>* players) {
+	for (auto countryOwned : *player->getCountriesOwned()) {
+		for (auto neighbour : countryOwned->getNeighbours()) {
+			if (neighbour->getPlayerID() != player->getPlayerID()) {
+				player->conquerEnemyCountry(countryOwned, neighbour, players);
+			}
+		}
+	}
+}
+
+void CheaterComputer::fortify(Player* player) {
+	for (auto countryOwned : *player->getCountriesOwned()) {
+		for (auto neighbour : countryOwned->getNeighbours()) {
+			if (neighbour->getPlayerID() != player->getPlayerID()) {
+				countryOwned->addArmy(countryOwned->getArmies());
+				break;
+			}
+		}
+	}
+}

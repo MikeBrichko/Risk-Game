@@ -39,3 +39,22 @@ public:
 	void reinforce(Player* player, int armiesToAdd);
 	void fortify(Player* player);
 };
+
+class RandomComputer : public Strategy {
+private:
+	bool hasEnemyNeighbours(Country* attackingCountry);
+	bool hasFriendlyNeighboursThatCanGiveArmies(Country* receivingCountry);
+public:
+	RandomComputer();
+	void reinforce(Player* player, int armiesToAdd);
+	void attack(Player* player, std::vector<Player*>* players);
+	void fortify(Player* player);
+};
+
+class CheaterComputer : public Strategy {
+public:
+	CheaterComputer();
+	void reinforce(Player* player, int armiesToAdd);
+	void attack(Player* player, std::vector<Player*>* players);
+	void fortify(Player* player);
+};

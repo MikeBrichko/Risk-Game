@@ -150,9 +150,9 @@ Strategy* GameEngine::selectComputerPlayerStrategy() {
 		else if (playerStrategy == 2)
 			return new BenevolentComputer();
 		else if (playerStrategy == 3)
-			return new AggressiveComputer(); // Change this later with Mike's implementation
+			return new RandomComputer(); // Change this later with Mike's implementation
 		else if (playerStrategy == 4)
-			return new BenevolentComputer(); // Change this later with Mike's implementation
+			return new CheaterComputer(); // Change this later with Mike's implementation
 		else
 			std::cout << "Invalid input! That is not a valid player strategy." << std::endl;
 	}
