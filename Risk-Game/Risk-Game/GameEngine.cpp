@@ -121,6 +121,8 @@ Strategy* GameEngine::selectPlayerStrategy() {
 		std::cout << "\t1 if you to play as a Human" << std::endl;
 		std::cout << "\t2 if you want to play as an Aggressive Computer" << std::endl;
 		std::cout << "\t3 if you want to play as a Bnevolent Computer" << std::endl;
+		std::cout << "\t4 if you want to play as a Random Computer" << std::endl;
+		std::cout << "\t5 if you want to play as a Cheater Computer" << std::endl;
 		std::cin >> playerStrategy;
 
 		if (playerStrategy == 1)
@@ -129,6 +131,10 @@ Strategy* GameEngine::selectPlayerStrategy() {
 			return new AggressiveComputer();
 		else if (playerStrategy == 3)
 			return new BenevolentComputer();
+		else if (playerStrategy == 4)
+			return new RandomComputer(); 
+		else if (playerStrategy == 5)
+			return new CheaterComputer(); 
 		else
 			std::cout << "Invalid input! That is not a valid player strategy." << std::endl;
 	}
