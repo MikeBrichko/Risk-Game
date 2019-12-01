@@ -3,9 +3,11 @@
 Strategy::Strategy() {}
 
 //-----------------------------------------------------------------------------------------------------------------------------------------
+//Human player strategy
 
 HumanPlayer::HumanPlayer(){}
 
+//Human reinforce method
 void HumanPlayer::reinforce(Player* player, int armiesToAdd) {
 	std::string countryOwnedName;
 	int armyInput;
@@ -43,6 +45,7 @@ void HumanPlayer::reinforce(Player* player, int armiesToAdd) {
 	}
 }
 
+//Human attack method
 void HumanPlayer::attack(Player* player, std::vector<Player*>* players) {
 	player->printNeighbours(true);
 	std::string attackingCountryName;
@@ -133,6 +136,7 @@ void HumanPlayer::attack(Player* player, std::vector<Player*>* players) {
 	}
 }
 
+//Human fortify method
 void HumanPlayer::fortify(Player* player) {
 	//Step 1. Select Country having armies removed
 	Country* transferingCountry = NULL;
@@ -188,7 +192,7 @@ void HumanPlayer::fortify(Player* player) {
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------------------
-
+//Aggresive Player strategy
 AggressiveComputer::AggressiveComputer(){}
 
 Country* AggressiveComputer::getStrongestCountry(std::vector<Country*>* countriesOwned) {
@@ -227,6 +231,7 @@ void AggressiveComputer::attack(Player* player, std::vector<Player*>* players) {
 				continue;
 			}
 
+			//roll dice for both players
 			attackingDice = player->getGameDice()->rollDice(strongestCountry->getArmies(), true, true);
 			defendingDice = player->getGameDice()->rollDice(neighbourCountry->getArmies(), false, true);
 
@@ -250,7 +255,6 @@ void AggressiveComputer::attack(Player* player, std::vector<Player*>* players) {
 				break;
 
 		}
-
 		if (player->getAmountOfCountriesOwned() == player->getGameMap()->getNumOfCountries()) {
 			isGameDone = true;
 			break;
@@ -258,10 +262,7 @@ void AggressiveComputer::attack(Player* player, std::vector<Player*>* players) {
 		else if (counquestCounter >= strongestCountry->getNeighbours().size()) {
 			break;
 		}
-		else {
-			// if it's not human player, we can skip this
-			//player->printNeighbours(true);
-		}
+		
 	}
 
 	if (isGameDone) {
@@ -270,6 +271,7 @@ void AggressiveComputer::attack(Player* player, std::vector<Player*>* players) {
 	}
 }
 
+//Aggressive fortify method
 void AggressiveComputer::fortify(Player* player) {
 	if (player->armiesOnCountriesOwned() == player->getCountriesOwned()->size()) {
 
@@ -300,6 +302,7 @@ void AggressiveComputer::fortify(Player* player) {
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------------------
+//Benevolent player strategy
 
 BenevolentComputer::BenevolentComputer(){}
 
@@ -318,12 +321,14 @@ Country* BenevolentComputer::getWeakestCountry(std::vector<Country*>* countries)
 	return weakestCountry;
 }
 
+//Benelovent reinforce method
 void BenevolentComputer::reinforce(Player* player, int armiesToAdd) {
 	for (int i = 0; i < armiesToAdd; i++) {
 		getWeakestCountry(player->getCountriesOwned())->addArmy(1);
 	}
 }
 
+//Benelovent fortify method
 void BenevolentComputer::fortify(Player* player) {
 	if (player->armiesOnCountriesOwned() == player->getCountriesOwned()->size()) {
 		//Step 1. Select Country having armies removed and Friendly Neighbour
@@ -352,9 +357,10 @@ void BenevolentComputer::fortify(Player* player) {
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------
-
+//Random player strategy
 RandomComputer::RandomComputer() {}
 
+//Check if the player country has enemy neighbour countries
 bool RandomComputer::hasEnemyNeighbours(Country* attackingCountry) {
 	for (auto neighbour : attackingCountry->getNeighbours()) {
 		if (neighbour->getPlayerID() != attackingCountry->getPlayerID())
@@ -363,6 +369,7 @@ bool RandomComputer::hasEnemyNeighbours(Country* attackingCountry) {
 	return false;
 };
 
+//Check if the players country has an ally neighbour that can give countries
 bool RandomComputer::hasFriendlyNeighboursThatCanGiveArmies(Country* receivingCountry) {
 	for (auto transferingCountry : receivingCountry->getNeighbours()) {
 		if (transferingCountry->getPlayerID() == receivingCountry->getPlayerID() && transferingCountry->getArmies() > 1)
@@ -371,12 +378,14 @@ bool RandomComputer::hasFriendlyNeighboursThatCanGiveArmies(Country* receivingCo
 	return false;
 }
 
+//Random reinforce method
 void RandomComputer::reinforce(Player* player, int armiesToAdd) {
 	for (int i = 0; i < armiesToAdd; i++) {
 		player->getCountriesOwned()->at(rand() % (player->getCountriesOwnedSize()))->addArmy(1);
 	}
 }
 
+//Radom attack method
 void RandomComputer::attack(Player* player, std::vector<Player*>* players) {
 	std::vector<int> attackingDice;
 	std::vector<int> defendingDice;
@@ -401,7 +410,7 @@ void RandomComputer::attack(Player* player, std::vector<Player*>* players) {
 			}
 		}
 
-		//roll dice
+		//roll dice for both players
 		attackingDice = player->getGameDice()->rollDice(randomAttackingCountry->getArmies(), true, true);
 		defendingDice = player->getGameDice()->rollDice(randomDefendingCountry->getArmies(), false, true);
 
@@ -431,6 +440,7 @@ void RandomComputer::attack(Player* player, std::vector<Player*>* players) {
 	}
 }
 
+//Random fortify method
 void RandomComputer::fortify(Player* player) {
 	if (player->armiesOnCountriesOwned() != player->getCountriesOwned()->size()) {
 		//Step 1. Select Country having armies removed and Friendly Neighbour
@@ -460,41 +470,25 @@ void RandomComputer::fortify(Player* player) {
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------
+//Cheater player strategy
 
 CheaterComputer::CheaterComputer() {}
 
+//Cheater reinforce method
 void CheaterComputer::reinforce(Player* player, int armiesToAdd) {
 	for (auto countryOwned : *player->getCountriesOwned()) {
 		countryOwned->addArmy(countryOwned->getArmies());
 	}
 }
 
+//Cheater attack method
 void CheaterComputer::attack(Player* player, std::vector<Player*>* players) {
 	// We can't use foreach loop here since getCountriesOwned is updating dynamically
 	player->conquerEnemyCountryByCheater();
 	std::cout << player->getAmountOfCountriesOwned() << "\t" << player->getGameMap()->getNumOfCountries() << std::endl;
-	//while (player->getAmountOfCountriesOwned() < player->getGameMap()->getNumOfCountries()) {
-	//	std::vector<Country*> staticCountries = *player->getCountriesOwned();
-	//	for (auto countryOwned : staticCountries) {
-	//		std::vector<Country*> staticNeighbours = countryOwned->getNeighbours();
-	//		int size = staticNeighbours.size();
-	//		for (int i = 0; i < size; ++i) {
-	//			if (staticNeighbours.at(i)->getPlayerID() != player->getPlayerID()) {
-	//				player->conquerEnemyCountry(countryOwned, staticNeighbours.at(i), players, true);
-	//			}
-	//		}
-	//		//for (auto neighbour : staticNeighbours) {
-	//		//	if (neighbour != nullptr) {
-	//		//		if (neighbour->getPlayerID() != player->getPlayerID()) {
-	//		//		}
-	//		//	}
-	//		//	
-	//		//}
-	//	}
-	//}
-
 }
 
+//Cheater fortify method
 void CheaterComputer::fortify(Player* player) {
 	for (auto countryOwned : *player->getCountriesOwned()) {
 		for (auto neighbour : countryOwned->getNeighbours()) {

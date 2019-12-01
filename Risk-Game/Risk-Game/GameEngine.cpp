@@ -8,6 +8,7 @@
 #include <time.h>
 
 
+//callback function used to display appropriate message in the Observer Pattern
 void callback(ConcreteSubject* player) {
 	switch (player->getPhase()) {
 	case Phase::ATTACK:
@@ -38,6 +39,7 @@ void callback(ConcreteSubject* player) {
 }
 
 GameEngine::GameEngine(bool automate) {
+	//If the game is to be automated 
 	if (automate) {
 		player_observers = new std::vector<ConcreteObserver*>();
 
@@ -60,6 +62,7 @@ GameEngine::GameEngine(bool automate) {
 		assignCountriesToPlayers();
 		validateAllCountriesHavePlayers();
 	}
+	//The case when the game is not to be automated
 	else {
 		player_observers = new std::vector<ConcreteObserver*>();
 		map = selectMap();
@@ -70,10 +73,12 @@ GameEngine::GameEngine(bool automate) {
 	}
 }
 GameEngine::GameEngine(std::string tournament) {
+	//If GameEngine has tournament as parameter we run the tournament process
 	if (tournament == "tournament") {
 		players =new std::vector<Player*>();
 		tournamentProcess();
 	}
+	//If GameEngine does not have tournament as parameter we do not run the tournament process
 	else {
 		map = selectMap();
 		deck = new Deck(map->getNumOfCountries());
@@ -82,6 +87,7 @@ GameEngine::GameEngine(std::string tournament) {
 	}
 };
 
+//Default GameEngine Process
 GameEngine::GameEngine() {
 	map = selectMap();
 	deck = new Deck(map->getNumOfCountries());
@@ -89,6 +95,7 @@ GameEngine::GameEngine() {
 	players = selectNumberOfPlayers();
 }
 
+//Destructor for GameEngine 
 GameEngine::~GameEngine() {
 	delete map;
 	for (auto player : *players)
@@ -97,6 +104,7 @@ GameEngine::~GameEngine() {
 	delete deck;
 }
 
+//Function to get map choice from user and then validate the users input
 Map* GameEngine::selectMap() {
 	while (true) {
 		std::string maps[] = { "brasil.map", "europe.map", "estonia.map", "germany.map", "solar.map" };
@@ -108,12 +116,14 @@ Map* GameEngine::selectMap() {
 		std::string selectedMap;
 		std::cin >> selectedMap;
 
+		//validate the users input
 		if (DominationMapLoader(selectedMap).dominationValidateMap()) {
 			return DominationMapLoader(selectedMap).dominationExportToMap();
 		}
 	}
 }
 
+//Function asks user to select a stratgey of their choice for a given player
 Strategy* GameEngine::selectPlayerStrategy() {
 	int playerStrategy = 0;
 	while (true) {
@@ -125,6 +135,7 @@ Strategy* GameEngine::selectPlayerStrategy() {
 		std::cout << "\t5 if you want to play as a Cheater Computer" << std::endl;
 		std::cin >> playerStrategy;
 
+		//Check user input and assign appropriate strategy
 		if (playerStrategy == 1)
 			return new HumanPlayer();
 		else if (playerStrategy == 2)
@@ -140,6 +151,7 @@ Strategy* GameEngine::selectPlayerStrategy() {
 	}
 }
 
+//Funciton that asks user to select a strategy of their choice for the computer player
 Strategy* GameEngine::selectComputerPlayerStrategy() {
 	int playerStrategy = 0;
 	while (true) {
@@ -151,25 +163,28 @@ Strategy* GameEngine::selectComputerPlayerStrategy() {
 
 		std::cin >> playerStrategy;
 
+		//Check user input and assign appropriate strategy
 		if (playerStrategy == 1)
 			return new AggressiveComputer();
 		else if (playerStrategy == 2)
 			return new BenevolentComputer();
 		else if (playerStrategy == 3)
-			return new RandomComputer(); // Change this later with Mike's implementation
+			return new RandomComputer(); 
 		else if (playerStrategy == 4)
-			return new CheaterComputer(); // Change this later with Mike's implementation
+			return new CheaterComputer(); 
 		else
 			std::cout << "Invalid input! That is not a valid player strategy." << std::endl;
 	}
 }
 
+//Function that asks user the number of player to be played
 std::vector<Player*>* GameEngine::selectNumberOfPlayers() {
 	int numberOfPlayers = 0;
 	std::cout << "Enter the amount of players that will play this game: ";
 	std::cin >> numberOfPlayers;
 	std::cout << std::endl;
 
+	//Ask the user to name the given player
 	std::string playerName = "";
 	std::vector<Player*>* newPlayers = new std::vector<Player*>();
 	for (int i = 0; i < numberOfPlayers; i++) {
@@ -180,6 +195,7 @@ std::vector<Player*>* GameEngine::selectNumberOfPlayers() {
 	return newPlayers;
 }
 
+//Function to randomly determine the player order
 void GameEngine::determinePlayerOrder() {
 	int i = 0;
 	srand((unsigned int)time(NULL));
@@ -192,6 +208,7 @@ void GameEngine::determinePlayerOrder() {
 	}
 }
 
+//Function that assigns random countries to player
 void GameEngine::assignCountriesToPlayers() {
 	std::list<Country*> BFSqueue;
 	int numVisited = 0;
@@ -235,6 +252,7 @@ void GameEngine::assignCountriesToPlayers() {
 	map->resetVisitedCountries();
 }
 
+//Fucntion to check that all countries have players
 bool GameEngine::allCountriesHavePlayers() {
 	for (int i = 0; i < map->getContinents()->size(); i++) {
 		for (int j = 0; j < map->getContinents()->at(i)->getCountries()->size(); j++) {
@@ -245,6 +263,7 @@ bool GameEngine::allCountriesHavePlayers() {
 	return true;
 }
 
+//Function that gives the total amount of armies for each player
 std::vector<int> GameEngine::totalArmyCountForEachPlayer() {
 	std::vector<int> armiesPerPlayer = std::vector<int>();
 	int armieCount = 0;
@@ -256,6 +275,7 @@ std::vector<int> GameEngine::totalArmyCountForEachPlayer() {
 	return armiesPerPlayer;
 }
 
+//Function that checks if every country has a player
 void GameEngine::validateAllCountriesHavePlayers() {
 	std::list<Country*> BFSqueue;
 	int numVisited = 0;
@@ -294,31 +314,13 @@ void GameEngine::validateAllCountriesHavePlayers() {
 	map->resetVisitedCountries();
 }
 
+//The startup phase for the default game
 void GameEngine::startupPhase() {
 	determinePlayerOrder();
 	assignCountriesToPlayers();
 	validateAllCountriesHavePlayers();
 
 	int givenArmies = 9;
-	/*switch (players->size()) {
-		case 2:
-			givenArmies = 40;
-			break;
-		case 3:
-			givenArmies = 35;
-			break;
-		case 4:
-			givenArmies = 30;
-			break;
-		case 5:
-			givenArmies = 25;
-			break;
-		case 6:
-			givenArmies = 20;
-			break;
-		default:
-			break;
-	}*/
 
 	std::cout << "Armies on the field before players add armies:" << std::endl;
 	std::vector<int> armiesPerPlayer = totalArmyCountForEachPlayer();
@@ -337,10 +339,12 @@ void GameEngine::startupPhase() {
 				continue;
 
 			while (true) {
+				//display countries that are owned by the current player
 				players->at(i)->printCountriesOwned();
 				std::cout << "Enter a Country that you would like to add armies to: ";
 				std::cin >> countryName;
 
+				//check if user choice a valid country
 				countryToBeAddedArmiesTo = players->at(i)->getCountryOwned(countryName);
 				if (countryToBeAddedArmiesTo != NULL) {
 					countryToBeAddedArmiesTo->addArmy(1);
@@ -361,6 +365,7 @@ void GameEngine::startupPhase() {
 	armiesPerPlayer = totalArmyCountForEachPlayer();
 }
 
+//Main game loop of the Game Engine
 void GameEngine::mainGameLoop() {
 	bool gameOver = false;
 	while (!gameOver) {
@@ -382,10 +387,10 @@ void GameEngine::mainGameLoop() {
 	}
 }
 
+//Tournament process if the tournament mode is chosen
 void GameEngine::tournamentProcess() {
 	int gameType;
 	int mapNum;
-	//int mapList[6];
 	std::vector<int> mapList;
 	int numplayers;
 	int numGames;
@@ -452,40 +457,6 @@ void GameEngine::tournamentProcess() {
 				chosenVec.push_back(chosen);		//add map number to list of chosen map numbers
 			}
 		}
-
-		
-		
-		//Show contents of mapList Array for debugging/testing purposes
-		/*
-		std::cout << "\nContents of mapList Array" << std::endl;
-		for (int i = 0; i < mapList.size(); i++)
-		{
-			std::cout << mapList.at(i) << std:: endl;
-		}
-		std::cout << std::endl;
-		*/
-
-
-
-
-		/*
-		for (int i = 0; i < mapNum; i++) {
-			int tempMapNum;
-			std::cout << "choose your map (enter number): \n" << std::endl;
-			std::cout << "1. Alberta" << std::endl;
-			std::cout << "2. " << std::endl;
-			std::cout << "3. " << std::endl;
-			std::cout << "4. " << std::endl;
-			std::cout << "5. " << std::endl;
-			std::cin >> tempMapNum;
-			while (tempMapNum > 5 || tempMapNum < 1) {
-				std::cout << "input any integer [1,5]" << std::endl;
-				std::cin >> mapNum;
-			}
-			mapList[i] = tempMapNum;
-		}
-		*/
-
 
 		//number of players
 		std::cout << "number of players? [2,4] " << std::endl;
@@ -573,7 +544,6 @@ void GameEngine::tournamentProcess() {
 							result.at(i) += "\t" + player->getPlayerName();
 							break;
 						}
-
 						player->fortify();
 					}
 					if (gameOver) {
@@ -592,6 +562,7 @@ void GameEngine::tournamentProcess() {
 		std::cin >> breakpoint;
 	}
 	else {
+		//default game loop
 		map = selectMap();
 		deck = new Deck(map->getNumOfCountries());
 		dice = new Dice();
