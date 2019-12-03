@@ -1,4 +1,5 @@
 #include "PlayerStrategies.h"
+#include <map>
 
 Strategy::Strategy() {}
 
@@ -350,9 +351,11 @@ void BenevolentComputer::fortify(Player* player) {
 		}
 
 		//Step 2. Move armies to friendly Country
-		int armiesToMobilize = transferingCountry->getArmies()/2;
-		transferingCountry->addArmy(-armiesToMobilize);
-		receivingCountry->addArmy(armiesToMobilize);
+		if (transferingCountry != NULL && receivingCountry != NULL) {
+			int armiesToMobilize = transferingCountry->getArmies() / 2;
+			transferingCountry->addArmy(-armiesToMobilize);
+			receivingCountry->addArmy(armiesToMobilize);
+		}
 	}
 }
 
@@ -443,10 +446,11 @@ void RandomComputer::attack(Player* player, std::vector<Player*>* players) {
 //Random fortify method
 void RandomComputer::fortify(Player* player) {
 	if (player->armiesOnCountriesOwned() != player->getCountriesOwned()->size()) {
-		//Step 1. Select Country having armies removed and Friendly Neighbour
 		Country* transferingCountry = NULL;
 		Country* receivingCountry = NULL;
+		//Randomly decide to fortify a country
 		while (rand() % 1) {
+			//Step 1. Select country that will receive armies
 			while (true) {
 				receivingCountry = player->getCountriesOwned()->at(rand() % (player->getCountriesOwnedSize()));
 				if (hasFriendlyNeighboursThatCanGiveArmies(receivingCountry)) {
@@ -454,12 +458,14 @@ void RandomComputer::fortify(Player* player) {
 				}
 			}
 
+			//Step 2. Select country that will give armies
 			while (true) {
 				transferingCountry = receivingCountry->getNeighbours().at(rand() % (receivingCountry->getNeighbours().size()));
 				if (transferingCountry->getArmies() > 1)
 					break;
 			}
 
+			//Step 3. Transfer armies
 			int armiesToMobilize = rand() % (transferingCountry->getArmies());
 			transferingCountry->addArmy(-armiesToMobilize);
 			receivingCountry->addArmy(armiesToMobilize);
@@ -484,8 +490,28 @@ void CheaterComputer::reinforce(Player* player, int armiesToAdd) {
 //Cheater attack method
 void CheaterComputer::attack(Player* player, std::vector<Player*>* players) {
 	// We can't use foreach loop here since getCountriesOwned is updating dynamically
-	player->conquerEnemyCountryByCheater();
-	std::cout << player->getAmountOfCountriesOwned() << "\t" << player->getGameMap()->getNumOfCountries() << std::endl;
+	std::map<Country*, Country*> map = std::map<Country*, Country*>();
+	for (auto countryOwned : *player->getCountriesOwned()) {
+		for (auto neighbour : countryOwned->getNeighbours()) {
+			if (countryOwned->getPlayerID() != neighbour->getPlayerID() && !map.count(neighbour))
+				map[neighbour] = countryOwned;
+		}
+	}
+
+	if (map.size() >= 1) {
+		for (auto relation : map) {
+			std::cout << relation.first->getName();
+			player->conquerEnemyCountry(relation.second, relation.first, players, true);
+		}
+	}
+
+	if (player->getAmountOfCountriesOwned() == player->getGameMap()->getNumOfCountries()) {
+		player->setCurrentPhase(GAME_OVER);
+		player->notify();
+	}
+
+	//player->conquerEnemyCountryByCheater();
+	//std::cout << player->getAmountOfCountriesOwned() << "\t" << player->getGameMap()->getNumOfCountries() << std::endl;
 }
 
 //Cheater fortify method

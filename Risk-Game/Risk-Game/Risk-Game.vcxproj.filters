@@ -25,6 +25,9 @@
     <Filter Include="Source Files\AssignmentThreeDrivers">
       <UniqueIdentifier>{f0ca1621-5094-4923-999b-8c7ea34c5d23}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\AssignmentFourDrivers">
+      <UniqueIdentifier>{554a5df7-5ad9-47bc-9502-f71e826c8ad4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Map.cpp">
@@ -72,9 +75,6 @@
     <ClCompile Include="PlayerReinforceDriver.cpp">
       <Filter>Source Files\AssignmentTwoDrivers</Filter>
     </ClCompile>
-    <ClCompile Include="StrategyPatternDriver.cpp">
-      <Filter>Source Files\AssignmentThreeDrivers</Filter>
-    </ClCompile>
     <ClCompile Include="PlayerStrategies.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -88,7 +88,10 @@
       <Filter>Source Files\AssignmentThreeDrivers</Filter>
     </ClCompile>
     <ClCompile Include="TournamentDriver.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\AssignmentFourDrivers</Filter>
+    </ClCompile>
+    <ClCompile Include="StrategyPatternDriver.cpp">
+      <Filter>Source Files\AssignmentFourDrivers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

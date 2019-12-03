@@ -178,8 +178,8 @@ void Player::conquerEnemyCountry(Country* ownCountry, Country* enemyCountry, std
 			*currentPhase = DEFEATED;
 			notify();
 
-			players->erase(i--);
-			delete (*i);
+			//players->erase(--i);
+			//delete (*i);
 			break;
 		}
 		else {
@@ -190,10 +190,9 @@ void Player::conquerEnemyCountry(Country* ownCountry, Country* enemyCountry, std
 	//Step 3. Mobilize armies to newly aquired country
 	int armiesToMobilize = 0;
 	while (true) {
+		if (isAutomated == false) {
 		std::cout << ownCountry->getName() << " has " << ownCountry->getArmies() << " armies." << std::endl;
 		std::cout << "How many armies would you like to move from the attacking country to the defeated country?" << std::endl;
-
-		if (isAutomated == false) {
 			std::cin >> armiesToMobilize;
 
 			if (armiesToMobilize <= (ownCountry->getArmies() - 1) && armiesToMobilize >= 1)
